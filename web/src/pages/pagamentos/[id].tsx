@@ -9,7 +9,6 @@ import mmt from "@/lib/mmt";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { toast } from "react-toastify";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useTimer } from "react-timer-hook";
 import { useEffect, useState } from "react";
 import PaymentStatusBadge from "@/components/common/payment-status-badge";
@@ -163,17 +162,18 @@ export default function PaymentDetailPage() {
                 </span>
                 <div className="flex flex-row space-x-4">
                   <Input value={payment.pix_code} disabled id="pix_code" />
-                  <CopyToClipboard text={payment.pix_code}>
-                    <Button
-                      color="success"
-                      className="w-min"
-                      onClick={() => {
-                        toast.success("Copiado com sucesso!");
-                      }}
-                    >
-                      Copiar
-                    </Button>
-                  </CopyToClipboard>
+                  <Button
+                    color="success"
+                    className="w-min"
+                    onClick={() => {
+                      if (payment.pix_code) {
+                        navigator.clipboard.writeText(payment.pix_code);
+                        toast.success("Código PIX copiado com sucesso!");
+                      }
+                    }}
+                  >
+                    Copiar
+                  </Button>
                 </div>
               </>
             )}
