@@ -184,9 +184,9 @@ yarn --version  # Deve mostrar 4.5.3
 # Criar container PostgreSQL
 docker run -d \
   --name postgresql-sortelancada \
-  -e POSTGRES_USER=sortelancada \
-  -e POSTGRES_PASSWORD=123@Mudar \
-  -e POSTGRES_DB=sortelancada \
+  -e POSTGRES_USER= \
+  -e POSTGRES_PASSWORD= \
+  -e POSTGRES_DB= \
   -p 5436:5432 \
   postgres:15.1
 
@@ -264,25 +264,25 @@ NODE_ENV=development
 # Banco de Dados
 DB_HOST=localhost
 DB_PORT=5436
-DB_USERNAME=sortelancada
-DB_PASSWORD=123@Mudar
-DB_DATABASE=sortelancada
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
 
 # JWT
-JWT_SECRET=sua-chave-secreta-super-segura-aqui
+JWT_SECRET=
 
 # Cloudinary (Upload de Imagens)
-CLOUDINARY_CLOUD_NAME=seu-cloud-name
-CLOUDINARY_API_KEY=sua-api-key
-CLOUDINARY_API_SECRET=seu-api-secret
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
 # Mercado Pago (Pagamentos PIX)
-MERCADO_PAGO_ACCESS_TOKEN=seu-access-token-aqui
+MERCADO_PAGO_ACCESS_TOKEN=
 
 # SendGrid (E-mails)
-SENDGRID_API_KEY=sua-api-key-sendgrid
-SENDGRID_FROM_EMAIL=contato@sortelancada.com
-SENDGRID_FROM_NAME=Sorte Lançada
+SENDGRID_API_KEY=
+SENDGRID_FROM_EMAIL=
+SENDGRID_FROM_NAME=
 
 # URL Frontend
 FRONTEND_URL=http://localhost:3000
@@ -648,9 +648,9 @@ services:
   postgres:
     image: postgres:15.1
     environment:
-      POSTGRES_USER: sortelancada
-      POSTGRES_PASSWORD: senha-forte-aqui
-      POSTGRES_DB: sortelancada
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: 
     ports:
       - "5436:5432"
     volumes:
@@ -746,7 +746,7 @@ yarn build
 
 ## 📜 Licença
 
-**Proprietário:** Lucas IT Dias  
+**Proprietário:** Lucas Dias  
 **Licença:** Todos os direitos reservados  
 **Uso:** Privado
 
