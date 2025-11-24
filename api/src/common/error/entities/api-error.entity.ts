@@ -1,7 +1,14 @@
+// ============================================
+// ENTITY: ERRO CUSTOMIZADO
+// ============================================
+// Classe de erro com mensagem amigável ao usuário
+// Pizzaria Massa Nostra
+// ============================================
+
 class ApiError extends Error {
-  message: string;
-  userMessage: string;
-  statusCode: number;
+  message: string; // Mensagem técnica
+  userMessage: string; // Mensagem para o usuário final
+  statusCode: number; // HTTP status code
 
   constructor(message: string, userMessage: string, statusCode: number) {
     super(message);

@@ -1,83 +1,38 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Logger,
-  Param,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import { CreateCommonUserDto } from '../dtos/create-common-user.dto';
-import { CreateCommonUserService, FindOneCommonUserService } from '../services';
-import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+// ============================================
+// CONTROLLER: CLIENTES (ADMIN)
+// ============================================
+// Endpoints administrativos de clientes
+// APENAS PARA ADMINISTRADORES
+// Pizzaria Massa Nostra
+// ============================================
+
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { FindOneCommonUserService } from '../services/find-one-common-user.service';
 import { PaginationDto } from '@/common/dtos/pagination.dto';
-import ApiError from '@/common/error/entities/api-error.entity';
-import { Payment } from '@/modules/payment/payment.entity';
-import { CommonUser } from '../common-user.entity';
+import { CommonUser } from '../entities/common-user.entity';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 
 @Controller('common-user')
 export class CommonUserController {
-  constructor(
-    private readonly findOneCommonUser: FindOneCommonUserService,
-    private readonly createOneCommonUser: CreateCommonUserService,
-  ) {}
-  logger = new Logger(CommonUserController.name);
+  constructor(private readonly findOneCommonUser: FindOneCommonUserService) {}
 
-  @Post('create-or-return')
-  async createUser(@Body() createCommonUserDto: CreateCommonUserDto) {
-    const { phone } = createCommonUserDto;
-    const formattedPhone = phone.replace(/\D/g, '');
-    createCommonUserDto.phone = formattedPhone;
-    const alreadyExists = await this.findOneCommonUser.findOne({
-      where: [{ phone: formattedPhone }],
-    });
-
-    if (alreadyExists) return { ok: true, user: alreadyExists };
-
-    const user = await this.createOneCommonUser.createUser(createCommonUserDto);
-    return { ok: true, user };
-  }
-
-  @Get('/list')
+  // ============================================
+  // LISTAR TODOS OS CLIENTES (ADMIN)
+  // ============================================
+  // Endpoint protegido por JWT (apenas administradores)
+  // Retorna lista paginada de todos os clientes
+  @Get('list')
   @UseGuards(JwtAuthGuard)
-  async listUsers(@Query() options: PaginationDto<CommonUser>) {
+  async list(@Query() options: PaginationDto<CommonUser>) {
     const { commonUsers, count } = await this.findOneCommonUser.list({
       ...options,
-      withPaymentsQtd: true,
       additionalSelects: ['created_at', 'updated_at'],
     });
-    commonUsers.forEach((user) => {
-      user.payments = user.payments?.map((payment) => {
-        return {
-          id: payment.id,
-          raffles_quantity: payment.raffles_quantity,
-        } as Payment;
-      });
-    });
-    return { ok: true, commonUsers, count };
-  }
 
-  @Post('/update-user-by-phone/:phone')
-  @UseGuards(JwtAuthGuard)
-  async updateUserByPhone(
-    @Param('phone') phone: string,
-    @Body() { name }: { name: string },
-  ) {
-    const formattedPhone = phone.replace(/\D/g, '');
-    const user = await this.findOneCommonUser.findOne({
-      where: [{ phone: formattedPhone }],
-    });
-
-    if (!user)
-      throw new ApiError('user-not-found', 'Usuário não encontrado', 404);
-    if (!name || name == '')
-      throw new ApiError('name-required', 'Nome é obrigatório', 400);
-
-    const updatedUser = await this.createOneCommonUser.updateUser(user.id, {
-      name,
-    });
-
-    return { ok: true, user: updatedUser };
+    return {
+      ok: true,
+      commonUsers,
+      count,
+    };
   }
 }

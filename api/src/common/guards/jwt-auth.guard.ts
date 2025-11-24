@@ -1,3 +1,10 @@
+// ============================================
+// GUARD: AUTENTICAÇÃO JWT
+// ============================================
+// Protege rotas que exigem autenticação
+// Pizzaria Massa Nostra - ADMIN
+// ============================================
+
 import ApiError from '@/common/error/entities/api-error.entity';
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';

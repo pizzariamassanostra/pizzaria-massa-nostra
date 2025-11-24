@@ -4454,6 +4454,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@supabase/auth-js@npm:2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/auth-js@npm:2.84.0"
+  dependencies:
+    tslib: "npm:2.8.1"
+  checksum: 10/d899c3c8e3bf375d86e240d1f41443a08bd2a98e701ad5af3ce349cab965693e15b2edc983e5515552efa9355b6e0c56d645e542d0d63c1c71d3964af3f8410c
+  languageName: node
+  linkType: hard
+
+"@supabase/functions-js@npm:2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/functions-js@npm:2.84.0"
+  dependencies:
+    tslib: "npm:2.8.1"
+  checksum: 10/c30f4eaf1e2176e7b329f60894d5066988300680f47e111c4a7e9ae31b845163fa7dfc45df04421c92c438673952da4c71db6556c6baf1722ca96637ef9d6bae
+  languageName: node
+  linkType: hard
+
+"@supabase/postgrest-js@npm:2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/postgrest-js@npm:2.84.0"
+  dependencies:
+    tslib: "npm:2.8.1"
+  checksum: 10/d04239dd6b3444561df611b27bda90849c49cdcc166df9426470364631f6533d55cb44c7826c948995d7df120a50e3f5c45773097205c1f2f7244057e78277c4
+  languageName: node
+  linkType: hard
+
+"@supabase/realtime-js@npm:2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/realtime-js@npm:2.84.0"
+  dependencies:
+    "@types/phoenix": "npm:^1.6.6"
+    "@types/ws": "npm:^8.18.1"
+    tslib: "npm:2.8.1"
+    ws: "npm:^8.18.2"
+  checksum: 10/0cf088817f5fe6ce3ebfd07e7f033e2c6a23d7eb6952f279e65706881905a738455ad4c547f339fb1fc3c1d0caf646ce8c1ad4c56a4b1c5eabd0c1b266a11a16
+  languageName: node
+  linkType: hard
+
+"@supabase/storage-js@npm:2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/storage-js@npm:2.84.0"
+  dependencies:
+    tslib: "npm:2.8.1"
+  checksum: 10/62d4cda1c837a6deae371f59c5b6b44e15da7bb54ac02fdc2ecb32fc48dc59868736e002b19d3a6feb4ce034446eb20d68678a2f7ff865aabff432af38efe179
+  languageName: node
+  linkType: hard
+
+"@supabase/supabase-js@npm:^2.84.0":
+  version: 2.84.0
+  resolution: "@supabase/supabase-js@npm:2.84.0"
+  dependencies:
+    "@supabase/auth-js": "npm:2.84.0"
+    "@supabase/functions-js": "npm:2.84.0"
+    "@supabase/postgrest-js": "npm:2.84.0"
+    "@supabase/realtime-js": "npm:2.84.0"
+    "@supabase/storage-js": "npm:2.84.0"
+  checksum: 10/b80d506c45ef853ca520a8fe39b158f01743676990e46fccd3e0c6bb87dec245c8fe0758619d88102fcdac1fc82422d111b19f42d954eb71d39df569c540b8fc
+  languageName: node
+  linkType: hard
+
 "@swc/counter@npm:^0.1.3":
   version: 0.1.3
   resolution: "@swc/counter@npm:0.1.3"
@@ -4575,12 +4636,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:*":
+  version: 24.10.1
+  resolution: "@types/node@npm:24.10.1"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10/ddac8c97be5f7401e31ea0e9316c6e864993c6cd06689b7f9874ecfb576ef8349f2d14298248a08b94a6dd029570a46a285cddc4d50e524817f1a3730b29a86e
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^20.17.10":
   version: 20.19.25
   resolution: "@types/node@npm:20.19.25"
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10/f0ed863599da289df5838380e211f9e010414dc7df8127b79f6a7eeca80a8d6e3daf3e58ddad1884f8dfafd17c16b02f56cee1689b7ebdf5df6d0e5770165ac1
+  languageName: node
+  linkType: hard
+
+"@types/phoenix@npm:^1.6.6":
+  version: 1.6.6
+  resolution: "@types/phoenix@npm:1.6.6"
+  checksum: 10/9dc897cb9a4cd62f7a0de48855e6cafded5c676e7d78c4d3a9ade4f21ec82b95eb7195caada26a9a3a5d9aba14f0fd875bc3898e086234b20da63991a033f6e8
   languageName: node
   linkType: hard
 
@@ -4614,6 +4691,15 @@ __metadata:
   version: 0.0.6
   resolution: "@types/use-sync-external-store@npm:0.0.6"
   checksum: 10/a95ce330668501ad9b1c5b7f2b14872ad201e552a0e567787b8f1588b22c7040c7c3d80f142cbb9f92d13c4ea41c46af57a20f2af4edf27f224d352abcfe4049
+  languageName: node
+  linkType: hard
+
+"@types/ws@npm:^8.18.1":
+  version: 8.18.1
+  resolution: "@types/ws@npm:8.18.1"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/1ce05e3174dcacf28dae0e9b854ef1c9a12da44c7ed73617ab6897c5cbe4fccbb155a20be5508ae9a7dde2f83bd80f5cf3baa386b934fc4b40889ec963e94f3a
   languageName: node
   linkType: hard
 
@@ -7851,6 +7937,73 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pizzaria-massa-nostra-web@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "pizzaria-massa-nostra-web@workspace:."
+  dependencies:
+    "@brazilian-utils/is-valid-phone": "npm:^0.1.1"
+    "@mona-health/react-input-mask": "npm:^3.0.3"
+    "@nextui-org/accordion": "npm:^2.0.42"
+    "@nextui-org/badge": "npm:^2.0.36"
+    "@nextui-org/button": "npm:^2.0.42"
+    "@nextui-org/card": "npm:^2.0.39"
+    "@nextui-org/checkbox": "npm:^2.1.6"
+    "@nextui-org/divider": "npm:^2.0.37"
+    "@nextui-org/image": "npm:^2.0.36"
+    "@nextui-org/input": "npm:^2.2.10"
+    "@nextui-org/modal": "npm:^2.0.45"
+    "@nextui-org/pagination": "npm:^2.0.40"
+    "@nextui-org/popover": "npm:^2.1.32"
+    "@nextui-org/progress": "npm:^2.0.38"
+    "@nextui-org/react": "npm:^2.6.10"
+    "@nextui-org/scroll-shadow": "npm:^2.2.3"
+    "@nextui-org/select": "npm:^2.2.11"
+    "@nextui-org/skeleton": "npm:^2.0.37"
+    "@nextui-org/spinner": "npm:^2.0.38"
+    "@nextui-org/system": "npm:^2.3.3"
+    "@nextui-org/table": "npm:^2.0.45"
+    "@nextui-org/theme": "npm:^2.3.2"
+    "@nextui-org/tooltip": "npm:^2.0.45"
+    "@radix-ui/react-alert-dialog": "npm:^1.1.4"
+    "@radix-ui/react-select": "npm:^2.1.4"
+    "@radix-ui/react-separator": "npm:^1.1.1"
+    "@radix-ui/react-slot": "npm:^1.1.1"
+    "@react-input/mask": "npm:^1.2.10"
+    "@reduxjs/toolkit": "npm:^2.4.0"
+    "@supabase/supabase-js": "npm:^2.84.0"
+    "@tanstack/react-query": "npm:^5.62.8"
+    "@tanstack/react-table": "npm:^8.20.6"
+    "@types/dinero.js": "npm:^1.9.4"
+    "@types/node": "npm:^20.17.10"
+    "@types/react": "npm:^18.3.18"
+    "@types/react-dom": "npm:^18.3.5"
+    axios: "npm:^1.7.9"
+    class-variance-authority: "npm:^0.7.1"
+    clsx: "npm:^2.1.1"
+    dinero.js: "npm:^1.9.1"
+    embla-carousel-autoplay: "npm:^8.5.1"
+    embla-carousel-react: "npm:^8.5.1"
+    eslint: "npm:^8.57.1"
+    eslint-config-next: "npm:^14.2.21"
+    framer-motion: "npm:^11.14.4"
+    lucide-react: "npm:^0.468.0"
+    moment-timezone: "npm:^0.5.46"
+    next: "npm:^14.2.21"
+    postcss: "npm:^8.4.49"
+    react: "npm:^18.3.1"
+    react-confirm-alert: "npm:^3.0.6"
+    react-dom: "npm:^18.3.1"
+    react-hook-form: "npm:^7.54.2"
+    react-redux: "npm:^9.2.0"
+    react-timer-hook: "npm:^3.0.7"
+    react-toastify: "npm:^10.0.6"
+    tailwind-merge: "npm:^2.6.0"
+    tailwindcss: "npm:^3.4.17"
+    tailwindcss-animate: "npm:^1.0.7"
+    typescript: "npm:^5.7.3"
+  languageName: unknown
+  linkType: soft
+
 "possible-typed-array-names@npm:^1.0.0":
   version: 1.1.0
   resolution: "possible-typed-array-names@npm:1.1.0"
@@ -8555,72 +8708,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sortelancada-front@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "sortelancada-front@workspace:."
-  dependencies:
-    "@brazilian-utils/is-valid-phone": "npm:^0.1.1"
-    "@mona-health/react-input-mask": "npm:^3.0.3"
-    "@nextui-org/accordion": "npm:^2.0.42"
-    "@nextui-org/badge": "npm:^2.0.36"
-    "@nextui-org/button": "npm:^2.0.42"
-    "@nextui-org/card": "npm:^2.0.39"
-    "@nextui-org/checkbox": "npm:^2.1.6"
-    "@nextui-org/divider": "npm:^2.0.37"
-    "@nextui-org/image": "npm:^2.0.36"
-    "@nextui-org/input": "npm:^2.2.10"
-    "@nextui-org/modal": "npm:^2.0.45"
-    "@nextui-org/pagination": "npm:^2.0.40"
-    "@nextui-org/popover": "npm:^2.1.32"
-    "@nextui-org/progress": "npm:^2.0.38"
-    "@nextui-org/react": "npm:^2.6.10"
-    "@nextui-org/scroll-shadow": "npm:^2.2.3"
-    "@nextui-org/select": "npm:^2.2.11"
-    "@nextui-org/skeleton": "npm:^2.0.37"
-    "@nextui-org/spinner": "npm:^2.0.38"
-    "@nextui-org/system": "npm:^2.3.3"
-    "@nextui-org/table": "npm:^2.0.45"
-    "@nextui-org/theme": "npm:^2.3.2"
-    "@nextui-org/tooltip": "npm:^2.0.45"
-    "@radix-ui/react-alert-dialog": "npm:^1.1.4"
-    "@radix-ui/react-select": "npm:^2.1.4"
-    "@radix-ui/react-separator": "npm:^1.1.1"
-    "@radix-ui/react-slot": "npm:^1.1.1"
-    "@react-input/mask": "npm:^1.2.10"
-    "@reduxjs/toolkit": "npm:^2.4.0"
-    "@tanstack/react-query": "npm:^5.62.8"
-    "@tanstack/react-table": "npm:^8.20.6"
-    "@types/dinero.js": "npm:^1.9.4"
-    "@types/node": "npm:^20.17.10"
-    "@types/react": "npm:^18.3.18"
-    "@types/react-dom": "npm:^18.3.5"
-    axios: "npm:^1.7.9"
-    class-variance-authority: "npm:^0.7.1"
-    clsx: "npm:^2.1.1"
-    dinero.js: "npm:^1.9.1"
-    embla-carousel-autoplay: "npm:^8.5.1"
-    embla-carousel-react: "npm:^8.5.1"
-    eslint: "npm:^8.57.1"
-    eslint-config-next: "npm:^14.2.21"
-    framer-motion: "npm:^11.14.4"
-    lucide-react: "npm:^0.468.0"
-    moment-timezone: "npm:^0.5.46"
-    next: "npm:^14.2.21"
-    postcss: "npm:^8.4.49"
-    react: "npm:^18.3.1"
-    react-confirm-alert: "npm:^3.0.6"
-    react-dom: "npm:^18.3.1"
-    react-hook-form: "npm:^7.54.2"
-    react-redux: "npm:^9.2.0"
-    react-timer-hook: "npm:^3.0.7"
-    react-toastify: "npm:^10.0.6"
-    tailwind-merge: "npm:^2.6.0"
-    tailwindcss: "npm:^3.4.17"
-    tailwindcss-animate: "npm:^1.0.7"
-    typescript: "npm:^5.7.3"
-  languageName: unknown
-  linkType: soft
-
 "source-map-js@npm:^1.0.2, source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
@@ -8997,7 +9084,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.8.0":
+"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.8.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -9109,6 +9196,13 @@ __metadata:
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
   checksum: 10/ec8f41aa4359d50f9b59fa61fe3efce3477cc681908c8f84354d8567bb3701fafdddf36ef6bff307024d3feb42c837cf6f670314ba37fc8145e219560e473d14
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10/db43439f69c2d94cc29f75cbfe9de86df87061d6b0c577ebe9bb3255f49b22c50162a7d7eb413b0458b6510b8ca299ac7cff38c3a29fbd31af9f504bcf7fbc0d
   languageName: node
   linkType: hard
 
@@ -9416,6 +9510,21 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 10/159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.18.2":
+  version: 8.18.3
+  resolution: "ws@npm:8.18.3"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 10/725964438d752f0ab0de582cd48d6eeada58d1511c3f613485b5598a83680bedac6187c765b0fe082e2d8cc4341fc57707c813ae780feee82d0c5efe6a4c61b6
   languageName: node
   linkType: hard
 

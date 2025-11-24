@@ -1,28 +1,40 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+// ============================================
+// DTO: GERAR PAGAMENTO
+// ============================================
+// Dados necessários para criar um pagamento de pedido
+// Pizzaria Massa Nostra
+// ============================================
+
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class GeneratePaymentDto {
+  // ============================================
+  // ID DO PEDIDO
+  // ============================================
   @IsNotEmpty({
     context: {
-      userMessage: 'missing-phone',
-      message: 'Telefone não informado',
+      userMessage: 'missing-order-id',
+      message: 'ID do pedido não informado',
     },
   })
-  @IsString({
-    context: { userMessage: 'invalid-phone', message: 'Telefone inválido' },
-  })
-  @IsPhoneNumber('BR')
-  phone: string;
+  @IsNumber(
+    {},
+    {
+      context: {
+        userMessage: 'invalid-order-id',
+        message: 'ID do pedido inválido',
+      },
+    },
+  )
+  order_id: number;
 
+  // ============================================
+  // VALOR DO PAGAMENTO
+  // ============================================
   @IsNotEmpty({
     context: {
       userMessage: 'missing-amount',
-      message: 'Quantidade não informada',
+      message: 'Valor não informado',
     },
   })
   @IsNumber(
@@ -30,26 +42,27 @@ export class GeneratePaymentDto {
     {
       context: {
         userMessage: 'invalid-amount',
-        message: 'Quantidade inválida',
+        message: 'Valor inválido',
       },
     },
   )
   amount: number;
 
+  // ============================================
+  // MÉTODO DE PAGAMENTO
+  // ============================================
+  // pix, dinheiro, cartao_debito, cartao_credito
   @IsNotEmpty({
     context: {
-      userMessage: 'missing-raffle_id',
-      message: 'Rifa não informada',
+      userMessage: 'missing-payment-method',
+      message: 'Método de pagamento não informado',
     },
   })
-  @IsNumber(
-    {},
-    {
-      context: {
-        userMessage: 'invalid-raffle_id',
-        message: 'Rifa inválida',
-      },
+  @IsString({
+    context: {
+      userMessage: 'invalid-payment-method',
+      message: 'Método de pagamento inválido',
     },
-  )
-  raffle_id: number;
+  })
+  payment_method: string;
 }

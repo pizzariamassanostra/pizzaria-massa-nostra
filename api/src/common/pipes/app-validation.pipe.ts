@@ -1,3 +1,11 @@
+// ============================================
+// PIPE: VALIDAÇÃO GLOBAL DE DTOs
+// ============================================
+// Valida todos os DTOs da aplicação
+// Formata erros de validação de forma amigável
+// Pizzaria Massa Nostra
+// ============================================
+
 import {
   BadRequestException,
   ValidationError,
@@ -7,59 +15,68 @@ import {
 export class AppValidationPipe extends ValidationPipe {
   constructor() {
     super({
-      whitelist: true,
-      stopAtFirstError: true,
+      whitelist: true, // Remove campos não definidos no DTO
+      stopAtFirstError: true, // Para no primeiro erro encontrado
       exceptionFactory: (rawErrors) => {
         console.dir(rawErrors, { depth: null });
-        const contexts = rawErrors.map((error) => {
-          if (error.constraints?.whitelistValidation !== undefined) {
-            return [
-              {
-                message: 'forbidden-field',
-                userMessage: `Sua requisição tem um ou mais campos não permitidos (${error.property})`,
-              },
-            ];
-          }
-
-          if (error.constraints?.isEnum) {
-            return [
-              {
-                message: `invalid-${error.property}`,
-                userMessage: `Valor do campo ${error.property} inválido`,
-              },
-            ];
-          }
-
-          if (error.children.length > 0)
-            return this.getContexts(error.children);
-          return Object.values(error.contexts);
-        });
-        const errors = contexts.reduce((acc, cur) => acc.concat(...cur), []);
+        const errors = this.flattenErrors(rawErrors);
         return new BadRequestException({ ok: false, errors });
       },
     });
   }
 
-  getContexts(errors: ValidationError[]) {
-    return errors.map((error) => {
+  // ============================================
+  // FORMATAR ERROS DE VALIDAÇÃO
+  // ============================================
+  private flattenErrors(errors: ValidationError[]): any[] {
+    const result = [];
+
+    for (const error of errors) {
+      // Campo proibido (não está no DTO)
       if (error.constraints?.whitelistValidation !== undefined) {
-        return [
-          {
-            message: 'forbidden-field',
-            userMessage: `Sua requisição tem um ou mais campos não permitidos (${error.property})`,
-          },
-        ];
+        result.push({
+          message: 'forbidden-field',
+          userMessage: `Sua requisição tem um ou mais campos não permitidos (${error.property})`,
+        });
+        continue;
       }
+
+      // Enum inválido
       if (error.constraints?.isEnum) {
-        return [
-          {
-            message: `invalid-${error.property}`,
-            userMessage: `Valor do campo ${error.property} inválido`,
-          },
-        ];
+        result.push({
+          message: `invalid-${error.property}`,
+          userMessage: `Valor do campo ${error.property} inválido`,
+        });
+        continue;
       }
-      if (error.children.length > 0) return this.getContexts(error.children);
-      return Object.values(error.contexts);
-    });
+
+      // Erros aninhados (objetos dentro de objetos)
+      if (error.children && error.children.length > 0) {
+        result.push(...this.flattenErrors(error.children));
+        continue;
+      }
+
+      // Erros normais de validação
+      if (error.constraints) {
+        const constraintKeys = Object.keys(error.constraints);
+
+        for (const key of constraintKeys) {
+          const message = error.constraints[key];
+
+          result.push({
+            message: message,
+            userMessage: message,
+          });
+        }
+      }
+
+      // Contexts (formato customizado)
+      if (error.contexts) {
+        const contextValues = Object.values(error.contexts);
+        result.push(...contextValues);
+      }
+    }
+
+    return result;
   }
 }

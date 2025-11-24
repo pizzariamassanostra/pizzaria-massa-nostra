@@ -1,3 +1,10 @@
+// ============================================
+// FILTER: TRATAMENTO DE ERROS GLOBAL
+// ============================================
+// Intercepta e formata todos os erros da API
+// Pizzaria Massa Nostra
+// ============================================
+
 import ApiError from '@/common/error/entities/api-error.entity';
 import {
   ArgumentsHost,
@@ -10,10 +17,13 @@ import {
 @Catch(Error)
 export class ApiErrorFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
-    // Handling ApiError
+    // ============================================
+    // ERRO CUSTOMIZADO (ApiError)
+    // ============================================
     if (exception instanceof ApiError) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
+
       if (exception.userMessage) {
         return response.status(exception.statusCode ?? 500).send({
           ok: false,
@@ -38,11 +48,14 @@ export class ApiErrorFilter implements ExceptionFilter {
       }
     }
 
-    // Handling BadRequestException
+    // ============================================
+    // ERRO DE VALIDAÇÃO (BadRequest)
+    // ============================================
     if (exception instanceof BadRequestException) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
       const exceptionResponse = exception.getResponse();
+
       if (typeof exceptionResponse['ok'] !== 'boolean') {
         return response.status(400).send({
           ok: false,
@@ -59,6 +72,9 @@ export class ApiErrorFilter implements ExceptionFilter {
       }
     }
 
+    // ============================================
+    // ROTA NÃO ENCONTRADA (404)
+    // ============================================
     if (exception instanceof NotFoundException) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
@@ -73,7 +89,9 @@ export class ApiErrorFilter implements ExceptionFilter {
       });
     }
 
-    //Handling other errors
+    // ============================================
+    // ERRO GENÉRICO (500)
+    // ============================================
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     return response.status(500).send({

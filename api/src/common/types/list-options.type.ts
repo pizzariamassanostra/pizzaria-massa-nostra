@@ -1,3 +1,10 @@
+// ============================================
+// TYPE: OPÇÕES DE LISTAGEM
+// ============================================
+// Tipagem para listagem paginada de recursos
+// Pizzaria Massa Nostra
+// ============================================
+
 export type ListOptions<T> = {
   where?: Array<{ [K in keyof Partial<T>]: T[keyof T] }>;
   relations?: string[];
@@ -5,8 +12,7 @@ export type ListOptions<T> = {
   per_page?: number;
   name?: string;
   ids?: string[];
-  withPaymentsQtd?: boolean;
   additionalSelects?: string[];
-  orderBy?: keyof T | 'all_raffles_numbers_bought';
+  orderBy?: keyof T;
   direction?: 'ASC' | 'DESC';
 };

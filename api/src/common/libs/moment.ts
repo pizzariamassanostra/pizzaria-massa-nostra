@@ -1,3 +1,10 @@
+// ============================================
+// LIB: MOMENT.JS
+// ============================================
+// Biblioteca de datas configurada para UTC
+// Pizzaria Massa Nostra
+// ============================================
+
 import * as mmt from 'moment-timezone';
 
 const moment = mmt;

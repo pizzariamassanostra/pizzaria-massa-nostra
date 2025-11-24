@@ -1,11 +1,21 @@
+// ============================================
+// FUNCTION: CENSURAR NOME
+// ============================================
+// Oculta nomes do meio (LGPD)
+// Exemplo: "João Silva Santos" → "João S***** Santos"
+// Pizzaria Massa Nostra
+// ============================================
+
 export const censorName = (username: string): string => {
   const usernameArray = username.trim().split(' ');
   let censoredArray: string[] = [];
 
   usernameArray?.forEach((word, index) => {
+    // Manter primeiro e último nome
     if ([usernameArray.length - 1, 0].includes(index)) {
       censoredArray.push(word);
     } else {
+      // Censurar nomes do meio
       censoredArray.push(
         word
           .split('')
@@ -17,5 +27,6 @@ export const censorName = (username: string): string => {
       );
     }
   });
+
   return censoredArray.join(' ');
 };

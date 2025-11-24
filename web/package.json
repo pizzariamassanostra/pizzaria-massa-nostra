@@ -1,8 +1,8 @@
 {
-  "name": "sortelancada-front",
-  "version": "0.1.0",
-  "description": "Frontend Sistema de Rifas - Sortelancada",
-  "author": "Lucas IT Dias",
+  "name": "pizzaria-massa-nostra-web",
+  "version": "1.0.0",
+  "description": "Frontend Sistema de Delivery - Pizzaria Massa Nostra",
+  "author": "Lucas IT Dias (@lucasitdias)",
   "private": true,
   "packageManager": "yarn@4.5.3",
   "scripts": {
@@ -41,6 +41,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@react-input/mask": "^1.2.10",
     "@reduxjs/toolkit": "^2.4.0",
+    "@supabase/supabase-js": "^2.48.0",
     "@tanstack/react-query": "^5.62.8",
     "@tanstack/react-table": "^8.20.6",
     "@types/dinero.js": "^1.9.4",

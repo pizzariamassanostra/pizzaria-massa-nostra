@@ -1,25 +1,42 @@
+// ============================================
+// SERVICE: CRIAR CLIENTE SIMPLES
+// ============================================
+// Serviço legado para criação simples de cliente
+// Usado internamente pelo sistema
+// Pizzaria Massa Nostra
+// ============================================
+
 import { Injectable } from '@nestjs/common';
-import { CommonUser } from '../common-user.entity';
+import { CommonUser } from '../entities/common-user.entity';
 import { CommonUserRepository } from '../repositories/common-user.repository';
-import { DeepPartial } from 'typeorm';
 import { CreateCommonUserDto } from '../dtos/create-common-user.dto';
 
 @Injectable()
 export class CreateCommonUserService {
   constructor(private readonly commonUserRepository: CommonUserRepository) {}
 
-  async createUser(
-    createCommonUserDto: CreateCommonUserDto,
-  ): Promise<CommonUser> {
-    const commonUser = new CommonUser();
-    Object.assign(commonUser, createCommonUserDto);
-    return await this.commonUserRepository.create(commonUser);
-  }
+  // ============================================
+  // CRIAR OU RETORNAR CLIENTE (MÉTODO LEGADO)
+  // ============================================
+  // Busca por telefone, se não existir cria novo
+  // Usado para integrações internas
+  async createOrReturn(dto: CreateCommonUserDto): Promise<CommonUser> {
+    // Formatar telefone
+    const formattedPhone = dto.phone.replace(/\D/g, '');
 
-  async updateUser(
-    id: string,
-    updateUser: DeepPartial<CommonUser>,
-  ): Promise<CommonUser> {
-    return await this.commonUserRepository.update(id, updateUser);
+    // Buscar por telefone
+    let commonUser = await this.commonUserRepository.findOne({
+      where: [{ phone: formattedPhone }],
+    });
+
+    // Se não existir, criar
+    if (!commonUser) {
+      const newUser = new CommonUser();
+      newUser.name = dto.name;
+      newUser.phone = formattedPhone;
+      commonUser = await this.commonUserRepository.create(newUser);
+    }
+
+    return commonUser;
   }
 }

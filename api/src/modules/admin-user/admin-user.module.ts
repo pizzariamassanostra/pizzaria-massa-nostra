@@ -1,6 +1,14 @@
+// ============================================
+// MODULE: USUÁRIOS ADMINISTRADORES
+// ============================================
+// Módulo de gerenciamento de administradores da pizzaria
+// (Administrador, Gerente, Analista, Assistente, etc)
+// Pizzaria Massa Nostra
+// ============================================
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminUser } from './admin-user.entity';
+import { AdminUser } from './entities/admin-user.entity';
 import { FindOneAdminUserService } from './services/find-one-admin-user.service';
 import { AdminUserRepository } from './repositories/admin-user.repository';
 

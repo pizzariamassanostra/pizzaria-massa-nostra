@@ -1,5 +1,12 @@
+// ============================================
+// SERVICE: BUSCAR CLIENTE
+// ============================================
+// Busca e lista clientes da pizzaria
+// Pizzaria Massa Nostra
+// ============================================
+
 import { Injectable } from '@nestjs/common';
-import { CommonUser } from '../common-user.entity';
+import { CommonUser } from '../entities/common-user.entity';
 import { CommonUserRepository } from '../repositories/common-user.repository';
 import { FindOneOptions } from '@/common/types/find-one-options.type';
 import { ListOptions } from '@/common/types/list-options.type';
@@ -8,12 +15,18 @@ import { ListOptions } from '@/common/types/list-options.type';
 export class FindOneCommonUserService {
   constructor(private readonly commonUserRepository: CommonUserRepository) {}
 
+  // ============================================
+  // BUSCAR UM CLIENTE
+  // ============================================
   async findOne(options: FindOneOptions<CommonUser>): Promise<CommonUser> {
     return await this.commonUserRepository.findOne(options);
   }
 
+  // ============================================
+  // LISTAR CLIENTES (PAGINADO)
+  // ============================================
   async list(options: ListOptions<CommonUser>): Promise<{
-    commonUsers: (Partial<CommonUser> & { totalRaffles?: string })[];
+    commonUsers: Partial<CommonUser>[];
     count: number;
   }> {
     return await this.commonUserRepository.list(options);

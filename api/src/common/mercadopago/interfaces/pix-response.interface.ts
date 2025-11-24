@@ -1,7 +1,14 @@
+// ============================================
+// INTERFACE: RESPONSE PIX MERCADO PAGO
+// ============================================
+// Resposta da criação de pagamento PIX
+// Pizzaria Massa Nostra
+// ============================================
+
 export interface MercadoPagoPixResponse {
-  id: number;
-  status: string;
-  status_detail: string;
+  id: number; // ID do pagamento no Mercado Pago
+  status: string; // pending, approved, rejected
+  status_detail: string; // Detalhes do status
   transaction_details: TransactionDetails;
   point_of_interaction: PointOfInteraction;
 }
@@ -28,7 +35,7 @@ interface ApplicationData {
 }
 
 interface TransactionData {
-  qr_code_base64: string;
-  qr_code: string;
-  ticket_url: string;
+  qr_code_base64: string; // QR Code em base64
+  qr_code: string; // Código PIX copia e cola
+  ticket_url: string; // URL do boleto (se aplicável)
 }

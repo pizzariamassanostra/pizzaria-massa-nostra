@@ -1,8 +1,14 @@
-import { InjectRepository } from '@nestjs/typeorm';
+// ============================================
+// REPOSITORY: CLIENTES
+// ============================================
+// Acesso ao banco de dados de clientes da pizzaria
+// Pizzaria Massa Nostra
+// ============================================
+
 import { Injectable } from '@nestjs/common';
-import { DeepPartial, Repository } from 'typeorm';
-import ApiError from '@/common/error/entities/api-error.entity';
-import { CommonUser } from '../common-user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommonUser } from '../entities/common-user.entity';
+import { Repository } from 'typeorm';
 import { FindOneOptions } from '@/common/types/find-one-options.type';
 import { ListOptions } from '@/common/types/list-options.type';
 
@@ -10,29 +16,27 @@ import { ListOptions } from '@/common/types/list-options.type';
 export class CommonUserRepository {
   constructor(
     @InjectRepository(CommonUser)
-    private readonly userRepository: Repository<CommonUser>,
+    private readonly commonUserRepository: Repository<CommonUser>,
   ) {}
 
-  async create(commonUser: CommonUser): Promise<CommonUser> {
-    const dbUser = await this.userRepository.save(commonUser);
-    return dbUser;
-  }
-
-  async list(options: ListOptions<CommonUser>): Promise<{
-    commonUsers: (Partial<CommonUser> & { totalRaffles?: string })[];
-    count: number;
-  }> {
-    const qb = this.userRepository.createQueryBuilder('common_users');
+  // ============================================
+  // LISTAR CLIENTES COM PAGINAÇÃO
+  // ============================================
+  async list(
+    options: ListOptions<CommonUser>,
+  ): Promise<{ commonUsers: Partial<CommonUser>[]; count: number }> {
+    const qb = this.commonUserRepository.createQueryBuilder('common_users');
     const { page = 1, per_page = 10 } = options;
+
+    // Filtro por nome ou telefone
     if (options.name) {
-      qb.andWhere(
-        `common_users.name::VARCHAR ILIKE :value OR common_users.phone::VARCHAR ILIKE :value OR common_users.id::VARCHAR ILIKE :value`,
-        {
-          value: `%${options.name}%`,
-        },
+      qb.where(
+        'common_users.name ILIKE :name OR common_users.phone ILIKE :name',
+        { name: `%${options.name}%` },
       );
     }
 
+    // Condições WHERE adicionais
     if (options.where) {
       for (const where of options.where) {
         for (const [key, value] of Object.entries(where)) {
@@ -41,27 +45,46 @@ export class CommonUserRepository {
       }
     }
 
+    // Filtro por IDs específicos
     if (options.ids) {
       qb.andWhereInIds(options.ids);
     }
 
+    // Campos adicionais no SELECT
     if (options.additionalSelects) {
       for (const additionalSelect of options.additionalSelects) {
         qb.addSelect(`common_users.${additionalSelect}`);
       }
     }
 
-    if (options.withPaymentsQtd) {
-      if (!options.relations?.includes('payments'))
-        qb.leftJoin('common_users.payments', 'payments');
-
-      qb.addSelect(
-        'COALESCE(SUM(payments.raffles_quantity), 0)',
-        'totalraffles',
+    // Relacionamentos
+    if (options.relations) {
+      options.relations.forEach((relation) =>
+        qb.leftJoinAndSelect(
+          `common_users.${relation}`,
+          relation.toLowerCase(),
+        ),
       );
-
-      qb.groupBy('common_users.id');
     }
+
+    // Ordenação
+    const orderByField = options.orderBy || 'created_at';
+    const direction = options.direction || 'DESC';
+    qb.orderBy(`common_users.${String(orderByField)}`, direction);
+
+    // Paginação
+    qb.skip((page - 1) * per_page);
+    qb.take(per_page);
+
+    const [commonUsers, count] = await qb.getManyAndCount();
+    return { commonUsers, count };
+  }
+
+  // ============================================
+  // BUSCAR UM CLIENTE
+  // ============================================
+  async findOne(options: FindOneOptions<CommonUser>): Promise<CommonUser> {
+    const qb = this.commonUserRepository.createQueryBuilder('common_users');
 
     if (options.relations) {
       options.relations.forEach((relation) =>
@@ -69,76 +92,76 @@ export class CommonUserRepository {
       );
     }
 
-    if (options.orderBy) {
-      if (
-        options.orderBy == 'all_raffles_numbers_bought' &&
-        options.withPaymentsQtd
-      ) {
-        qb.orderBy('totalraffles', options.direction ?? 'ASC');
-      } else
-        qb.orderBy(
-          `common_users.${options.orderBy}`,
-          options.direction ?? 'ASC',
+    if (options.with_password_hash) {
+      qb.addSelect('common_users.password_hash');
+    }
+
+    if (options.where && options.where.length > 0) {
+      if (options.where.length > 1) {
+        const conditions = options.where.map((where, index) => {
+          const key = Object.keys(where)[0];
+          const value = where[key];
+          const paramName = `${key}_${index}`;
+
+          return {
+            condition: `common_users.${key} = :${paramName}`,
+            param: { [paramName]: value },
+          };
+        });
+
+        const conditionsString = conditions
+          .map((c) => c.condition)
+          .join(' OR ');
+
+        const allParams = conditions.reduce(
+          (acc, c) => ({ ...acc, ...c.param }),
+          {},
         );
-    }
 
-    qb.offset((page - 1) * per_page);
-    qb.limit(per_page);
-
-    const count = await qb.getCount();
-    const commonsUsersWithTotalRaffle = await qb.getRawMany();
-    const commonUsers: (Partial<CommonUser> & { totalRaffles?: string })[] =
-      commonsUsersWithTotalRaffle.map((user) => {
-        return {
-          id: user.common_users_id,
-          name: user.common_users_name,
-          phone: user.common_users_phone,
-          created_at: user.common_users_created_at,
-          updated_at: user.common_users_updated_at,
-          totalRaffles: user.totalraffles,
-        };
-      });
-
-    return { commonUsers, count };
-  }
-
-  async findOne(options: FindOneOptions<CommonUser>): Promise<CommonUser> {
-    const qb = this.userRepository.createQueryBuilder('common_users');
-
-    if (options.relations) {
-      options.relations.forEach((relation) => {
-        qb.leftJoinAndSelect(`common_users.${relation}`, relation);
-      });
-    }
-
-    if (options.where) {
-      for (const where of options.where) {
-        for (const [key, value] of Object.entries(where)) {
+        qb.where(`(${conditionsString})`, allParams);
+      } else {
+        for (const [key, value] of Object.entries(options.where[0])) {
           qb.andWhere(`common_users.${key} = :${key}`, { [key]: value });
         }
       }
     }
 
-    if (options.with_users_raffle_number) {
-      if (!options.relations.includes('payments')) {
-        qb.leftJoinAndSelect('common_users.payments', 'payments');
-      }
-      qb.leftJoin('payments.users_raffle_number', 'users_raffle_number');
-      qb.addSelect('users_raffle_number.number');
+    if (options.additionalSelects) {
+      options.additionalSelects.forEach((select) => {
+        qb.addSelect(`common_users.${select}`);
+      });
     }
 
-    const commonUser = await qb.getOne();
-    return commonUser;
+    return qb.getOne();
   }
 
+  // ============================================
+  // CRIAR CLIENTE
+  // ============================================
+  async create(commonUser: CommonUser): Promise<CommonUser> {
+    return await this.commonUserRepository.save(commonUser);
+  }
+
+  // ============================================
+  // ATUALIZAR CLIENTE (MÉTODO CORRETO PARA customer.service.ts)
+  // ============================================
   async update(
-    id: string,
-    userData: DeepPartial<CommonUser>,
+    userId: number,
+    updateData: Partial<CommonUser>,
   ): Promise<CommonUser> {
-    const user = await this.userRepository.findOne({ where: [{ id }] });
-    if (!user)
-      throw new ApiError('user-not-found', 'Usuário comum não encontrado', 404);
-    Object.assign(user, userData);
-    return await this.userRepository.save(user);
+    // Atualiza no banco
+    await this.commonUserRepository.update(userId, updateData);
+
+    // Retorna usuário atualizado
+    return await this.findOne({
+      where: [{ id: userId }],
+    });
+  }
+
+  // ============================================
+  // DELETAR CLIENTE (SOFT DELETE)
+  // ============================================
+  async softDelete(id: number): Promise<void> {
+    await this.commonUserRepository.softDelete(id);
   }
 }

@@ -1,3 +1,10 @@
+// ============================================
+// STRATEGY: AUTENTICAÇÃO LOCAL
+// ============================================
+// Estratégia de autenticação com usuário e senha
+// Pizzaria Massa Nostra - ADMIN
+// ============================================
+
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../services/auth.service';
@@ -10,11 +17,16 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
+  // ============================================
+  // VALIDAR CREDENCIAIS DO ADMINISTRADOR
+  // ============================================
   async validate(username: string, password: string): Promise<any> {
     const user = await this.authService.validateUser(username, password);
+
     if (!user) {
       throw new ApiError('invalid-credentials', 'Credenciais inválidas', 401);
     }
+
     return {
       id: user.id,
       name: user.name,

@@ -1,3 +1,10 @@
+// ============================================
+// DTO: VALOR GENÉRICO
+// ============================================
+// DTO para operações que recebem apenas um valor numérico
+// Pizzaria Massa Nostra
+// ============================================
+
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class ValueDto {

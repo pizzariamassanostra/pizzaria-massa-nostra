@@ -1,34 +1,44 @@
-// Importações principais do NestJS e módulos internos
+// ============================================
+// MODULE: AUTENTICAÇÃO
+// ============================================
+// Módulo de autenticação (Admin + Cliente)
+// Pizzaria Massa Nostra
+// ============================================
+
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { AuthService } from './services/auth.service';
-import { LocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtCustomerStrategy } from './strategies/jwt-customer.strategy';
 import { AdminUserModule } from '../admin-user/admin-user.module';
+import { CommonUserModule } from '../common-user/common-user.module';
 
 @Module({
   controllers: [AuthController],
   imports: [
     AdminUserModule,
-    ConfigModule, // Garante que as variáveis do .env estejam disponíveis
-
-    // Configuração do JWT usando variável de ambiente JWT_SECRET
+    CommonUserModule, // ⭐ NOVO: Para validar clientes
+    ConfigModule,
+    // ============================================
+    // CONFIGURAÇÃO DO JWT
+    // ============================================
     JwtModule.registerAsync({
       useFactory: () => ({
-        secret: process.env.JWT_SECRET, // Chave secreta usada para assinar os tokens
-        signOptions: { expiresIn: '1d' }, // ⏱Token expira em 1 dia
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: '7d' }, // Token expira em 7 dias
       }),
     }),
-
-    PassportModule, // Necessário para estratégias de autenticação
+    PassportModule,
   ],
   providers: [
-    AuthService, // Serviço que gerencia autenticação
-    LocalStrategy, // Estratégia de login com usuário/senha
-    JwtStrategy, // Estratégia de autenticação via token JWT
+    AuthService,
+    LocalStrategy, // Login de admin
+    JwtStrategy, // Validação de token admin
+    JwtCustomerStrategy, // ⭐ NOVO: Validação de token cliente
   ],
 })
 export class AuthModule {}
