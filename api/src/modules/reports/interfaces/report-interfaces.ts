@@ -9,6 +9,7 @@
 // VENDAS POR PERÍODO
 // ============================================
 export interface SalesReport {
+  sales: any;
   period: {
     start_date: string;
     end_date: string;

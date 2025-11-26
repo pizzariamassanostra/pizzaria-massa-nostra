@@ -3,14 +3,22 @@
 // ============================================
 // Lógica de negócio para geração de relatórios
 // Pizzaria Massa Nostra
+//
+// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
+// Data: 2025-11-26 04:00:00 UTC
+// Desenvolvedor: @lucasitdias
+// Status: ✅ Completo com Excel
 // ============================================
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, MoreThanOrEqual } from 'typeorm';
-import { Order } from '@/modules/order/entities/order.entity';
-import { OrderItem } from '@/modules/order/entities/order-item.entity';
-import { CommonUser } from '@/modules/common-user/entities/common-user.entity';
+
+// ✅ CORRIGIDO: Usar paths relativos
+import { Order } from '../../order/entities/order.entity';
+import { OrderItem } from '../../order/entities/order-item.entity';
+import { CommonUser } from '../../common-user/entities/common-user.entity';
+
 import {
   SalesReport,
   TopProductsReport,
@@ -41,6 +49,11 @@ export class ReportsService {
 
   // ============================================
   // CALCULAR DATAS DO PERÍODO
+  // ============================================
+  // Converte filtros de período em datas concretas
+  // Suporta: today, week, month, year ou datas customizadas
+  // @param filter - Filtros do relatório
+  // @returns { start_date, end_date } - Período calculado
   // ============================================
   private getDateRange(filter: ReportFilterDto): {
     start_date: Date;
@@ -74,20 +87,30 @@ export class ReportsService {
   // ============================================
   // RELATÓRIO DE VENDAS
   // ============================================
-  async getSalesReport(filter: ReportFilterDto): Promise<SalesReport> {
+  async getSalesReport(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<SalesReport> {
+    const filter: ReportFilterDto = {
+      start_date: startDate,
+      end_date: endDate,
+    };
+
     const { start_date, end_date } = this.getDateRange(filter);
 
-    // Buscar pedidos do período
+    // ✅ CORRIGIDO: usar alias 'ord' e relations corretas
     const queryBuilder = this.orderRepo
-      .createQueryBuilder('order')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .createQueryBuilder('ord')
+      .leftJoinAndSelect('ord.user', 'user')
+      .leftJoinAndSelect('ord.items', 'items')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.deleted_at IS NULL');
+      .andWhere('ord.deleted_at IS NULL');
 
     if (filter.status && filter.status !== 'all') {
-      queryBuilder.andWhere('order.status = :status', {
+      queryBuilder.andWhere('ord.status = :status', {
         status: filter.status,
       });
     }
@@ -112,12 +135,12 @@ export class ReportsService {
     // Buscar itens vendidos
     const items = await this.orderItemRepo
       .createQueryBuilder('item')
-      .leftJoin('item.order', 'order')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .leftJoin('item.order', 'ord')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .getMany();
 
     const total_items_sold = items.reduce((sum, i) => sum + i.quantity, 0);
@@ -206,6 +229,19 @@ export class ReportsService {
       by_payment_method,
       by_status,
       daily_breakdown,
+      sales: orders.map((order) => ({
+  id: order.id,
+  order_number: `ORD-${order.id}`,  // ✅ GERAR A PARTIR DO ID
+  customer_name: order.user?. name || 'Cliente',
+  items_count: order.items?. length || 0,
+  subtotal: parseFloat(order.subtotal. toString()),
+  delivery_fee: parseFloat(order. delivery_fee.toString()),
+  discount: parseFloat(order.discount. toString()),
+  total: parseFloat(order.total. toString()),
+  payment_method: order.payment_method,
+  status: order.status,
+  created_at: order.created_at,
+})),
     };
   }
 
@@ -220,23 +256,23 @@ export class ReportsService {
 
     const items = await this.orderItemRepo
       .createQueryBuilder('item')
-      .leftJoin('item.order', 'order')
+      .leftJoin('item.order', 'ord')
       .leftJoin('item.product', 'product')
       .leftJoin('product.category', 'category')
       .select('product.id', 'product_id')
-      .addSelect('product.name', 'product_name')
-      .addSelect('category.name', 'category')
+      .addSelect('product. name', 'product_name')
+      .addSelect('category. name', 'category')
       .addSelect('SUM(item.quantity)', 'quantity_sold')
       .addSelect('SUM(item.subtotal)', 'total_revenue')
       .addSelect('AVG(item.unit_price)', 'average_price')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
-      .groupBy('product.id')
+      .andWhere('ord.status != :status', { status: 'cancelled' })
+      .groupBy('product. id')
       .addGroupBy('product.name')
-      .addGroupBy('category.name')
+      .addGroupBy('category. name')
       .orderBy('quantity_sold', 'DESC')
       .limit(limit)
       .getRawMany();
@@ -284,10 +320,10 @@ export class ReportsService {
     });
 
     const today_revenue_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('SUM(order.total)', 'total')
-      .where('order.created_at >= :start', { start: today_start })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .createQueryBuilder('ord')
+      .select('SUM(ord.total)', 'total')
+      .where('ord.created_at >= :start', { start: today_start })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .getRawOne();
 
     const today_revenue = parseFloat(today_revenue_data?.total || '0');
@@ -303,10 +339,10 @@ export class ReportsService {
     });
 
     const week_revenue_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('SUM(order.total)', 'total')
-      .where('order.created_at >= :start', { start: week_start })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .createQueryBuilder('ord')
+      .select('SUM(ord.total)', 'total')
+      .where('ord.created_at >= :start', { start: week_start })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .getRawOne();
 
     const week_revenue = parseFloat(week_revenue_data?.total || '0');
@@ -322,10 +358,10 @@ export class ReportsService {
     });
 
     const month_revenue_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('SUM(order.total)', 'total')
-      .where('order.created_at >= :start', { start: month_start })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .createQueryBuilder('ord')
+      .select('SUM(ord.total)', 'total')
+      .where('ord.created_at >= :start', { start: month_start })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .getRawOne();
 
     const month_revenue = parseFloat(month_revenue_data?.total || '0');
@@ -335,11 +371,11 @@ export class ReportsService {
     // Top produtos (semana)
     const top_products_data = await this.orderItemRepo
       .createQueryBuilder('item')
-      .leftJoin('item.order', 'order')
+      .leftJoin('item.order', 'ord')
       .leftJoin('item.product', 'product')
       .select('product.name', 'name')
       .addSelect('SUM(item.quantity)', 'quantity')
-      .where('order.created_at >= :start', { start: week_start })
+      .where('ord.created_at >= :start', { start: week_start })
       .groupBy('product.name')
       .orderBy('quantity', 'DESC')
       .limit(5)
@@ -392,12 +428,10 @@ export class ReportsService {
   async getCustomerReport(filter: ReportFilterDto): Promise<CustomerReport> {
     const { start_date, end_date } = this.getDateRange(filter);
 
-    // Total de clientes
     const total_customers = await this.userRepo.count({
       where: { deleted_at: null },
     });
 
-    // Novos clientes no período
     const new_customers = await this.userRepo.count({
       where: {
         created_at: Between(start_date, end_date),
@@ -405,20 +439,18 @@ export class ReportsService {
       },
     });
 
-    // Clientes ativos (fizeram pedido no período)
     const active_customers_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('DISTINCT order.common_user_id')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .createQueryBuilder('ord')
+      .select('DISTINCT ord.common_user_id')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .getRawMany();
 
     const active_customers = active_customers_data.length;
 
-    // Total de pedidos no período
     const total_orders = await this.orderRepo.count({
       where: {
         created_at: Between(start_date, end_date),
@@ -426,21 +458,20 @@ export class ReportsService {
       },
     });
 
-    // Top clientes
     const top_customers_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .leftJoin('order.user', 'user')
+      .createQueryBuilder('ord')
+      .leftJoin('ord.user', 'user')
       .select('user.id', 'customer_id')
       .addSelect('user.name', 'customer_name')
-      .addSelect('COUNT(order.id)', 'total_orders')
-      .addSelect('SUM(order.total)', 'total_spent')
-      .addSelect('AVG(order.total)', 'average_ticket')
-      .addSelect('MAX(order.created_at)', 'last_order_date')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .addSelect('COUNT(ord.id)', 'total_orders')
+      .addSelect('SUM(ord.total)', 'total_spent')
+      .addSelect('AVG(ord.total)', 'average_ticket')
+      .addSelect('MAX(ord.created_at)', 'last_order_date')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .groupBy('user.id')
       .addGroupBy('user.name')
       .orderBy('total_spent', 'DESC')
@@ -477,17 +508,16 @@ export class ReportsService {
   async getPeakHoursReport(filter: ReportFilterDto): Promise<PeakHoursReport> {
     const { start_date, end_date } = this.getDateRange(filter);
 
-    // Agrupar por hora
     const by_hour_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('EXTRACT(HOUR FROM order.created_at)', 'hour')
-      .addSelect('COUNT(order.id)', 'orders')
-      .addSelect('SUM(order.total)', 'revenue')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .createQueryBuilder('ord')
+      .select('EXTRACT(HOUR FROM ord.created_at)', 'hour')
+      .addSelect('COUNT(ord.id)', 'orders')
+      .addSelect('SUM(ord.total)', 'revenue')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .groupBy('hour')
       .orderBy('hour', 'ASC')
       .getRawMany();
@@ -498,17 +528,16 @@ export class ReportsService {
       revenue: parseFloat(h.revenue),
     }));
 
-    // Agrupar por dia da semana
     const by_day_data = await this.orderRepo
-      .createQueryBuilder('order')
-      .select("TO_CHAR(order.created_at, 'Day')", 'day')
-      .addSelect('COUNT(order.id)', 'orders')
-      .addSelect('SUM(order.total)', 'revenue')
-      .where('order.created_at BETWEEN :start AND :end', {
+      .createQueryBuilder('ord')
+      .select("TO_CHAR(ord.created_at, 'Day')", 'day')
+      .addSelect('COUNT(ord.id)', 'orders')
+      .addSelect('SUM(ord.total)', 'revenue')
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .andWhere('order.status != :status', { status: 'cancelled' })
+      .andWhere('ord.status != :status', { status: 'cancelled' })
       .groupBy('day')
       .getRawMany();
 
@@ -525,33 +554,222 @@ export class ReportsService {
   }
 
   // ============================================
-  // EXPORTAR VENDAS EM CSV
+  // EXPORTAR EXCEL
+  // ============================================
+  async exportSalesToExcel(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<Buffer> {
+    const ExcelJS = require('exceljs');
+    const salesData = await this.getSalesReport(startDate, endDate);
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Pizzaria Massa Nostra';
+    workbook.created = new Date();
+
+    const worksheet = workbook.addWorksheet('Vendas', {
+      properties: { tabColor: { argb: 'FFd32f2f' } },
+      views: [{ state: 'frozen', xSplit: 0, ySplit: 3 }],
+    });
+
+    worksheet.mergeCells('A1:G1');
+    const titleCell = worksheet.getCell('A1');
+    titleCell.value = '🍕 PIZZARIA MASSA NOSTRA - RELATÓRIO DE VENDAS';
+    titleCell.font = {
+      name: 'Arial',
+      size: 16,
+      bold: true,
+      color: { argb: 'FFd32f2f' },
+    };
+    titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+    titleCell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFF5F5F5' },
+    };
+
+    worksheet.mergeCells('A2:G2');
+    const periodCell = worksheet.getCell('A2');
+    periodCell.value = `Período: ${startDate || 'Início'} até ${endDate || 'Hoje'}`;
+    periodCell.font = { name: 'Arial', size: 12 };
+    periodCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+    worksheet.getRow(3).height = 5;
+
+    const headerRow = worksheet.getRow(4);
+    headerRow.values = [
+      'Data',
+      'Nº Pedido',
+      'Cliente',
+      'Itens',
+      'Forma Pagamento',
+      'Total',
+      'Status',
+    ];
+
+    headerRow.font = {
+      name: 'Arial',
+      size: 11,
+      bold: true,
+      color: { argb: 'FFFFFFFF' },
+    };
+    headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+    headerRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFd32f2f' },
+    };
+    headerRow.height = 25;
+
+    headerRow.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    let totalGeral = 0;
+    let rowIndex = 5;
+
+    salesData.sales.forEach((sale: any) => {
+      const row = worksheet.getRow(rowIndex);
+
+      const statusMap = {
+        pending: 'Pendente',
+        confirmed: 'Confirmado',
+        preparing: 'Preparando',
+        ready: 'Pronto',
+        out_for_delivery: 'Em Entrega',
+        delivered: 'Entregue',
+        cancelled: 'Cancelado',
+      };
+
+      const paymentMap = {
+        pix: 'PIX',
+        credit_card: 'Cartão Crédito',
+        debit_card: 'Cartão Débito',
+        cash: 'Dinheiro',
+        voucher: 'Vale Refeição',
+      };
+
+      // ✅ CORRIGIDO: Garantir que nenhum valor seja undefined
+      const orderNumber = sale.order_number || `ORD-${sale.id}`;
+      const customerName = sale.customer_name || 'Cliente';
+      const itemsCount = sale.items_count || 0;
+      const paymentMethod =
+        paymentMap[sale.payment_method] || sale.payment_method || 'N/A';
+      const total = parseFloat(sale.total) || 0;
+      const status = statusMap[sale.status] || sale.status || 'N/A';
+      const createdAt = sale.created_at
+        ? new Date(sale.created_at).toLocaleDateString('pt-BR')
+        : '-';
+
+      row.values = [
+        createdAt,
+        orderNumber,
+        customerName,
+        itemsCount,
+        paymentMethod,
+        total,
+        status,
+      ];
+
+      row.font = { name: 'Arial', size: 10 };
+      row.alignment = { vertical: 'middle' };
+
+      if (rowIndex % 2 === 0) {
+        row.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFF9F9F9' },
+        };
+      }
+
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin', color: { argb: 'FFE0E0E0' } },
+          left: { style: 'thin', color: { argb: 'FFE0E0E0' } },
+          bottom: { style: 'thin', color: { argb: 'FFE0E0E0' } },
+          right: { style: 'thin', color: { argb: 'FFE0E0E0' } },
+        };
+      });
+
+      row.getCell(6).numFmt = 'R$ #,##0.00';
+
+      totalGeral += total;
+      rowIndex++;
+    });
+
+    const totalRow = worksheet.getRow(rowIndex);
+    totalRow.values = ['', '', '', '', 'TOTAL GERAL:', totalGeral, ''];
+    totalRow.font = { name: 'Arial', size: 12, bold: true };
+    totalRow.alignment = { vertical: 'middle', horizontal: 'right' };
+    totalRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFFEB3B' },
+    };
+
+    totalRow.getCell(6).numFmt = 'R$ #,##0.00';
+
+    totalRow.eachCell((cell, colNumber) => {
+      if (colNumber >= 5) {
+        cell.border = {
+          top: { style: 'double' },
+          bottom: { style: 'double' },
+          left: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      }
+    });
+
+    worksheet.columns = [
+      { key: 'data', width: 12 },
+      { key: 'pedido', width: 20 },
+      { key: 'cliente', width: 30 },
+      { key: 'itens', width: 8 },
+      { key: 'pagamento', width: 18 },
+      { key: 'total', width: 15 },
+      { key: 'status', width: 15 },
+    ];
+
+    worksheet.autoFilter = {
+      from: { row: 4, column: 1 },
+      to: { row: rowIndex - 1, column: 7 },
+    };
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    return Buffer.from(buffer);
+  }
+
+  // ============================================
+  // EXPORTAR CSV
   // ============================================
   async exportSalesCSV(filter: ReportFilterDto): Promise<string> {
     const { start_date, end_date } = this.getDateRange(filter);
 
     const orders = await this.orderRepo
-      .createQueryBuilder('order')
-      .leftJoin('order.user', 'user')
+      .createQueryBuilder('ord')
+      .leftJoin('ord.user', 'user')
       .select([
-        'order.id',
-        'order.created_at',
+        'ord.id',
+        'ord. created_at',
         'user.name',
-        'order.total',
-        'order.status',
-        'order.payment_method',
+        'ord. total',
+        'ord.status',
+        'ord.payment_method',
       ])
-      .where('order.created_at BETWEEN :start AND :end', {
+      .where('ord.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,
       })
-      .orderBy('order.created_at', 'DESC')
+      .orderBy('ord.created_at', 'DESC')
       .getMany();
 
-    // Criar cabeçalho CSV
     let csv = 'ID,Data,Cliente,Total,Status,Pagamento\n';
 
-    // Adicionar linhas
     orders.forEach((order) => {
       const date = order.created_at.toISOString().split('T')[0];
       const customer = order.user?.name || 'Cliente';

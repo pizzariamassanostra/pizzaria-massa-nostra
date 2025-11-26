@@ -3,25 +3,46 @@
 // ============================================
 // Geração de comprovantes de compra em PDF
 // Cria snapshot do pedido e gera PDF formatado
+// ✅ AGORA COM ENVIO AUTOMÁTICO POR E-MAIL
+//
 // Pizzaria Massa Nostra
+// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
+// Data: 2025-11-26 03:20:00 UTC
 // Desenvolvedor: @lucasitdias
+// Status: ✅ Completo com E-mail
 // ============================================
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Receipt } from '../entities/receipt.entity';
-import { Order } from '@/modules/order/entities/order.entity';
-const PDFDocument = require('pdfkit'); // ✅ ÚNICA MUDANÇA: LINHA 15
+
+// ✅ CORREÇÃO: Usar path relativo
+import { Order } from '../../order/entities/order.entity';
+
+// ✅ CORREÇÃO: Usar paths relativos para serviços de e-mail
+import { EmailService } from '../../notification/services/email.service';
+import {
+  generateReceiptEmailHTML,
+  ReceiptEmailData,
+} from '../../notification/templates/receipt-email.template';
+
+const PDFDocument = require('pdfkit');
 
 @Injectable()
 export class ReceiptService {
+  // ✅ NOVO: Logger para rastreamento
+  private readonly logger = new Logger(ReceiptService.name);
+
   constructor(
     @InjectRepository(Receipt)
     private readonly receiptRepo: Repository<Receipt>,
 
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
+
+    // ✅ NOVO: Injetar EmailService
+    private readonly emailService: EmailService,
   ) {}
 
   // ============================================
@@ -29,10 +50,18 @@ export class ReceiptService {
   // ============================================
   // Cria um novo comprovante com snapshot do pedido
   // Se já existir, retorna o existente
+  // ✅ NOVO: Agora envia e-mail automaticamente!
+  //
   // @param orderId - ID do pedido
+  // @param sendEmail - Se deve enviar e-mail (padrão: true)
   // @returns Promise<Receipt>
   // ============================================
-  async generateReceipt(orderId: number): Promise<Receipt> {
+  async generateReceipt(
+    orderId: number,
+    sendEmail: boolean = true, // ✅ NOVO: Parâmetro para controlar envio
+  ): Promise<Receipt> {
+    this.logger.log(`📄 Gerando comprovante para pedido #${orderId}`);
+
     // Buscar pedido completo com todas as relações necessárias
     const order = await this.orderRepo.findOne({
       where: { id: orderId },
@@ -42,6 +71,7 @@ export class ReceiptService {
         'items.product', // Produto de cada item
         'items.variant', // Variação (tamanho) de cada item
         'payment', // Dados do pagamento
+        'delivery_address', // ✅ NOVO: Endereço de entrega
       ],
     });
 
@@ -51,21 +81,27 @@ export class ReceiptService {
     }
 
     // Verificar se já existe comprovante para este pedido
-    // Evita duplicação de comprovantes
-    const existing = await this.receiptRepo.findOne({
+    let receipt = await this.receiptRepo.findOne({
       where: { order_id: orderId },
     });
 
-    if (existing) {
-      return existing; // Retorna comprovante existente
+    // ✅ NOVO: Se já existe e não foi enviado por e-mail, enviar agora
+    if (receipt) {
+      this.logger.warn(`⚠️ Comprovante já existe para pedido #${orderId}`);
+
+      // Se deve enviar e-mail e ainda não foi enviado
+      if (sendEmail && !receipt.was_emailed && order.customer?.email) {
+        await this.sendReceiptEmail(receipt, order);
+      }
+
+      return receipt;
     }
 
     // Gerar número único do comprovante
-    // Formato: REC-YYYYMMDD-XXXX
     const receiptNumber = await this.generateReceiptNumber();
 
     // Criar objeto comprovante com snapshot do pedido
-    const receipt = this.receiptRepo.create({
+    receipt = this.receiptRepo.create({
       // Relacionamento
       order_id: orderId,
 
@@ -81,9 +117,8 @@ export class ReceiptService {
       items_json: JSON.stringify(
         order.items.map((item) => ({
           product_name: item.product.name,
-          variant_name: item.variant?.size || 'Padrão',
+          variant_name: item.variant?.size || item.variant?.label || 'Padrão',
           quantity: item.quantity,
-          // ✅ CORREÇÃO: usar unit_price e total_price (nomes corretos)
           unit_price: parseFloat(item.unit_price.toString()),
           total_price: parseFloat(item.total_price.toString()),
         })),
@@ -100,10 +135,123 @@ export class ReceiptService {
 
       // Data de emissão
       issue_date: new Date(),
+
+      // ✅ NOVO: Campos de controle de e-mail
+      was_emailed: false,
+      emailed_at: null,
     });
 
     // Salvar no banco de dados
-    return this.receiptRepo.save(receipt);
+    receipt = await this.receiptRepo.save(receipt);
+
+    this.logger.log(`✅ Comprovante ${receiptNumber} gerado com sucesso`);
+
+    // ✅ NOVO: Enviar e-mail se solicitado e cliente tiver e-mail
+    if (sendEmail && order.customer?.email) {
+      await this.sendReceiptEmail(receipt, order);
+    } else if (sendEmail && !order.customer?.email) {
+      this.logger.warn(`⚠️ Cliente sem e-mail - Comprovante não enviado`);
+    }
+
+    return receipt;
+  }
+
+  // ============================================
+  // ✅ NOVO: ENVIAR COMPROVANTE POR E-MAIL
+  // ============================================
+  // Envia o comprovante em PDF por e-mail
+  // Usa o template HTML formatado
+  // Marca o comprovante como enviado
+  //
+  // @param receipt - Comprovante gerado
+  // @param order - Pedido completo
+  // @returns Promise<boolean> - true se enviado com sucesso
+  // ============================================
+  private async sendReceiptEmail(
+    receipt: Receipt,
+    order: any,
+  ): Promise<boolean> {
+    try {
+      const customerEmail = receipt.customer_email || order.customer?.email;
+
+      // Validar e-mail
+      if (!customerEmail) {
+        this.logger.warn('⚠️ Cliente sem e-mail cadastrado');
+        return false;
+      }
+
+      this.logger.log(`📧 Enviando comprovante para ${customerEmail}`);
+
+      // Gerar PDF do comprovante
+      const pdfBuffer = await this.generatePDF(receipt.id);
+
+      // Preparar dados para o template de e-mail
+      const emailData: ReceiptEmailData = {
+        customerName: receipt.customer_name,
+        orderNumber: order.order_number,
+        orderDate: new Date(receipt.issue_date).toLocaleString('pt-BR'),
+        items: JSON.parse(receipt.items_json).map((item: any) => ({
+          name: `${item.product_name}${item.variant_name ? ` (${item.variant_name})` : ''}`,
+          quantity: item.quantity,
+          unitPrice: item.unit_price,
+          totalPrice: item.total_price,
+        })),
+        subtotal: parseFloat(receipt.subtotal.toString()),
+        deliveryFee: parseFloat(receipt.delivery_fee.toString()),
+        discount: parseFloat(receipt.discount.toString()),
+        total: parseFloat(receipt.total.toString()),
+        paymentMethod: receipt.payment_method,
+        deliveryToken: order.delivery_token || '',
+        address: order.delivery_address
+          ? this.formatAddress(order.delivery_address)
+          : undefined,
+      };
+
+      // Gerar HTML formatado do e-mail
+      const htmlContent = generateReceiptEmailHTML(emailData);
+
+      // Enviar e-mail com PDF anexo
+      const sent = await this.emailService.sendReceiptEmail(
+        customerEmail,
+        order.order_number,
+        htmlContent,
+        pdfBuffer,
+      );
+
+      // Se enviado com sucesso, marcar no banco
+      if (sent) {
+        receipt.was_emailed = true;
+        receipt.emailed_at = new Date();
+        await this.receiptRepo.save(receipt);
+
+        this.logger.log(`✅ Comprovante enviado para ${customerEmail}`);
+      }
+
+      return sent;
+    } catch (error) {
+      this.logger.error(`❌ Erro ao enviar comprovante por e-mail:`, error);
+      return false;
+    }
+  }
+
+  // ============================================
+  // ✅ NOVO: FORMATAR ENDEREÇO PARA E-MAIL
+  // ============================================
+  // Converte objeto de endereço em string formatada
+  //
+  // @param address - Objeto endereço
+  // @returns string - Endereço formatado
+  // ============================================
+  private formatAddress(address: any): string {
+    const parts = [
+      `${address.rua}, ${address.numero}`,
+      address.complemento,
+      address.bairro,
+      `${address.cidade}/${address.estado}`,
+      `CEP: ${address.cep}`,
+    ];
+
+    return parts.filter(Boolean).join(', ');
   }
 
   // ============================================
@@ -151,7 +299,7 @@ export class ReceiptService {
   async findByOrder(orderId: number): Promise<Receipt> {
     const receipt = await this.receiptRepo.findOne({
       where: { order_id: orderId },
-      relations: ['order'], // Incluir dados do pedido
+      relations: ['order'],
     });
 
     if (!receipt) {
@@ -189,6 +337,7 @@ export class ReceiptService {
   // GERAR PDF DO COMPROVANTE
   // ============================================
   // Gera PDF formatado com dados do comprovante
+  // Mantém toda a formatação original
   // @param receiptId - ID do comprovante
   // @returns Promise<Buffer> - Buffer do PDF gerado
   // @throws NotFoundException se comprovante não existir
@@ -209,8 +358,8 @@ export class ReceiptService {
       try {
         // Criar documento PDF com configurações
         const doc = new PDFDocument({
-          size: 'A4', // Tamanho A4
-          margin: 50, // Margem de 50px
+          size: 'A4',
+          margin: 50,
           info: {
             Title: `Comprovante ${receipt.receipt_number}`,
             Author: 'Pizzaria Massa Nostra',
@@ -219,10 +368,8 @@ export class ReceiptService {
           },
         });
 
-        // Array para armazenar chunks do PDF
         const chunks: Buffer[] = [];
 
-        // Eventos do documento
         doc.on('data', (chunk) => chunks.push(chunk));
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
@@ -238,7 +385,7 @@ export class ReceiptService {
         doc
           .fontSize(10)
           .font('Helvetica')
-          .text('CNPJ: 12. 345.678/0001-90', { align: 'center' })
+          .text('CNPJ: 12.345. 678/0001-90', { align: 'center' })
           .text('Avenida Exemplo, 1000 - Centro - Montes Claros/MG', {
             align: 'center',
           })
@@ -260,9 +407,7 @@ export class ReceiptService {
         doc.fontSize(10).font('Helvetica');
 
         const y = doc.y;
-        // Número do comprovante (esquerda)
         doc.text(`Número: ${receipt.receipt_number}`, 50, y);
-        // Data de emissão (direita)
         doc.text(
           `Data: ${new Date(receipt.issue_date).toLocaleString('pt-BR')}`,
           300,
@@ -283,7 +428,6 @@ export class ReceiptService {
         doc.fontSize(10).font('Helvetica');
         doc.text(`Nome: ${receipt.customer_name}`);
 
-        // Campos opcionais (só exibe se existir)
         if (receipt.customer_cpf) {
           doc.text(`CPF: ${receipt.customer_cpf}`);
         }
@@ -301,7 +445,6 @@ export class ReceiptService {
           .text('ITENS DO PEDIDO')
           .moveDown(0.5);
 
-        // Cabeçalho da tabela
         const tableTop = doc.y;
         doc.fontSize(9).font('Helvetica-Bold');
         doc.text('Item', 50, tableTop);
@@ -309,32 +452,24 @@ export class ReceiptService {
         doc.text('Valor Un. ', 350, tableTop, { width: 80, align: 'right' });
         doc.text('Total', 450, tableTop, { width: 90, align: 'right' });
 
-        // Linha separadora
         doc
           .moveTo(50, tableTop + 15)
           .lineTo(540, tableTop + 15)
           .stroke();
 
-        // Parse dos itens JSON
         const items = JSON.parse(receipt.items_json);
         let yPos = tableTop + 25;
 
         doc.fontSize(9).font('Helvetica');
 
-        // Iterar sobre cada item
         items.forEach((item: any) => {
           const itemName = `${item.product_name} (${item.variant_name})`;
 
-          // Nome do item
           doc.text(itemName, 50, yPos, { width: 240 });
-
-          // Quantidade
           doc.text(item.quantity.toString(), 300, yPos, {
             width: 50,
             align: 'center',
           });
-
-          // Valor unitário
           doc.text(
             item.unit_price.toLocaleString('pt-BR', {
               style: 'currency',
@@ -344,8 +479,6 @@ export class ReceiptService {
             yPos,
             { width: 80, align: 'right' },
           );
-
-          // Total do item
           doc.text(
             item.total_price.toLocaleString('pt-BR', {
               style: 'currency',
@@ -359,7 +492,6 @@ export class ReceiptService {
           yPos += 20;
         });
 
-        // Linha final da tabela
         doc.moveTo(50, yPos).lineTo(540, yPos).stroke();
         yPos += 15;
 
@@ -368,7 +500,6 @@ export class ReceiptService {
         // ============================================
         doc.fontSize(10).font('Helvetica');
 
-        // Subtotal
         doc.text('Subtotal:', 350, yPos);
         doc.text(
           parseFloat(receipt.subtotal.toString()).toLocaleString('pt-BR', {
@@ -381,7 +512,6 @@ export class ReceiptService {
         );
         yPos += 15;
 
-        // Taxa de entrega
         doc.text('Taxa de Entrega:', 350, yPos);
         doc.text(
           parseFloat(receipt.delivery_fee.toString()).toLocaleString('pt-BR', {
@@ -394,9 +524,8 @@ export class ReceiptService {
         );
         yPos += 15;
 
-        // Desconto (se houver)
         if (parseFloat(receipt.discount.toString()) > 0) {
-          doc.fillColor('red'); // Desconto em vermelho
+          doc.fillColor('red');
           doc.text('Desconto:', 350, yPos);
           doc.text(
             `-${parseFloat(receipt.discount.toString()).toLocaleString(
@@ -410,15 +539,13 @@ export class ReceiptService {
             yPos,
             { width: 90, align: 'right' },
           );
-          doc.fillColor('black'); // Voltar para preto
+          doc.fillColor('black');
           yPos += 15;
         }
 
-        // Linha antes do total
         doc.moveTo(350, yPos).lineTo(540, yPos).stroke();
         yPos += 10;
 
-        // TOTAL FINAL (destacado)
         doc.fontSize(12).font('Helvetica-Bold');
         doc.text('TOTAL:', 350, yPos);
         doc.text(
@@ -438,7 +565,6 @@ export class ReceiptService {
         // ============================================
         doc.fontSize(10).font('Helvetica');
 
-        // Mapeamento de códigos para nomes amigáveis
         const paymentMethodMap: Record<string, string> = {
           pix: 'PIX',
           credit_card: 'Cartão de Crédito',
@@ -462,7 +588,7 @@ export class ReceiptService {
         doc
           .fontSize(8)
           .font('Helvetica')
-          .text('Obrigado pela preferência!  Volte sempre! ', 50, 700, {
+          .text('Obrigado pela preferência! Volte sempre! ', 50, 700, {
             align: 'center',
           })
           .text('Este documento não possui valor fiscal', {
@@ -472,7 +598,6 @@ export class ReceiptService {
             align: 'center',
           });
 
-        // Finalizar PDF
         doc.end();
       } catch (error) {
         reject(error);
@@ -488,17 +613,45 @@ export class ReceiptService {
   // @returns Promise<Receipt>
   // ============================================
   async reissue(orderId: number): Promise<Receipt> {
-    // Tentar buscar comprovante existente
     const existing = await this.receiptRepo.findOne({
       where: { order_id: orderId },
     });
 
-    // Se existir, retornar
     if (existing) {
       return existing;
     }
 
-    // Se não existir, gerar novo
     return this.generateReceipt(orderId);
+  }
+
+  // ============================================
+  // ✅ NOVO: REENVIAR E-MAIL DO COMPROVANTE
+  // ============================================
+  // Reenvia o comprovante por e-mail
+  // Útil se o cliente não recebeu ou perdeu
+  //
+  // @param orderId - ID do pedido
+  // @returns Promise<boolean> - true se enviado
+  // ============================================
+  async resendEmail(orderId: number): Promise<boolean> {
+    this.logger.log(`📧 Reenviando comprovante para pedido #${orderId}`);
+
+    const receipt = await this.findByOrder(orderId);
+    const order = await this.orderRepo.findOne({
+      where: { id: orderId },
+      relations: [
+        'customer',
+        'items',
+        'items.product',
+        'items.variant',
+        'delivery_address',
+      ],
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Pedido #${orderId} não encontrado`);
+    }
+
+    return await this.sendReceiptEmail(receipt, order);
   }
 }

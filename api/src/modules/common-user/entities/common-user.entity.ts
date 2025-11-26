@@ -88,4 +88,5 @@ export class CommonUser {
 
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date; // Soft delete (mantém log no banco)
+  nome_completo: string;
 }

@@ -15,13 +15,15 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtCustomerStrategy } from './strategies/jwt-customer.strategy';
 import { AdminUserModule } from '../admin-user/admin-user.module';
+import { UserRole } from '../rbac/entities/user-role.entity';
 import { CommonUserModule } from '../common-user/common-user.module';
 
 @Module({
   controllers: [AuthController],
   imports: [
     AdminUserModule,
-    CommonUserModule, // ⭐ NOVO: Para validar clientes
+    CommonUserModule,
+    UserRole,
     ConfigModule,
     // ============================================
     // CONFIGURAÇÃO DO JWT
@@ -38,7 +40,7 @@ import { CommonUserModule } from '../common-user/common-user.module';
     AuthService,
     LocalStrategy, // Login de admin
     JwtStrategy, // Validação de token admin
-    JwtCustomerStrategy, // ⭐ NOVO: Validação de token cliente
+    JwtCustomerStrategy, // Validação de token cliente
   ],
 })
 export class AuthModule {}

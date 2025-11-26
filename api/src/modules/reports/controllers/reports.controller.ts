@@ -3,9 +3,15 @@
 // ============================================
 // Endpoints de relatórios gerenciais
 // Pizzaria Massa Nostra
+//
+// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
+// Data: 2025-11-26 04:00:00 UTC
+// Desenvolvedor: @lucasitdias
+// Status: ✅ Completo com Excel
 // ============================================
 
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Res } from '@nestjs/common';
+import { Response } from 'express'; // ✅ ADICIONAR
 import { ReportsService } from '../services/reports.service';
 import {
   ReportFilterDto,
@@ -14,12 +20,30 @@ import {
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 
 @Controller('reports')
-@UseGuards(JwtAuthGuard) // ⭐ Apenas administradores
+@UseGuards(JwtAuthGuard) // ⭐ Apenas administradores autenticados
 export class ReportsController {
+  // ============================================
+  // CONSTRUCTOR
+  // ============================================
+  // Injeta o serviço de relatórios
+  // ============================================
   constructor(private readonly reportsService: ReportsService) {}
 
   // ============================================
   // DASHBOARD - MÉTRICAS GERAIS
+  // ============================================
+  // GET /reports/dashboard
+  //
+  // Retorna métricas consolidadas do negócio:
+  // - Vendas de hoje, semana e mês
+  // - Ticket médio
+  // - Top 5 produtos da semana
+  // - Últimos 10 pedidos
+  //
+  // @returns {
+  //   ok: boolean,
+  //   data: DashboardStats
+  // }
   // ============================================
   @Get('dashboard')
   async getDashboard() {
@@ -34,9 +58,27 @@ export class ReportsController {
   // ============================================
   // RELATÓRIO DE VENDAS
   // ============================================
+  // GET /reports/sales? start_date=YYYY-MM-DD&end_date=YYYY-MM-DD
+  //
+  // Retorna relatório completo de vendas do período
+  // Inclui: resumo, breakdown por pagamento/status, vendas diárias
+  //
+  // ✅ CORRIGIDO: Aceita apenas 2 parâmetros de query
+  //
+  // @param startDate - Data inicial (query, opcional)
+  // @param endDate - Data final (query, opcional)
+  // @returns {
+  //   ok: boolean,
+  //   data: SalesReport
+  // }
+  // ============================================
   @Get('sales')
-  async getSalesReport(@Query() filter: ReportFilterDto) {
-    const report = await this.reportsService.getSalesReport(filter);
+  async getSalesReport(
+    @Query('start_date') startDate?: string,
+    @Query('end_date') endDate?: string,
+  ) {
+    // ✅ CORRIGIDO: Passar apenas 2 parâmetros
+    const report = await this.reportsService.getSalesReport(startDate, endDate);
 
     return {
       ok: true,
@@ -46,6 +88,17 @@ export class ReportsController {
 
   // ============================================
   // PRODUTOS MAIS VENDIDOS
+  // ============================================
+  // GET /reports/top-products? period=week&limit=10
+  //
+  // Lista os produtos mais vendidos do período
+  // Ordenado por quantidade vendida (maior para menor)
+  //
+  // @param filter - Filtros de período e limite
+  // @returns {
+  //   ok: boolean,
+  //   data: TopProductsReport
+  // }
   // ============================================
   @Get('top-products')
   async getTopProducts(@Query() filter: TopProductsFilterDto) {
@@ -60,6 +113,19 @@ export class ReportsController {
   // ============================================
   // RELATÓRIO DE CLIENTES
   // ============================================
+  // GET /reports/customers? period=month
+  //
+  // Analisa comportamento de compra dos clientes
+  // - Total de clientes (ativos, novos)
+  // - Top 20 clientes por valor gasto
+  // - Ticket médio por cliente
+  //
+  // @param filter - Filtros de período
+  // @returns {
+  //   ok: boolean,
+  //   data: CustomerReport
+  // }
+  // ============================================
   @Get('customers')
   async getCustomerReport(@Query() filter: ReportFilterDto) {
     const report = await this.reportsService.getCustomerReport(filter);
@@ -73,6 +139,20 @@ export class ReportsController {
   // ============================================
   // HORÁRIOS DE PICO
   // ============================================
+  // GET /reports/peak-hours?period=week
+  //
+  // Identifica horários e dias com mais movimento
+  // - Pedidos por hora do dia (0-23h)
+  // - Pedidos por dia da semana
+  //
+  // Útil para: planejamento de equipe, promoções
+  //
+  // @param filter - Filtros de período
+  // @returns {
+  //   ok: boolean,
+  //   data: PeakHoursReport
+  // }
+  // ============================================
   @Get('peak-hours')
   async getPeakHours(@Query() filter: ReportFilterDto) {
     const report = await this.reportsService.getPeakHoursReport(filter);
@@ -84,7 +164,66 @@ export class ReportsController {
   }
 
   // ============================================
+  // ✅ NOVO: EXPORTAR VENDAS PARA EXCEL
+  // ============================================
+  // GET /reports/export/sales/excel?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD
+  //
+  // Gera e baixa arquivo Excel (. xlsx) com relatório de vendas
+  // Formatação profissional com:
+  // - Cabeçalho colorido
+  // - Tabela de vendas completa
+  // - Totalizações
+  // - Filtros automáticos
+  // - Células mescladas
+  //
+  // ✅ CORRIGIDO: Importa Response do Express
+  //
+  // @param startDate - Data inicial (query, opcional)
+  // @param endDate - Data final (query, opcional)
+  // @param res - Response do Express (para enviar arquivo)
+  // @returns Arquivo Excel para download
+  // ============================================
+  @Get('export/sales/excel')
+  async exportSalesToExcel(
+    @Query('start_date') startDate?: string,
+    @Query('end_date') endDate?: string,
+    @Res() res?: Response,
+  ) {
+    // Gerar Excel
+    const buffer = await this.reportsService.exportSalesToExcel(
+      startDate,
+      endDate,
+    );
+
+    // Nome do arquivo
+    const filename = `vendas_${startDate || 'inicio'}_${endDate || 'hoje'}.xlsx`;
+
+    // Headers para download
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', buffer.length);
+
+    // Enviar buffer
+    res.send(buffer);
+  }
+
+  // ============================================
   // EXPORTAR RELATÓRIO CSV
+  // ============================================
+  // GET /reports/export/sales? period=month
+  //
+  // Exporta vendas em formato CSV (simples)
+  // Compatível com Excel, Google Sheets
+  //
+  // @param filter - Filtros de período
+  // @returns {
+  //   ok: boolean,
+  //   filename: string,
+  //   data: string (conteúdo CSV)
+  // }
   // ============================================
   @Get('export/sales')
   async exportSalesCSV(@Query() filter: ReportFilterDto) {

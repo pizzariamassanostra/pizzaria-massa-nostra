@@ -14,6 +14,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  FindOperator,
 } from 'typeorm';
 import { CommonUser } from '../../common-user/entities/common-user.entity';
 
@@ -80,4 +81,5 @@ export class Payment {
 
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date;
+  order_id: number | FindOperator<number>;
 }

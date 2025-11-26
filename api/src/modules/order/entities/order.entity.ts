@@ -22,6 +22,9 @@ import { OrderItem } from './order-item.entity';
 
 @Entity('orders')
 export class Order {
+  order_number(order_number: any, arg1: any, arg2: number) {
+    throw new Error('Method not implemented.');
+  }
   // ============================================
   // IDENTIFICAÇÃO
   // ============================================

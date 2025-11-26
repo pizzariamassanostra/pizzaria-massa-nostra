@@ -26,6 +26,7 @@ import { OrderModule } from './modules/order/order.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { RbacModule } from './modules/rbac/rbac.module';
 
 // ============================================
 // 🆕 FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
@@ -106,6 +107,7 @@ config();
     AuthModule, // Login JWT (admin e cliente)
     CommonUserModule, // Cadastro e gestão de clientes
     AdminUserModule, // Usuários admin (gestão interna)
+    RbacModule, // Níveis de acesso (admin, gerente, etc)
 
     // PAGAMENTOS
     PaymentModule, // Integração MercadoPago + Webhook
