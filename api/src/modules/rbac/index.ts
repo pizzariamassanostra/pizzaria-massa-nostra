@@ -1,12 +1,7 @@
 // ===========================================
 // INDEX: RBAC
 // Sistema de Permissões - Pizzaria Massa Nostra
-//
 // Exports centralizados do módulo RBAC
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
 // ===========================================
 
 // Module

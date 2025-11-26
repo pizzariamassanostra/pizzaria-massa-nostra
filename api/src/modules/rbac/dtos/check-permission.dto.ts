@@ -2,10 +2,6 @@
  * ============================================
  * DTO: VERIFICAR PERMISSÃO
  * ============================================
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import { IsNotEmpty, IsString } from 'class-validator';

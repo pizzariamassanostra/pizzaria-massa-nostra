@@ -2,7 +2,6 @@
 // ENTIDADE: BORDAS DE PIZZA
 // ============================================
 // Tipos de borda (Tradicional, Vulcão, Trançada)
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -52,5 +51,3 @@ export class PizzaCrust {
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date;
 }
-
-

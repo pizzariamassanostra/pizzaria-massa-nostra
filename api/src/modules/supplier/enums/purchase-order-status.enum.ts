@@ -1,8 +1,6 @@
 // ============================================
 // ENUM: STATUS DO PEDIDO DE COMPRA
 // ============================================
-// Pizzaria Massa Nostra
-// ============================================
 
 export enum PurchaseOrderStatus {
   // Pedido criado, aguardando aprovação

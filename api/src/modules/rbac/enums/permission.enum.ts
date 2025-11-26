@@ -3,13 +3,8 @@
  * ENUMERAÇÃO DE PERMISSÕES
  * ============================================
  * Define todas as permissões disponíveis no sistema
- *
  * Formato: RESOURCE_ACTION
  * Exemplo: ORDERS_CREATE, USERS_READ
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 export enum PermissionEnum {

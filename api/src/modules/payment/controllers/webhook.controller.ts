@@ -3,12 +3,6 @@
 // ============================================
 // Recebe notificações de pagamento do Mercado Pago
 // Processa aprovação e envia comprovante por e-mail
-//
-// Pizzaria Massa Nostra
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 04:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Completo com E-mail
 // ============================================
 
 import {
@@ -62,13 +56,13 @@ export class WebhookController {
   // - Aprovação, rejeição, cancelamento
   //
   // Fluxo quando pagamento aprovado:
-  // 1.   Valida assinatura do webhook
-  // 2.  Atualiza status do pagamento
-  // 3.   Atualiza status do pedido
-  // 4.  ✅ Gera comprovante PDF
-  // 5. ✅ Envia e-mail para cliente
-  // 6. ✅ Notifica admin por e-mail
-  // 7. ✅ Envia notificações WebSocket
+  // 1. Valida assinatura do webhook
+  // 2. Atualiza status do pagamento
+  // 3. Atualiza status do pedido
+  // 4. Gera comprovante PDF
+  // 5. Envia e-mail para cliente
+  // 6. Notifica admin por e-mail
+  // 7. Envia notificações WebSocket
   //
   // @param signature - Assinatura HMAC (header x-signature)
   // @param requestId - ID da requisição (header x-request-id)
@@ -88,7 +82,7 @@ export class WebhookController {
       this.logger.log(`📨 Webhook recebido - Data ID: ${dataId}`);
 
       // ============================================
-      // 1. VALIDAR ASSINATURA DO WEBHOOK
+      // VALIDAR ASSINATURA DO WEBHOOK
       // ============================================
       // Garante que a requisição vem do Mercado Pago
       // Evita webhooks falsos/maliciosos
@@ -98,40 +92,38 @@ export class WebhookController {
           dataId,
           requestId,
         );
-        this.logger.log('✅ Assinatura validada');
+        this.logger.log('Assinatura validada');
       }
 
       // ============================================
-      // 2. PROCESSAR NOTIFICAÇÃO
+      // PROCESSAR NOTIFICAÇÃO
       // ============================================
       const { type, data } = body;
 
       // Só processar eventos de pagamento
       if (type !== 'payment') {
-        this.logger.warn(`⚠️ Tipo de evento ignorado: ${type}`);
+        this.logger.warn(`Tipo de evento ignorado: ${type}`);
         return { ok: true, message: 'Evento ignorado' };
       }
 
       const paymentId = data.id;
-      this.logger.log(`💰 Processando pagamento ${paymentId}`);
+      this.logger.log(`Processando pagamento ${paymentId}`);
 
       // ============================================
-      // 3. BUSCAR PAGAMENTO NO BANCO
+      // BUSCAR PAGAMENTO NO BANCO
       // ============================================
-      // ✅ NOTA: Ajuste o campo 'where' conforme sua estrutura
-      // Se sua tabela usar outro campo para ID do MP, altere aqui
       const payment = await this.paymentRepo.findOne({
-        where: { id: paymentId.toString() }, // ✅ Ajuste se necessário
+        where: { id: paymentId.toString() },
         relations: ['commonUser'],
       });
 
       if (!payment) {
-        this.logger.warn(`⚠️ Pagamento ${paymentId} não encontrado no banco`);
+        this.logger.warn(`Pagamento ${paymentId} não encontrado no banco`);
         return { ok: true, message: 'Pagamento não encontrado' };
       }
 
       // ============================================
-      // 4. BUSCAR PEDIDO RELACIONADO
+      // BUSCAR PEDIDO RELACIONADO
       // ============================================
       const order = await this.orderRepo.findOne({
         where: { id: payment.order_id },
@@ -145,12 +137,12 @@ export class WebhookController {
       });
 
       if (!order) {
-        this.logger.warn(`⚠️ Pedido ${payment.order_id} não encontrado`);
+        this.logger.warn(`Pedido ${payment.order_id} não encontrado`);
         return { ok: true, message: 'Pedido não encontrado' };
       }
 
       // ============================================
-      // 5. ATUALIZAR STATUS DO PAGAMENTO
+      // ATUALIZAR STATUS DO PAGAMENTO
       // ============================================
       const previousStatus = payment.status;
       payment.status = this.mapMercadoPagoStatus(data.status);
@@ -159,37 +151,34 @@ export class WebhookController {
       await this.paymentRepo.save(payment);
 
       this.logger.log(
-        `✅ Status do pagamento atualizado: ${previousStatus} → ${payment.status}`,
+        `Status do pagamento atualizado: ${previousStatus} → ${payment.status}`,
       );
 
       // ============================================
-      // 6. SE PAGAMENTO APROVADO → PROCESSAR
+      // SE PAGAMENTO APROVADO → PROCESSAR
       // ============================================
       if (payment.status === 'approved' && previousStatus !== 'approved') {
-        this.logger.log('🎉 Pagamento aprovado!  Processando.. .');
+        this.logger.log('Pagamento aprovado!  Processando.. .');
 
         // Atualizar status do pedido
         order.status = 'confirmed';
         await this.orderRepo.save(order);
-        this.logger.log('✅ Pedido confirmado');
+        this.logger.log('Pedido confirmado');
 
         // ============================================
-        // ✅ 6.1 GERAR COMPROVANTE E ENVIAR E-MAIL
+        // GERAR COMPROVANTE E ENVIAR E-MAIL
         // ============================================
         try {
           const receipt = await this.receiptService.generateReceipt(
             order.id,
-            true, // ✅ Enviar e-mail automaticamente
+            true, // Enviar e-mail automaticamente
           );
 
           this.logger.log(
-            `✅ Comprovante ${receipt.receipt_number} gerado e enviado por e-mail`,
+            `Comprovante ${receipt.receipt_number} gerado e enviado por e-mail`,
           );
         } catch (error) {
-          this.logger.error(
-            '❌ Erro ao gerar/enviar comprovante:',
-            error.message,
-          );
+          this.logger.error('Erro ao gerar/enviar comprovante:', error.message);
         }
 
         try {
@@ -199,13 +188,13 @@ export class WebhookController {
             Number(parseFloat(order.total.toString())),
           );
 
-          this.logger.log('✅ Admin notificado por e-mail');
+          this.logger.log('Admin notificado por e-mail');
         } catch (error) {
-          this.logger.error('❌ Erro ao notificar admin:', error.message);
+          this.logger.error('Erro ao notificar admin:', error.message);
         }
 
         // ============================================
-        // ✅ 6.3 NOTIFICAR VIA WEBSOCKET
+        // NOTIFICAR VIA WEBSOCKET
         // ============================================
         try {
           // Notificar cliente sobre pagamento aprovado
@@ -218,14 +207,14 @@ export class WebhookController {
             total: parseFloat(order.total.toString()),
           });
 
-          this.logger.log('✅ Notificações WebSocket enviadas');
+          this.logger.log('Notificações WebSocket enviadas');
         } catch (error) {
-          this.logger.error('❌ Erro ao enviar WebSocket:', error.message);
+          this.logger.error('Erro ao enviar WebSocket:', error.message);
         }
       }
 
       // ============================================
-      // 7. RETORNAR SUCESSO
+      // RETORNAR SUCESSO
       // ============================================
       return {
         ok: true,
@@ -234,7 +223,7 @@ export class WebhookController {
       };
     } catch (error) {
       // Log detalhado de erro
-      this.logger.error('❌ Erro ao processar webhook:', error.message);
+      this.logger.error('Erro ao processar webhook:', error.message);
       this.logger.error('Stack:', error.stack);
 
       return {

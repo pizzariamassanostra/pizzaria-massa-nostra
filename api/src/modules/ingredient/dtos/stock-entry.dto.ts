@@ -2,8 +2,6 @@
 // DTO: ENTRADA DE ESTOQUE
 // ============================================
 // Registra entrada de mercadoria (compra)
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

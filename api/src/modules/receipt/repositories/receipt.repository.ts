@@ -2,8 +2,6 @@
 // REPOSITORY: COMPROVANTES
 // ============================================
 // Acesso ao banco de dados de comprovantes
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import { Injectable } from '@nestjs/common';
@@ -31,7 +29,6 @@ export class ReceiptRepository {
   async findById(id: number): Promise<Receipt> {
     return await this.receiptRepository.findOne({
       where: { id },
-      // ✅ CORREÇÃO: Remover 'customer' pois não existe relacionamento direto
       relations: ['order'],
     });
   }
@@ -42,7 +39,6 @@ export class ReceiptRepository {
   async findByReceiptNumber(receiptNumber: string): Promise<Receipt> {
     return await this.receiptRepository.findOne({
       where: { receipt_number: receiptNumber },
-      // ✅ CORREÇÃO: Remover 'customer'
       relations: ['order'],
     });
   }
@@ -53,7 +49,6 @@ export class ReceiptRepository {
   async findByOrderId(orderId: number): Promise<Receipt> {
     return await this.receiptRepository.findOne({
       where: { order_id: orderId },
-      // ✅ CORREÇÃO: Remover 'customer'
       relations: ['order'],
     });
   }
@@ -61,9 +56,6 @@ export class ReceiptRepository {
   // ============================================
   // LISTAR POR CLIENTE
   // ============================================
-  // ✅ CORREÇÃO COMPLETA: Buscar via relacionamento com Order
-  // Pois Receipt não tem customer_id direto, apenas order_id
-  // E Order tem common_user_id (que é o ID do cliente)
   async findByCustomerId(customerId: number): Promise<Receipt[]> {
     return await this.receiptRepository
       .createQueryBuilder('receipt')

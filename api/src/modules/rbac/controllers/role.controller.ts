@@ -1,13 +1,7 @@
 // ===========================================
 // CONTROLLER: ROLE
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
+// ===========================================
 // Endpoints para gerenciar roles
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import {
@@ -37,7 +31,7 @@ export class RoleController {
 
   /**
    * Criar role
-   * Apenas SUPER_ADMIN
+   * Apenas ADMIN
    */
   @Post()
   @Roles(RoleEnum.SUPER_ADMIN)
@@ -78,7 +72,7 @@ export class RoleController {
 
   /**
    * Atualizar role
-   * Apenas SUPER_ADMIN
+   * Apenas ADMIN
    */
   @Put(':id')
   @Roles(RoleEnum.SUPER_ADMIN)
@@ -93,7 +87,7 @@ export class RoleController {
 
   /**
    * Deletar role
-   * Apenas SUPER_ADMIN
+   * Apenas ADMIN
    */
   @Delete(':id')
   @Roles(RoleEnum.SUPER_ADMIN)
@@ -109,7 +103,7 @@ export class RoleController {
    * Atribuir roles a usuário
    */
   @Post('assign')
-  // @Roles(RoleEnum.SUPER_ADMIN)
+  // @Roles(RoleEnum.ADMIN)
   async assignRoles(@Body() assignRoleDto: AssignRoleDto, @Request() req) {
     const userRoles = await this.roleService.assignRolesToUser(
       assignRoleDto,

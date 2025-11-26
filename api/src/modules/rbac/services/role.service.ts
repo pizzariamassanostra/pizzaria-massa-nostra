@@ -1,13 +1,6 @@
 // ===========================================
-// SERVICE: ROLE
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
+// SERVIÇO: ROLE
 // Gerencia operações relacionadas a roles
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import {

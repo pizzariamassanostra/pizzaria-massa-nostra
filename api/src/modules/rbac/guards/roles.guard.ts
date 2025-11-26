@@ -1,17 +1,9 @@
 // ===========================================
 // GUARD: ROLES
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
 // Verifica se o usuário possui os roles necessários
-//
 // Uso:
 // @UseGuards(JwtAuthGuard, RolesGuard)
-// @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.MANAGER)
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
+// @Roles(RoleEnum.ADMIN, RoleEnum.MANAGER)
 // ===========================================
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';

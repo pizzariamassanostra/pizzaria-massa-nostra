@@ -1,10 +1,7 @@
 // ============================================
-// SERVICE: MOVIMENTAÇÃO DE ESTOQUE
+// SERVIÇO: MOVIMENTAÇÃO DE ESTOQUE
 // ============================================
 // Registra todas as entradas e saídas
-// Garante rastreabilidade completa
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import { Injectable, NotFoundException } from '@nestjs/common';

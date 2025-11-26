@@ -8,7 +8,7 @@ import {
 export class CreateIngredientTables1732579200000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // ============================================
-    // TABELA: INGREDIENTS
+    // TABELA: INGREDIENTES
     // ============================================
     await queryRunner.createTable(
       new Table({

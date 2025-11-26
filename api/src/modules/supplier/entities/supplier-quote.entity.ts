@@ -2,7 +2,6 @@
 // ENTITY: COTAÇÕES DE FORNECEDORES
 // ============================================
 // Sistema de cotação e comparação de preços
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

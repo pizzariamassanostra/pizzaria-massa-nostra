@@ -3,7 +3,6 @@
 // ============================================
 // Protege rotas que exigem autenticação de cliente
 // Diferente do JwtAuthGuard (que é para admins)
-// Pizzaria Massa Nostra
 // ============================================
 
 import ApiError from '@/common/error/entities/api-error.entity';

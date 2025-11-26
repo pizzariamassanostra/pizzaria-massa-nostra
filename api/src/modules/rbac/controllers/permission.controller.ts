@@ -1,13 +1,7 @@
 // ===========================================
 // CONTROLLER: PERMISSION
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
+// ===========================================
 // Endpoints para gerenciar permissões
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';

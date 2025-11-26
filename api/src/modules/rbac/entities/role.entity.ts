@@ -3,14 +3,9 @@
  * ENTIDADE: ROLE (PAPEL/FUNÇÃO)
  * ============================================
  * Define os papéis que podem ser atribuídos aos usuários
- *
  * Relacionamentos:
  * - N:N com Permission (role_permissions)
  * - 1:N com AdminUser (user_roles)
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import {
@@ -35,7 +30,7 @@ export class Role {
 
   /**
    * Nome único do role
-   * Exemplo: super_admin, manager, cook
+   * Exemplo: admin, gerência, cozinheira
    */
   @Column({
     type: 'varchar',
@@ -47,7 +42,7 @@ export class Role {
 
   /**
    * Nome de exibição
-   * Exemplo: "Super Administrador", "Gerente", "Cozinheira"
+   * Exemplo: "Administrador", "Gerente", "Cozinheira"
    */
   @Column({
     type: 'varchar',

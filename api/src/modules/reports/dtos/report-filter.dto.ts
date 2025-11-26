@@ -2,7 +2,6 @@
 // DTO: FILTROS DE RELATÓRIOS
 // ============================================
 // Validação de filtros para consultas
-// Pizzaria Massa Nostra
 // ============================================
 
 import { IsOptional, IsDateString, IsIn } from 'class-validator';

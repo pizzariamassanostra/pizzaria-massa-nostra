@@ -2,7 +2,6 @@
 // MODULE: RELATÓRIOS
 // ============================================
 // Módulo de relatórios gerenciais e analytics
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Module } from '@nestjs/common';

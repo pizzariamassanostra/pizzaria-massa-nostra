@@ -1,9 +1,7 @@
 // ============================================
-// MODULE: FORNECEDORES
+// MODULO: FORNECEDORES
 // ============================================
 // Registra providers, controllers e exports
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import { Module } from '@nestjs/common';

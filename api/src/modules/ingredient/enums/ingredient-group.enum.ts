@@ -3,8 +3,6 @@
 // ============================================
 // Classifica o tipo de ingrediente
 // Para organização e relatórios
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export enum IngredientGroup {

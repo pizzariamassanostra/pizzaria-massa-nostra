@@ -1,17 +1,9 @@
 // ===========================================
 // GUARD: PERMISSIONS
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
 // Verifica se o usuário possui as permissões necessárias
-//
 // Uso:
 // @UseGuards(JwtAuthGuard, PermissionsGuard)
 // @RequirePermissions(PermissionEnum. ORDERS_CREATE)
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';

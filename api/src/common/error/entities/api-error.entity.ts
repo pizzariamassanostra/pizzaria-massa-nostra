@@ -2,7 +2,6 @@
 // ENTITY: ERRO CUSTOMIZADO
 // ============================================
 // Classe de erro com mensagem amigável ao usuário
-// Pizzaria Massa Nostra
 // ============================================
 
 class ApiError extends Error {

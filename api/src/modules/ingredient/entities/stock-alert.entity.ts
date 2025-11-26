@@ -3,8 +3,6 @@
 // ============================================
 // Alertas automáticos de estoque baixo,
 // vencimento, etc
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

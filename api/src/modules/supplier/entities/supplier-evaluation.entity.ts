@@ -2,7 +2,6 @@
 // ENTITY: AVALIAÇÕES DE FORNECEDORES
 // ============================================
 // Avaliação técnica e financeira
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

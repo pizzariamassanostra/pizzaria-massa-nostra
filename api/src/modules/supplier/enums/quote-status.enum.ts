@@ -1,8 +1,6 @@
 // ============================================
 // ENUM: STATUS DA COTAÇÃO
 // ============================================
-// Pizzaria Massa Nostra
-// ============================================
 
 export enum QuoteStatus {
   // Cotação criada, aguardando envio

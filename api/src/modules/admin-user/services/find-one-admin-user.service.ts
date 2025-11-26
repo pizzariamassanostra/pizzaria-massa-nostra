@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: BUSCAR ADMINISTRADOR
+// SERVIÇO: BUSCAR ADMINISTRADOR
 // ============================================
 // Busca administradores do sistema (login, validação, etc)
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

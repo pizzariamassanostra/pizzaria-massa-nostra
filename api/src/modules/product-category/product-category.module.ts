@@ -1,8 +1,5 @@
 // ============================================
-// MODULE: CATEGORIAS DE PRODUTOS
-// ============================================
-// Módulo completo de categorias
-// Pizzaria Massa Nostra
+// MODULO: CATEGORIAS DE PRODUTOS
 // ============================================
 
 import { Module } from '@nestjs/common';

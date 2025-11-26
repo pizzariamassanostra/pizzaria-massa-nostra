@@ -2,8 +2,6 @@
 // INTERFACE: RESUMO DE ESTOQUE
 // ============================================
 // Estrutura para retorno de resumo de estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export interface StockSummary {

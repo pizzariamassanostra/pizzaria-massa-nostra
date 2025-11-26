@@ -22,7 +22,7 @@ export class WebhookController {
     @Body() body: any,
     @Headers('x-signature') signature: string,
   ) {
-    console.log('📥 Webhook Mercado Pago recebido:', body);
+    console.log('Webhook Mercado Pago recebido:', body);
 
     // Validar assinatura (segurança)
     // TODO: Implementar validação de assinatura
@@ -32,19 +32,19 @@ export class WebhookController {
       const paymentId = body.data.id;
 
       // Buscar status do pagamento
-      const paymentStatus = await this.mercadopagoService.getPaymentStatus(paymentId);
+      const paymentStatus =
+        await this.mercadopagoService.getPaymentStatus(paymentId);
 
-      console.log('💳 Status do pagamento:', paymentStatus);
+      console.log('Status do pagamento:', paymentStatus);
 
       // Se aprovado, atualizar pedido
       if (paymentStatus.status === 'approved') {
         // TODO: Buscar order_id pelo payment_id
         // TODO: Atualizar status do pedido para 'confirmed'
-        console.log('✅ Pagamento aprovado! Atualizar pedido.');
+        console.log('Pagamento aprovado! Atualizar pedido.');
       }
     }
 
     return { ok: true };
   }
 }
-

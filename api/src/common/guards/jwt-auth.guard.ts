@@ -3,10 +3,6 @@
 // Sistema de Autenticação - Pizzaria Massa Nostra
 //
 // Valida JWT e carrega roles do usuário
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
 // ===========================================
 
 import {

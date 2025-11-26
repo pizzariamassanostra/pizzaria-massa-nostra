@@ -2,7 +2,6 @@
 // STRATEGY: AUTENTICAÇÃO LOCAL
 // ============================================
 // Estratégia de autenticação com usuário e senha
-// Pizzaria Massa Nostra - ADMIN
 // ============================================
 
 import { PassportStrategy } from '@nestjs/passport';

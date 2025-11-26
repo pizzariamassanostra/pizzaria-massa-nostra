@@ -2,7 +2,6 @@
 // MIGRATION: TABELAS DE FORNECEDORES
 // ============================================
 // Cria todas as tabelas do módulo supplier
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -320,7 +319,7 @@ export class CreateSupplierTables1732542000000 implements MigrationInterface {
     );
 
     // ============================================
-    // TABELA: purchase_orders (PEDIDOS DE COMPRA)
+    // TABELA: (PEDIDOS DE COMPRA)
     // ============================================
     await queryRunner.createTable(
       new Table({
@@ -431,7 +430,7 @@ export class CreateSupplierTables1732542000000 implements MigrationInterface {
     );
 
     // ============================================
-    // TABELA: supplier_evaluations (AVALIAÇÕES)
+    // TABELA: (AVALIAÇÕES)
     // ============================================
     await queryRunner.createTable(
       new Table({

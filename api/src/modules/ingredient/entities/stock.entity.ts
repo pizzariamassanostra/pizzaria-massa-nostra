@@ -3,8 +3,6 @@
 // ============================================
 // Controle de estoque por ingrediente e lote
 // Permite rastreabilidade e validade
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

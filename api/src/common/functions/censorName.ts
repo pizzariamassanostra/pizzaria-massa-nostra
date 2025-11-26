@@ -1,9 +1,8 @@
 // ============================================
-// FUNCTION: CENSURAR NOME
+// FUNÇÃO: CENSURAR NOME
 // ============================================
 // Oculta nomes do meio (LGPD)
 // Exemplo: "João Silva Santos" → "João S***** Santos"
-// Pizzaria Massa Nostra
 // ============================================
 
 export const censorName = (username: string): string => {

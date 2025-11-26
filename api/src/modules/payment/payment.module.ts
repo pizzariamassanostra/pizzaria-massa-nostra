@@ -3,12 +3,6 @@
 // ============================================
 // Gerencia pagamentos via Mercado Pago
 // Inclui webhook e notificações
-//
-// Pizzaria Massa Nostra
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 04:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Completo com E-mail
 // ============================================
 
 import { Module } from '@nestjs/common';
@@ -24,14 +18,14 @@ import { Order } from '../order/entities/order.entity';
 // MODULES
 // ============================================
 import { CommonUserModule } from '../common-user/common-user.module';
-import { ReceiptModule } from '../receipt/receipt.module'; // ✅ NOVO: Para gerar comprovantes
-import { NotificationModule } from '../notification/notification.module'; // ✅ NOVO: Para enviar e-mails
+import { ReceiptModule } from '../receipt/receipt.module'; // Gerar comprovantes
+import { NotificationModule } from '../notification/notification.module'; // Para enviar e-mails
 
 // ============================================
 // CONTROLLERS
 // ============================================
 import { PaymentController } from './controllers/payment.controller';
-import { WebhookController } from './controllers/webhook.controller'; // ✅ NOVO
+import { WebhookController } from './controllers/webhook.controller';
 
 // ============================================
 // REPOSITORIES
@@ -51,7 +45,7 @@ import { ValidateWebhookService } from './services/validate-payment-webhook.serv
   // Endpoints expostos pelo módulo
   controllers: [
     PaymentController, // Endpoints de consulta de pagamentos
-    WebhookController, // ✅ NOVO: Webhook do Mercado Pago
+    WebhookController, // Webhook do Mercado Pago
   ],
 
   // ============================================
@@ -64,8 +58,8 @@ import { ValidateWebhookService } from './services/validate-payment-webhook.serv
 
     // Módulos externos
     CommonUserModule, // Para acessar dados de usuários
-    ReceiptModule, // ✅ NOVO: Para gerar comprovantes
-    NotificationModule, // ✅ NOVO: Para enviar e-mails e WebSocket
+    ReceiptModule, // Para gerar comprovantes
+    NotificationModule, // Para enviar e-mails e WebSocket
   ],
 
   // ============================================

@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: GERADOR DE PDF
+// SERVIÇO: GERADOR DE PDF
 // ============================================
 // Serviço de geração de comprovantes em PDF
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';
@@ -156,16 +155,16 @@ export class PdfGeneratorService {
   // GERAR E FAZER UPLOAD PARA CLOUDINARY
   // ============================================
   async generateAndUpload(data: ReceiptData): Promise<string> {
-    console.log(`📄 Gerando PDF do comprovante...`);
+    console.log(`Gerando PDF do comprovante...`);
     const pdfBuffer = await this.generateReceipt(data);
-    console.log(`📦 PDF gerado com ${pdfBuffer.length} bytes`);
+    console.log(`PDF gerado com ${pdfBuffer.length} bytes`);
 
-    console.log(`☁️  Fazendo upload para Cloudinary...`);
+    console.log(`Fazendo upload para Cloudinary...`);
     const result = await this.cloudinaryService.uploadPdf(
       pdfBuffer,
       data.receiptNumber,
     );
-    console.log(`✅ Upload concluído: ${result.secure_url}`);
+    console.log(`Upload concluído: ${result.secure_url}`);
 
     return result.secure_url;
   }

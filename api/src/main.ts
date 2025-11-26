@@ -1,8 +1,8 @@
 // ============================================
-// ENTRY POINT DA API - PIZZARIA MASSA NOSTRA
+// API - PIZZARIA MASSA NOSTRA
 // ============================================
 // Este é o arquivo principal que inicializa a aplicação NestJS
-// Configura porta, CORS, validação, filtros de erro, Swagger, etc.
+// Configura porta, CORS, validação, filtros de erro, Swagger...
 // ============================================
 
 import { NestFactory } from '@nestjs/core';
@@ -54,7 +54,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000', // Frontend local
-      'http://localhost:3001', // API local (self)
+      'http://localhost:3001', // API local
       process.env.FRONTEND_URL_PRODUCTION, // Frontend produção (quando subir)
     ].filter(Boolean), // Remove valores undefined
     credentials: true, // Permite cookies

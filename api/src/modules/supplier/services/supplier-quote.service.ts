@@ -1,10 +1,8 @@
 // ============================================
-// SERVICE: COTAÇÕES DE FORNECEDORES
+// SERVIÇO: COTAÇÕES DE FORNECEDORES
 // ============================================
 // Lógica de negócio para sistema de cotação
 // Envio, recebimento, análise e aprovação
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -33,7 +31,7 @@ export class SupplierQuoteService {
   // CRIAR COTAÇÃO
   // ============================================
   // Gera número único: COT-YYYYMMDD-XXX
-  // Envia para fornecedor (futuro: email/WhatsApp)
+  // Envia para fornecedor (email/WhatsApp)
   // ============================================
   async create(dto: CreateQuoteDto): Promise<SupplierQuote> {
     // Validar se fornecedor existe e está ativo
@@ -82,7 +80,7 @@ export class SupplierQuoteService {
 
     // TODO: Enviar email/WhatsApp para fornecedor
     console.log(
-      `📧 Cotação ${quoteNumber} criada para fornecedor #${dto.supplier_id}`,
+      `Cotação ${quoteNumber} criada para fornecedor #${dto.supplier_id}`,
     );
 
     return savedQuote;

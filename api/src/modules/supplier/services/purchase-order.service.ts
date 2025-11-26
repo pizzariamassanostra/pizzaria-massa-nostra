@@ -1,10 +1,8 @@
 // ============================================
-// SERVICE: PEDIDOS DE COMPRA
+// SERVIÇO: PEDIDOS DE COMPRA
 // ============================================
 // Lógica de negócio para pedidos de compra
 // Aprovação, recebimento, nota fiscal
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -68,7 +66,7 @@ export class PurchaseOrderService {
     const savedOrder = await this.purchaseOrderRepo.save(order);
 
     console.log(
-      `📦 Pedido de compra ${orderNumber} criado para fornecedor #${dto.supplier_id}`,
+      `Pedido de compra ${orderNumber} criado para fornecedor #${dto.supplier_id}`,
     );
 
     return savedOrder;

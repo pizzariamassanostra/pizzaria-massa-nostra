@@ -3,7 +3,6 @@
 // ============================================
 // Cadastro completo de clientes da pizzaria
 // Incluindo validação LGPD e autenticação
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -65,15 +64,15 @@ export class CommonUser {
   // ============================================
   // RELACIONAMENTOS (COMENTADOS TEMPORARIAMENTE)
   // ============================================
-  // ⚠️ DESCOMENTAR quando Payment entity estiver correta
+  // DESCOMENTAR quando Payment entity estiver correta
   // @OneToMany(() => Payment, (payment) => payment.commonUser)
   // payments: Payment[];
 
-  // ⚠️ DESCOMENTAR quando Order entity estiver correta
+  // DESCOMENTAR quando Order entity estiver correta
   // @OneToMany(() => Order, (order) => order.user)
   // orders: Order[];
 
-  // ⚠️ DESCOMENTAR quando Address entity estiver correta
+  // DESCOMENTAR quando Address entity estiver correta
   // @OneToMany(() => Address, (address) => address.user)
   // addresses: Address[];
 

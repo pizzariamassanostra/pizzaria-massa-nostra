@@ -2,7 +2,6 @@
 // DTO: GERAR PAGAMENTO
 // ============================================
 // Dados necessários para criar um pagamento de pedido
-// Pizzaria Massa Nostra
 // ============================================
 
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';

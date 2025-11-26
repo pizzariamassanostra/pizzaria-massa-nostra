@@ -1,9 +1,7 @@
 // ============================================
-// MODULE: INGREDIENTES E ESTOQUE
+// MODULO: INGREDIENTES E ESTOQUE
 // ============================================
 // Registra providers, controllers e exports
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import { Module } from '@nestjs/common';

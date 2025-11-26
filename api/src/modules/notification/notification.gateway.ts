@@ -1,12 +1,7 @@
 // ===========================================
-// NOTIFICATION GATEWAY - PIZZARIA MASSA NOSTRA
+// NOTIFICATION GATEWAY
 // WebSocket Gateway para notificações em tempo real
 // Permite comunicação bidirecional entre servidor e clientes
-//
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 02:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Implementado
 // ===========================================
 
 import {
@@ -46,11 +41,11 @@ export class NotificationGateway
    * @param client - Socket do cliente
    */
   handleConnection(client: Socket) {
-    this.logger.log(`🔌 Cliente conectado: ${client.id}`);
+    this.logger.log(`Cliente conectado: ${client.id}`);
     this.clients.set(client.id, client);
 
     // Log do total de clientes conectados
-    this.logger.log(`📊 Total de clientes conectados: ${this.clients.size}`);
+    this.logger.log(`Total de clientes conectados: ${this.clients.size}`);
   }
 
   /**
@@ -58,11 +53,11 @@ export class NotificationGateway
    * @param client - Socket do cliente
    */
   handleDisconnect(client: Socket) {
-    this.logger.log(`🔌 Cliente desconectado: ${client.id}`);
+    this.logger.log(`Cliente desconectado: ${client.id}`);
     this.clients.delete(client.id);
 
     // Log do total de clientes restantes
-    this.logger.log(`📊 Total de clientes conectados: ${this.clients.size}`);
+    this.logger.log(`Total de clientes conectados: ${this.clients.size}`);
   }
 
   /**
@@ -73,7 +68,7 @@ export class NotificationGateway
    * @param orderData - Dados adicionais do pedido
    */
   notifyNewOrder(orderId: number, orderData?: any) {
-    this.logger.log(`🔔 Notificando novo pedido #${orderId}`);
+    this.logger.log(`Notificando novo pedido #${orderId}`);
 
     this.server.emit('new_order', {
       orderId,
@@ -96,7 +91,7 @@ export class NotificationGateway
     newStatus: string,
     message?: string,
   ) {
-    this.logger.log(`📝 Pedido #${orderId} - Novo status: ${newStatus}`);
+    this.logger.log(`Pedido #${orderId} - Novo status: ${newStatus}`);
 
     // Emitir para todos os clientes (filtrar no frontend)
     this.server.emit(`order_${orderId}_status`, {
@@ -115,7 +110,7 @@ export class NotificationGateway
    * @param paymentData - Dados do pagamento
    */
   notifyPaymentApproved(orderId: number, paymentData?: any) {
-    this.logger.log(`💰 Pagamento aprovado - Pedido #${orderId}`);
+    this.logger.log(`Pagamento aprovado - Pedido #${orderId}`);
 
     this.server.emit(`order_${orderId}_payment`, {
       orderId,
@@ -133,7 +128,7 @@ export class NotificationGateway
    * @param data - Dados a serem enviados
    */
   broadcast(event: string, data: any) {
-    this.logger.log(`📢 Broadcast: ${event}`);
+    this.logger.log(`Broadcast: ${event}`);
     this.server.emit(event, {
       ...data,
       timestamp: new Date().toISOString(),

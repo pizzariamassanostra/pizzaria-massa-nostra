@@ -2,8 +2,6 @@
 // INDEX: INGREDIENTES E ESTOQUE
 // ============================================
 // Exporta todos os recursos do módulo
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export * from './ingredient.module';

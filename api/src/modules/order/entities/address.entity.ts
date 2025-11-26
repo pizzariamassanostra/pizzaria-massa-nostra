@@ -2,7 +2,6 @@
 // ENTIDADE: ENDEREÇOS DE ENTREGA
 // ============================================
 // Endereços cadastrados pelos clientes
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

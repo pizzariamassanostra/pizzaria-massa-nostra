@@ -1,9 +1,8 @@
 // ============================================
-// SERVICE: PEDIDOS
+// SERVIÇO: PEDIDOS
 // ============================================
 // Lógica de negócio para criação e gestão de pedidos
 // Integrado com geração automática de comprovantes
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -240,17 +239,17 @@ export class OrderService {
     });
 
     // ============================================
-    // ⭐ GERAR COMPROVANTE AUTOMATICAMENTE
+    // GERAR COMPROVANTE AUTOMATICAMENTE
     // ============================================
     if (dto.status === 'confirmed') {
       try {
-        console.log(`🔄 Gerando comprovante para pedido #${id}...`);
+        console.log(`Gerando comprovante para pedido #${id}...`);
         const receipt = await this.receiptService.generateReceipt(id);
-        console.log(`✅ Comprovante gerado com sucesso!`);
-        console.log(`   Número: ${receipt.receipt_number}`);
-        console.log(`   PDF URL: ${receipt.pdf_url}`);
+        console.log(`Comprovante gerado com sucesso!`);
+        console.log(`Número: ${receipt.receipt_number}`);
+        console.log(`PDF URL: ${receipt.pdf_url}`);
       } catch (error) {
-        console.error(`❌ Erro ao gerar comprovante para pedido #${id}:`);
+        console.error(`Erro ao gerar comprovante para pedido #${id}:`);
         console.error(error);
       }
     }

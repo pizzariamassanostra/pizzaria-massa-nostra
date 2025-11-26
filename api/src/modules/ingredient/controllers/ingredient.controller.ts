@@ -3,8 +3,6 @@
 // ============================================
 // Endpoints REST para gestão de ingredientes
 // e controle de estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -46,7 +44,7 @@ export class IngredientController {
   ) {}
 
   // ============================================
-  // SEÇÃO 1: CRUD DE INGREDIENTES
+  // CRUD DE INGREDIENTES
   // ============================================
 
   // ============================================
@@ -98,7 +96,6 @@ export class IngredientController {
   // Lista APENAS ingredientes ativos
   // Usado para seleção em receitas e pedidos
   // Retorna: Array de ingredientes ativos
-  // ⚠️ IMPORTANTE: Esta rota DEVE vir ANTES de /ingredient/:id
   // ============================================
   @Get('active')
   @ApiOperation({ summary: 'Listar apenas ingredientes ativos' })
@@ -111,7 +108,7 @@ export class IngredientController {
   }
 
   // ============================================
-  // SEÇÃO 2: CONTROLE DE ESTOQUE
+  // CONTROLE DE ESTOQUE
   // ============================================
 
   // ============================================
@@ -206,7 +203,7 @@ export class IngredientController {
   }
 
   // ============================================
-  // SEÇÃO 3: MOVIMENTAÇÕES
+  // MOVIMENTAÇÕES
   // ============================================
 
   // ============================================
@@ -256,7 +253,7 @@ export class IngredientController {
   }
 
   // ============================================
-  // SEÇÃO 4: ALERTAS
+  // ALERTAS
   // ============================================
 
   // ============================================
@@ -294,9 +291,7 @@ export class IngredientController {
   }
 
   // ============================================
-  // SEÇÃO 5: ROTAS COM PARÂMETRO :id
-  // ============================================
-  // ⚠️ IMPORTANTE: Estas rotas DEVEM vir POR ÚLTIMO
+  // ROTAS COM PARÂMETRO :id
   // ============================================
 
   // ============================================

@@ -7,13 +7,14 @@
 // - permissions
 // - role_permissions
 // - user_roles
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
 // ===========================================
 
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
 export class CreateRBACTables1732620000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -164,7 +165,7 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
     );
 
     // Foreign keys - role_permissions
-    await queryRunner. createForeignKey(
+    await queryRunner.createForeignKey(
       'role_permissions',
       new TableForeignKey({
         columnNames: ['role_id'],
@@ -230,7 +231,7 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
       }),
     );
 
-    await queryRunner. createForeignKey(
+    await queryRunner.createForeignKey(
       'user_roles',
       new TableForeignKey({
         columnNames: ['role_id'],
@@ -242,12 +243,20 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
 
     // Índices
     await queryRunner.query(`CREATE INDEX idx_roles_name ON roles(name)`);
-    await queryRunner.query(`CREATE INDEX idx_permissions_name ON permissions(name)`);
-    await queryRunner.query(`CREATE INDEX idx_permissions_resource ON permissions(resource)`);
-    await queryRunner.query(`CREATE INDEX idx_user_roles_user ON user_roles(user_id)`);
-    await queryRunner.query(`CREATE INDEX idx_user_roles_role ON user_roles(role_id)`);
+    await queryRunner.query(
+      `CREATE INDEX idx_permissions_name ON permissions(name)`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX idx_permissions_resource ON permissions(resource)`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX idx_user_roles_user ON user_roles(user_id)`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX idx_user_roles_role ON user_roles(role_id)`,
+    );
 
-    console.log('✅ Tabelas RBAC criadas com sucesso');
+    console.log('Tabelas RBAC criadas com sucesso');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -257,4 +266,3 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
     await queryRunner.dropTable('roles');
   }
 }
-

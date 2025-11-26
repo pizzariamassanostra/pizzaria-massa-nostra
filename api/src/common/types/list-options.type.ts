@@ -2,7 +2,6 @@
 // TYPE: OPÇÕES DE LISTAGEM
 // ============================================
 // Tipagem para listagem paginada de recursos
-// Pizzaria Massa Nostra
 // ============================================
 
 export type ListOptions<T> = {

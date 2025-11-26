@@ -2,8 +2,6 @@
 // DTO: SAÍDA DE ESTOQUE
 // ============================================
 // Registra saída de mercadoria (consumo, venda)
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

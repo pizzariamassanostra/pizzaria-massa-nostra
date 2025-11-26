@@ -3,7 +3,6 @@
 // ============================================
 // Endpoints administrativos de clientes
 // APENAS PARA ADMINISTRADORES
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';

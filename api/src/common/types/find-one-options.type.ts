@@ -2,7 +2,6 @@
 // TYPE: OPÇÕES DE BUSCA ÚNICA
 // ============================================
 // Tipagem para buscar um único recurso
-// Pizzaria Massa Nostra
 // ============================================
 
 export type FindOneOptions<T> = {

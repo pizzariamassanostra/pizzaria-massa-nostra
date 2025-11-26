@@ -2,7 +2,6 @@
 // ENTITY: PEDIDOS DE COMPRA
 // ============================================
 // Pedidos de compra para fornecedores
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

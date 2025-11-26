@@ -2,7 +2,6 @@
 // CONTROLLER: AUTENTICAÇÃO
 // ============================================
 // Endpoints de login e validação de token
-// Pizzaria Massa Nostra - ADMIN
 // ============================================
 
 import { Controller, Post, Req, UseGuards } from '@nestjs/common';

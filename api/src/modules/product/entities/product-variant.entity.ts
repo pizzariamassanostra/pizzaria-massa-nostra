@@ -2,7 +2,6 @@
 // ENTIDADE: VARIAÇÕES DE PRODUTO
 // ============================================
 // Tamanhos e preços (P/M/G para pizzas)
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -63,4 +62,3 @@ export class ProductVariant {
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date;
 }
-

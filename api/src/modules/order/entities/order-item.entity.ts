@@ -2,7 +2,6 @@
 // ENTIDADE: ITENS DO PEDIDO
 // ============================================
 // Itens individuais de cada pedido
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

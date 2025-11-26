@@ -2,7 +2,6 @@
 // INTERFACE: REQUEST PIX MERCADO PAGO
 // ============================================
 // Dados necessários para criar pagamento PIX
-// Pizzaria Massa Nostra
 // ============================================
 
 export interface MercadoPagoPixRequest {

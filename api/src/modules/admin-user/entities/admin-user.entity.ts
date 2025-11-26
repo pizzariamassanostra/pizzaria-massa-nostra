@@ -2,7 +2,6 @@
 // ENTIDADE: USUÁRIOS ADMIN (GESTÃO)
 // ============================================
 // Representa usuários do sistema de gestão (admin, gerente, etc.)
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

@@ -2,7 +2,6 @@
 // ENUM: STATUS DE PAGAMENTO
 // ============================================
 // Possíveis status de um pagamento
-// Pizzaria Massa Nostra
 // ============================================
 
 export enum PaymentStatus {

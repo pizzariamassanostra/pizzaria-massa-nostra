@@ -2,7 +2,6 @@
 // REPOSITORY: ADMINISTRADORES
 // ============================================
 // Acesso ao banco de dados de administradores
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

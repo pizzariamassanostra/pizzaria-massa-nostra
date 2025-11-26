@@ -2,8 +2,6 @@
 // DTO: CRIAR INGREDIENTE
 // ============================================
 // Validação de dados para cadastro de ingrediente
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

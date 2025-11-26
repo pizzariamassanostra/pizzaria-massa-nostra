@@ -2,7 +2,7 @@
   "name": "pizzaria-massa-nostra-api",
   "version": "1.0.0",
   "description": "API Sistema de Delivery - Pizzaria Massa Nostra",
-  "author": "Lucas IT Dias (@lucasitdias)",
+  "author": "Lucas Dias (@lucasitdias)",
   "private": true,
   "license": "UNLICENSED",
   "packageManager": "yarn@4.5.3",

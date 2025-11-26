@@ -1,8 +1,7 @@
 // ============================================
 // DTO: PAGINAÇÃO
 // ============================================
-// DTO genérico para listagens paginadas
-// Pizzaria Massa Nostra
+// DTO para listagens paginadas
 // ============================================
 
 import { Transform } from 'class-transformer';

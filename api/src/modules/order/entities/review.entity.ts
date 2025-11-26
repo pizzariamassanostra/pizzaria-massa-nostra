@@ -2,7 +2,6 @@
 // ENTIDADE: AVALIAÇÕES DE PEDIDOS
 // ============================================
 // Avaliações dos clientes sobre pedidos entregues
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

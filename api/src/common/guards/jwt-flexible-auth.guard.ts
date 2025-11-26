@@ -2,7 +2,6 @@
 // GUARD: AUTENTICAÇÃO JWT FLEXÍVEL
 // ============================================
 // Aceita tanto token de admin quanto de cliente
-// Pizzaria Massa Nostra
 // ============================================
 
 import ApiError from '@/common/error/entities/api-error.entity';

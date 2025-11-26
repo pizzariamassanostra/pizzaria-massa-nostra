@@ -1,8 +1,6 @@
 // ============================================
 // ENUM: FORMAS DE PAGAMENTO (FORNECEDOR)
 // ============================================
-// Pizzaria Massa Nostra
-// ============================================
 
 export enum SupplierPaymentMethod {
   PIX = 'pix',

@@ -1,8 +1,7 @@
 // ============================================
-// MODULE: PRODUTOS
+// MODULO: PRODUTOS
 // ============================================
-// Módulo completo de produtos do cardápio
-// Pizzaria Massa Nostra
+// Produtos do cardápio
 // ============================================
 
 import { Module } from '@nestjs/common';
@@ -26,17 +25,7 @@ import { FillingService } from './services/filling.service';
     ]),
   ],
   controllers: [ProductController],
-  providers: [
-    ProductService,
-    CrustService,
-    FillingService,
-  ],
-  exports: [
-    ProductService,
-    CrustService,
-    FillingService,
-  ],
+  providers: [ProductService, CrustService, FillingService],
+  exports: [ProductService, CrustService, FillingService],
 })
 export class ProductModule {}
-
-

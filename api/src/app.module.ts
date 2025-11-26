@@ -2,11 +2,7 @@
 // MÓDULO PRINCIPAL DA APLICAÇÃO
 // ============================================
 // Este é o módulo raiz que importa todos os outros módulos
-// e configura TypeORM, Schedule, Config, etc.
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -29,7 +25,7 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 
 // ============================================
-// 🆕 FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
+// FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
 // ============================================
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { IngredientModule } from './modules/ingredient/ingredient.module';
@@ -54,7 +50,7 @@ config();
     // ============================================
     // SCHEDULE MODULE - Tarefas agendadas (cron)
     // ============================================
-    // Permite criar jobs agendados (ex: limpar logs diariamente)
+    // Permite criar jobs agendados (exemplo: limpar logs diariamente)
     ScheduleModule.forRoot(),
 
     // ============================================
@@ -73,13 +69,13 @@ config();
       database: process.env.DB_DATABASE, // postgres
 
       // ============================================
-      // ENTIDADES (MODELOS) - AUTO-DISCOVERY
+      // ENTIDADES (MODELOS)
       // ============================================
       // TypeORM vai buscar automaticamente todos os arquivos .entity.ts
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
 
       // ============================================
-      // SYNCHRONIZE - CRIAÇÃO AUTOMÁTICA DE TABELAS
+      // CRIAÇÃO AUTOMÁTICA DE TABELAS
       // ============================================
       // ATENÇÃO: APENAS TRUE EM DESENVOLVIMENTO!
       // Em produção, SEMPRE usar false e criar tabelas via migrations
@@ -107,7 +103,7 @@ config();
     AuthModule, // Login JWT (admin e cliente)
     CommonUserModule, // Cadastro e gestão de clientes
     AdminUserModule, // Usuários admin (gestão interna)
-    RbacModule, // Níveis de acesso (admin, gerente, etc)
+    RbacModule, // Níveis de acesso (admin, gerente)
 
     // PAGAMENTOS
     PaymentModule, // Integração MercadoPago + Webhook
@@ -126,15 +122,15 @@ config();
     NotificationModule, // WebSocket para notificações em tempo real
 
     // RELATÓRIOS
-    ReportsModule, // Dashboard, vendas, clientes, etc
+    ReportsModule,
 
     // ============================================
-    // 🆕 FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
+    // FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
     // ============================================
     SupplierModule, // Gestão de fornecedores
     IngredientModule, // Cadastro de insumos
     // StockModule,         // Controle de estoque
-    // PermissionModule,    // Níveis de acesso (admin, gerente, etc)
+    // PermissionModule,    // Níveis de acesso
     // WhatsappModule,      // Integração WhatsApp Business
   ],
 })

@@ -2,7 +2,6 @@
 // REPOSITORY: CLIENTES
 // ============================================
 // Acesso ao banco de dados de clientes da pizzaria
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

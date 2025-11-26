@@ -2,7 +2,6 @@
 // SERVICE: CONSULTA DE PAGAMENTOS
 // ============================================
 // Busca e lista pagamentos
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

@@ -2,8 +2,6 @@
 // DTO: AJUSTE DE ESTOQUE
 // ============================================
 // Corrige divergências de estoque (inventário)
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import { IsInt, IsNumber, IsString, IsOptional } from 'class-validator';

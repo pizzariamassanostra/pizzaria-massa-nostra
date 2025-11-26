@@ -3,8 +3,6 @@
 // ============================================
 // Cadastro de ingredientes, bebidas e insumos
 // utilizados na pizzaria
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

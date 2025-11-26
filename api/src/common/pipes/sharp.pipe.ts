@@ -2,7 +2,6 @@
 // PIPE: PROCESSAMENTO DE IMAGENS
 // ============================================
 // Converte imagens para formato WebP otimizado
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable, PipeTransform } from '@nestjs/common';

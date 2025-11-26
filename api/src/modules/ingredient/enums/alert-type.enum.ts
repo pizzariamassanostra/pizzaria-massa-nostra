@@ -3,8 +3,6 @@
 // ============================================
 // Define alertas automáticos baseados
 // em regras de estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export enum AlertType {

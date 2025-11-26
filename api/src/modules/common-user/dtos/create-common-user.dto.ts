@@ -2,7 +2,6 @@
 // DTO: CRIAR CLIENTE
 // ============================================
 // Dados mínimos para cadastro de cliente
-// Pizzaria Massa Nostra
 // ============================================
 
 import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';

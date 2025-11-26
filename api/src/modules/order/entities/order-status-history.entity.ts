@@ -2,7 +2,6 @@
 // ENTIDADE: HISTÓRICO DE STATUS DO PEDIDO
 // ============================================
 // Registra todas as mudanças de status
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

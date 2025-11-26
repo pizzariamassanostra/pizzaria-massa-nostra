@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: BUSCAR CLIENTE
+// SERVIÇO: BUSCAR CLIENTE
 // ============================================
 // Busca e lista clientes da pizzaria
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

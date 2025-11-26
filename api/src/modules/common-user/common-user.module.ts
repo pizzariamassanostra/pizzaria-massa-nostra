@@ -1,8 +1,7 @@
 // ============================================
 // MODULE: CLIENTES (COMMON USERS)
 // ============================================
-// Módulo completo de gestão de clientes
-// Pizzaria Massa Nostra
+// Gestão de clientes
 // ============================================
 
 import { Module } from '@nestjs/common';
@@ -19,7 +18,6 @@ import { CreateCommonUserService } from './services/create-common-user.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([CommonUser]),
-    // ⭐ IMPORTAR JwtModule
     JwtModule.registerAsync({
       useFactory: () => ({
         secret: process.env.JWT_SECRET,

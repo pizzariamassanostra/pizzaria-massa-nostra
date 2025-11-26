@@ -1,8 +1,7 @@
 // ============================================
 // ENTIDADE: PRODUTOS (BASE)
 // ============================================
-// Produto base do cardápio (pizza, bebida, etc.)
-// Pizzaria Massa Nostra
+// Produto base do cardápio (pizza, bebida...)
 // ============================================
 
 import {
@@ -24,7 +23,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Categoria do produto (Pizzas Salgadas, Bebidas, etc.)
+  // Categoria do produto (Pizzas Salgadas, Bebidas...)
   @Column()
   category_id: number;
 

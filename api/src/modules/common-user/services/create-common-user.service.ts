@@ -1,9 +1,7 @@
 // ============================================
-// SERVICE: CRIAR CLIENTE SIMPLES
+// SERVIÇO: CRIAR CLIENTE SIMPLES
 // ============================================
 // Serviço legado para criação simples de cliente
-// Usado internamente pelo sistema
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

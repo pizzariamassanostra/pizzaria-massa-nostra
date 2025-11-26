@@ -1,12 +1,6 @@
 // ===========================================
-// TEST EMAIL CONTROLLER - TEMPORÁRIO
+// TEST EMAIL CONTROLLER
 // Controller para testar envio de e-mails
-// REMOVER APÓS TESTES!
-//
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 02:15:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: 🧪 TESTE
 // ===========================================
 
 import { Controller, Post, Body, Get } from '@nestjs/common';
@@ -41,8 +35,8 @@ export class TestEmailController {
    */
   @Post('welcome')
   async testWelcomeEmail(@Body() data: TestEmailDto) {
-    console.log('📩 Dados recebidos:', data);
-    console.log('📧 E-mail:', data.email);
+    console.log('Dados recebidos:', data);
+    console.log('E-mail:', data.email);
     const result = await this.emailService.sendWelcomeEmail(
       data.email,
       data.customerName || 'Cliente Teste',
@@ -51,8 +45,8 @@ export class TestEmailController {
     return {
       ok: result,
       message: result
-        ? '✅ E-mail de boas-vindas enviado com sucesso!'
-        : '❌ Falha ao enviar e-mail',
+        ? 'E-mail de boas-vindas enviado com sucesso!'
+        : 'Falha ao enviar e-mail',
       sentTo: data.email,
     };
   }
@@ -73,8 +67,8 @@ export class TestEmailController {
     return {
       ok: result,
       message: result
-        ? '✅ E-mail de status enviado com sucesso!'
-        : '❌ Falha ao enviar e-mail',
+        ? 'E-mail de status enviado com sucesso!'
+        : 'Falha ao enviar e-mail',
       sentTo: data.email,
     };
   }
@@ -94,8 +88,8 @@ export class TestEmailController {
     return {
       ok: result,
       message: result
-        ? '✅ Notificação de novo pedido enviada!'
-        : '❌ Falha ao enviar notificação',
+        ? 'Notificação de novo pedido enviada!'
+        : 'Falha ao enviar notificação',
       sentTo: process.env.LOG_EMAIL || 'pizzariamassanostra@gmail. com',
     };
   }

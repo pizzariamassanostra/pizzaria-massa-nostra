@@ -1,5 +1,5 @@
 // ============================================
-// SERVICE: PRODUTOS
+// SERVIÇO: PRODUTOS
 // ============================================
 
 import { Injectable, NotFoundException } from '@nestjs/common';

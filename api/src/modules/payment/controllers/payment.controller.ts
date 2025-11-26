@@ -2,7 +2,6 @@
 // CONTROLLER: PAGAMENTOS
 // ============================================
 // Endpoints de pagamento
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Controller, Get, Param } from '@nestjs/common';

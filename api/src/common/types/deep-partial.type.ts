@@ -3,7 +3,6 @@
 // ============================================
 // Permite partial em objetos aninhados
 // Usado para atualizações parciais de recursos
-// Pizzaria Massa Nostra
 // ============================================
 
 export type DeepPartial<K> = {

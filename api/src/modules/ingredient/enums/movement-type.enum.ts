@@ -3,8 +3,6 @@
 // ============================================
 // Define se é entrada ou saída de estoque
 // E o motivo da movimentação
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export enum MovementType {

@@ -2,7 +2,6 @@
 // ENTIDADE: PEDIDOS
 // ============================================
 // Pedidos realizados pelos clientes
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

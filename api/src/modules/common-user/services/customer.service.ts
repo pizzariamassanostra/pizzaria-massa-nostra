@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: CLIENTES (CUSTOMER)
+// SERVIÇO: CLIENTES (CUSTOMER)
 // ============================================
 // Lógica de negócio para registro, login e gestão de clientes
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

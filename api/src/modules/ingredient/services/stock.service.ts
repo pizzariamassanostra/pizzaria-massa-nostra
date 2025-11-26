@@ -1,9 +1,7 @@
 // ============================================
-// SERVICE: CONTROLE DE ESTOQUE
+// SERVIÇO: CONTROLE DE ESTOQUE
 // ============================================
 // Gerencia entradas, saídas e consultas de estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

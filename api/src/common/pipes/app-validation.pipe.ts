@@ -3,7 +3,6 @@
 // ============================================
 // Valida todos os DTOs da aplicação
 // Formata erros de validação de forma amigável
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

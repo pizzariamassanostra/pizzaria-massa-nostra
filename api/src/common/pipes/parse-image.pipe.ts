@@ -3,7 +3,6 @@
 // ============================================
 // Valida tamanho e tipo de arquivo de imagens
 // Limite: 10MB | Formatos: jpg, jpeg, png, gif
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

@@ -8,10 +8,6 @@
  * - Um usuário ter múltiplos roles
  * - Controlar quando o role foi atribuído
  * - Rastrear quem atribuiu o role
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import {

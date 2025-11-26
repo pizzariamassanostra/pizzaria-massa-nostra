@@ -3,8 +3,6 @@
 // ============================================
 // Registra todas as entradas e saídas do estoque
 // Garante rastreabilidade completa
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

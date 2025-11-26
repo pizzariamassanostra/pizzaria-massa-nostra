@@ -3,8 +3,6 @@
 // ============================================
 // Define como o ingrediente é medido/contado
 // Usado para controle de estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export enum UnitMeasure {

@@ -1,9 +1,8 @@
 // ============================================
-// SERVICE: CLOUDINARY
+// SERVIÇO: CLOUDINARY
 // ============================================
 // Upload de imagens e PDFs para Cloudinary
 // Usado para imagens de produtos, categorias e comprovantes PDF
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';
@@ -34,7 +33,7 @@ export class CloudinaryService {
   }
 
   // ============================================
-  // UPLOAD DE PDF (CORRIGIDO!)
+  // UPLOAD DE PDF
   // ============================================
   async uploadPdf(
     buffer: Buffer,

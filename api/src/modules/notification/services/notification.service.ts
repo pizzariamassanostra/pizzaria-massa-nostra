@@ -1,12 +1,7 @@
 // ===========================================
-// NOTIFICATION SERVICE - PIZZARIA MASSA NOSTRA
+// NOTIFICAÇÃO DE SERVIÇO
 // Serviço central de notificações
 // Gerencia envio de e-mails, SMS e push notifications
-//
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 02:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Implementado
 // ===========================================
 
 import { Injectable, Logger } from '@nestjs/common';
@@ -42,7 +37,7 @@ export class NotificationService {
    * @param emailService - Serviço de e-mail
    */
   constructor(private readonly emailService: EmailService) {
-    this.logger.log('✅ NotificationService inicializado');
+    this.logger.log('NotificationService inicializado');
   }
 
   /**
@@ -55,7 +50,7 @@ export class NotificationService {
   async send(notificationData: NotificationData): Promise<boolean> {
     try {
       this.logger.log(
-        `📤 Enviando notificação ${notificationData.type} para ${notificationData.recipient}`,
+        `Enviando notificação ${notificationData.type} para ${notificationData.recipient}`,
       );
 
       // Roteamento por tipo de notificação
@@ -71,12 +66,12 @@ export class NotificationService {
 
         default:
           this.logger.warn(
-            `⚠️ Tipo de notificação desconhecido: ${notificationData.type}`,
+            `Tipo de notificação desconhecido: ${notificationData.type}`,
           );
           return false;
       }
     } catch (error) {
-      this.logger.error(`❌ Erro ao enviar notificação:`, error);
+      this.logger.error(`Erro ao enviar notificação:`, error);
       return false;
     }
   }
@@ -96,7 +91,7 @@ export class NotificationService {
         html: data.message,
       });
     } catch (error) {
-      this.logger.error('❌ Erro ao enviar e-mail:', error);
+      this.logger.error('Erro ao enviar e-mail:', error);
       return false;
     }
   }
@@ -110,7 +105,7 @@ export class NotificationService {
    */
   private async sendSMS(data: NotificationData): Promise<boolean> {
     // TODO: Futura integração com Twilio
-    this.logger.warn('⚠️ Envio de SMS ainda não implementado');
+    this.logger.warn('Envio de SMS ainda não implementado');
     this.logger.debug(
       `SMS seria enviado para: ${data.recipient} - Mensagem: ${data.message}`,
     );
@@ -131,15 +126,10 @@ export class NotificationService {
    */
   private async sendPush(data: NotificationData): Promise<boolean> {
     // TODO: Futura integração com Firebase FCM
-    this.logger.warn('⚠️ Push notification ainda não implementado');
+    this.logger.warn('Push notification ainda não implementado');
     this.logger.debug(
       `Push seria enviado para: ${data.recipient} - Mensagem: ${data.message}`,
     );
-
-    // Quando implementar Firebase:
-    // const fcmService = new FCMService();
-    // return await fcmService.sendPush(data.recipient, data.message, data.data);
-
     return false;
   }
 
@@ -163,7 +153,7 @@ export class NotificationService {
   ): Promise<boolean> {
     const message = `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
-        <h2 style="color: #d32f2f;">🔔 Novo Pedido Recebido! </h2>
+        <h2 style="color: #d32f2f;">Novo Pedido Recebido! </h2>
         <table style="width: 100%; margin-top: 20px;">
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #eee;">
@@ -201,7 +191,7 @@ export class NotificationService {
     return await this.send({
       type: NotificationType.EMAIL,
       recipient: adminEmail,
-      subject: `🔔 Novo Pedido #${orderNumber} - R$ ${total.toFixed(2)}`,
+      subject: `Novo Pedido #${orderNumber} - R$ ${total.toFixed(2)}`,
       message,
     });
   }
@@ -222,7 +212,7 @@ export class NotificationService {
     // Validar se cliente tem e-mail
     if (!email || email.trim() === '') {
       this.logger.warn(
-        `⚠️ Cliente sem e-mail cadastrado - Pedido #${orderNumber}`,
+        `Cliente sem e-mail cadastrado - Pedido #${orderNumber}`,
       );
       return false;
     }

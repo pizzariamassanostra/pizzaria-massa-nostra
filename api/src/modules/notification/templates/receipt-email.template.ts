@@ -85,7 +85,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
           <!-- CABEÇALHO -->
           <tr>
             <td style="background-color: #d32f2f; padding: 30px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 28px;">🍕 PIZZARIA MASSA NOSTRA</h1>
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px;">PIZZARIA MASSA NOSTRA</h1>
               <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 14px;">A melhor pizza da cidade! </p>
             </td>
           </tr>
@@ -93,9 +93,9 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
           <!-- MENSAGEM DE BOAS-VINDAS -->
           <tr>
             <td style="padding: 30px;">
-              <h2 style="color: #333; margin: 0 0 10px 0;">Olá, ${data.customerName}!  👋</h2>
+              <h2 style="color: #333; margin: 0 0 10px 0;">Olá, ${data.customerName}!  </h2>
               <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
-                Seu pedido foi <strong style="color: #4caf50;">confirmado com sucesso!</strong> 🎉
+                Seu pedido foi <strong style="color: #4caf50;">confirmado com sucesso!</strong> 
               </p>
             </td>
           </tr>
@@ -113,7 +113,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
                       <strong style="color: #333;">Data:</strong> ${data.orderDate}
                     </p>
                     <p style="margin: 10px 0 0 0; color: #666; font-size: 14px;">
-                      <strong style="color: #333;">Status:</strong> <span style="color: #4caf50;">✅ Confirmado</span>
+                      <strong style="color: #333;">Status:</strong> <span style="color: #4caf50;">Confirmado</span>
                     </p>
                   </td>
                 </tr>
@@ -124,7 +124,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
           <!-- ITENS DO PEDIDO -->
           <tr>
             <td style="padding: 0 30px 20px 30px;">
-              <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">📦 Itens do Pedido</h3>
+              <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">Itens do Pedido</h3>
               <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #eee; border-radius: 6px; overflow: hidden;">
                 ${itemsHTML}
               </table>
@@ -170,17 +170,17 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
                 <tr>
                   <td>
                     <p style="margin: 0; color: #856404;">
-                      <strong>💳 Forma de Pagamento:</strong> ${paymentMethodDisplay}
+                      <strong>Forma de Pagamento:</strong> ${paymentMethodDisplay}
                     </p>
                     ${
                       data.deliveryToken
                         ? `
                     <p style="margin: 10px 0 0 0; color: #856404;">
-                      <strong>🔐 Token de Entrega:</strong> 
+                      <strong>Token de Entrega:</strong> 
                       <span style="font-size: 24px; font-weight: bold; color: #d32f2f;">${data.deliveryToken}</span>
                     </p>
                     <p style="margin: 5px 0 0 0; color: #856404; font-size: 12px;">
-                      ⚠️ Informe este código ao entregador para confirmar o recebimento
+                      Informe este código ao entregador para confirmar o recebimento
                     </p>
                     `
                         : ''
@@ -197,7 +197,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
               ? `
           <tr>
             <td style="padding: 0 30px 30px 30px;">
-              <h3 style="color: #333; margin: 0 0 10px 0; font-size: 16px;">📍 Endereço de Entrega</h3>
+              <h3 style="color: #333; margin: 0 0 10px 0; font-size: 16px;">Endereço de Entrega</h3>
               <p style="margin: 0; color: #666; line-height: 1.5;">${data.address}</p>
             </td>
           </tr>
@@ -210,7 +210,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             <td style="padding: 0 30px 30px 30px;">
               <div style="background-color: #e3f2fd; border: 1px solid #2196f3; border-radius: 6px; padding: 15px; text-align: center;">
                 <p style="margin: 0; color: #1976d2;">
-                  📎 <strong>Comprovante em anexo (PDF)</strong>
+                  <strong>Comprovante em anexo (PDF)</strong>
                 </p>
               </div>
             </td>
@@ -220,7 +220,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
           <tr>
             <td style="background-color: #f9f9f9; padding: 30px; text-align: center; border-top: 1px solid #eee;">
               <p style="margin: 0; color: #666; font-size: 14px;">
-                Obrigado pela preferência!  Volte sempre!  🍕
+                Obrigado pela preferência!  Volte sempre!
               </p>
               <p style="margin: 10px 0 0 0; color: #999; font-size: 12px;">
                 <strong>Pizzaria Massa Nostra</strong><br>

@@ -2,7 +2,6 @@
 // STRATEGY: AUTENTICAÇÃO JWT
 // ============================================
 // Estratégia de validação de token JWT
-// Pizzaria Massa Nostra - ADMIN
 // ============================================
 
 import { AdminUser } from '@/modules/admin-user/entities/admin-user.entity';

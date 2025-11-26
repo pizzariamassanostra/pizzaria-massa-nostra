@@ -2,7 +2,6 @@
 // STRATEGY: AUTENTICAÇÃO JWT PARA CLIENTES
 // ============================================
 // Estratégia de validação de token JWT de clientes
-// Pizzaria Massa Nostra
 // ============================================
 
 import { CommonUser } from '@/modules/common-user/entities/common-user.entity';

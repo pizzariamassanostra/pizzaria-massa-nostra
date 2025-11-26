@@ -1,5 +1,5 @@
 // ============================================
-// SERVICE: ENDEREÇOS DE ENTREGA
+// SERVIÇO: ENDEREÇOS DE ENTREGA
 // ============================================
 
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -66,7 +66,6 @@ export class AddressService {
   async update(id: number, dto: CreateAddressDto): Promise<Address> {
     const address = await this.findOne(id);
 
-    // Se for marcar como padrão, desmarcar outros
     if (dto.is_default) {
       await this.addressRepo.update(
         { common_user_id: address.common_user_id },

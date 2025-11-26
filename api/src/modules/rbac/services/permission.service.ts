@@ -1,13 +1,6 @@
 // ===========================================
-// SERVICE: PERMISSION
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
+// SERVIÇO: PERMISSION
 // Gerencia operações relacionadas a permissões
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import { Injectable, NotFoundException } from '@nestjs/common';

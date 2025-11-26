@@ -4,8 +4,6 @@
 // Endpoints REST para gestão de fornecedores
 // Cotações, Pedidos de Compra e Avaliações
 // Apenas ADMIN tem acesso (JwtAuthGuard)
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -53,7 +51,7 @@ export class SupplierController {
   // ============================================
   // POST /supplier
   // Cadastra um novo fornecedor no sistema
-  // Body: CreateSupplierDto (razão social, CNPJ, endereço, etc)
+  // Body: CreateSupplierDto (razão social, CNPJ, endereço...)
   // Retorna: Fornecedor criado com status 'pre_registered'
   // ============================================
   @Post()
@@ -70,7 +68,7 @@ export class SupplierController {
   // ============================================
   // GET /supplier
   // Lista todos os fornecedores (não deletados)
-  // Query Params (opcionais):
+  // Query Params:
   //  - status: SupplierStatus (filtrar por status)
   //  - cidade: string (filtrar por cidade)
   //  - estado: string (filtrar por UF)
@@ -99,7 +97,6 @@ export class SupplierController {
   // Lista APENAS fornecedores com status 'active'
   // Usado para selecionar fornecedores em cotações
   // Retorna: Array de fornecedores ativos
-  // ⚠️ IMPORTANTE: Esta rota DEVE vir ANTES de /supplier/:id
   // ============================================
   @Get('active')
   @ApiOperation({ summary: 'Listar apenas fornecedores ativos' })
@@ -114,14 +111,10 @@ export class SupplierController {
   // ============================================
   // SEÇÃO 2: COTAÇÕES (QUOTES)
   // ============================================
-  // ⚠️ ATENÇÃO: Todas as rotas de cotação devem vir
-  // ANTES da rota GET /supplier/:id para evitar conflito!
-  // ============================================
-
   // ============================================
   // POST /supplier/quote
   // Cria uma nova cotação para um fornecedor
-  // Body: CreateQuoteDto (supplier_id, itens, prazo, etc)
+  // Body: CreateQuoteDto (supplier_id, itens, prazo...)
   // Gera número único: COT-YYYYMMDD-XXX
   // Status inicial: 'pending'
   // Retorna: Cotação criada
@@ -138,12 +131,12 @@ export class SupplierController {
   }
 
   // ============================================
-  // GET /supplier/quotes (PLURAL!)
+  // GET /supplier/quotes (PLURAL)
   // Lista todas as cotações
-  // Query Params (opcionais):
+  // Query Params:
   //  - supplier_id: number (filtrar por fornecedor)
   // Retorna: Array de cotações
-  // ⚠️ ROTA EM PLURAL para evitar conflito com /:id
+  // ROTA EM PLURAL para evitar conflito com /:id
   // ============================================
   @Get('quotes')
   @ApiOperation({ summary: 'Listar cotações' })
@@ -226,7 +219,7 @@ export class SupplierController {
   // PUT /supplier/quote/:id/cancel
   // Cancela uma cotação (muda status para 'cancelled')
   // Params: id (ID da cotação)
-  // Body (opcional):
+  // Body:
   //  - reason: string (motivo do cancelamento)
   // Retorna: Cotação cancelada
   // ============================================
@@ -271,7 +264,7 @@ export class SupplierController {
   // ============================================
   // GET /supplier/purchase-order
   // Lista todos os pedidos de compra
-  // Query Params (opcionais):
+  // Query Params:
   //  - supplier_id: number (filtrar por fornecedor)
   // Retorna: Array de pedidos
   // ============================================
@@ -440,7 +433,6 @@ export class SupplierController {
   // ============================================
   // SEÇÃO 4: ROTAS COM PARÂMETRO :id
   // ============================================
-  // ⚠️ IMPORTANTE: Estas rotas DEVEM vir POR ÚLTIMO
   // para não capturar rotas específicas como
   // /active, /quotes, /purchase-order, etc
   // ============================================

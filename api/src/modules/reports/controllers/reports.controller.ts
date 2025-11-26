@@ -2,16 +2,10 @@
 // CONTROLLER: RELATÓRIOS
 // ============================================
 // Endpoints de relatórios gerenciais
-// Pizzaria Massa Nostra
-//
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 04:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Completo com Excel
 // ============================================
 
 import { Controller, Get, Query, UseGuards, Res } from '@nestjs/common';
-import { Response } from 'express'; // ✅ ADICIONAR
+import { Response } from 'express';
 import { ReportsService } from '../services/reports.service';
 import {
   ReportFilterDto,
@@ -20,7 +14,7 @@ import {
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 
 @Controller('reports')
-@UseGuards(JwtAuthGuard) // ⭐ Apenas administradores autenticados
+@UseGuards(JwtAuthGuard) // Apenas administradores autenticados
 export class ReportsController {
   // ============================================
   // CONSTRUCTOR
@@ -63,7 +57,7 @@ export class ReportsController {
   // Retorna relatório completo de vendas do período
   // Inclui: resumo, breakdown por pagamento/status, vendas diárias
   //
-  // ✅ CORRIGIDO: Aceita apenas 2 parâmetros de query
+  // Aceita apenas 2 parâmetros de query
   //
   // @param startDate - Data inicial (query, opcional)
   // @param endDate - Data final (query, opcional)
@@ -77,7 +71,7 @@ export class ReportsController {
     @Query('start_date') startDate?: string,
     @Query('end_date') endDate?: string,
   ) {
-    // ✅ CORRIGIDO: Passar apenas 2 parâmetros
+    // Passar apenas 2 parâmetros
     const report = await this.reportsService.getSalesReport(startDate, endDate);
 
     return {
@@ -164,19 +158,19 @@ export class ReportsController {
   }
 
   // ============================================
-  // ✅ NOVO: EXPORTAR VENDAS PARA EXCEL
+  // EXPORTAR VENDAS PARA EXCEL
   // ============================================
   // GET /reports/export/sales/excel?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD
   //
   // Gera e baixa arquivo Excel (. xlsx) com relatório de vendas
-  // Formatação profissional com:
+  // Formatação com:
   // - Cabeçalho colorido
   // - Tabela de vendas completa
   // - Totalizações
   // - Filtros automáticos
   // - Células mescladas
   //
-  // ✅ CORRIGIDO: Importa Response do Express
+  // Importa Response do Express
   //
   // @param startDate - Data inicial (query, opcional)
   // @param endDate - Data final (query, opcional)

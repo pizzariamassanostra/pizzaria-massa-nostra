@@ -2,8 +2,6 @@
 // CONTROLLER: COMPROVANTES
 // ============================================
 // Endpoints de comprovantes
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {

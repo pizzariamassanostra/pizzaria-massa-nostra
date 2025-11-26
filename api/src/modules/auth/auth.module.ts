@@ -1,8 +1,7 @@
 // ============================================
-// MODULE: AUTENTICAÇÃO
+// MODULO: AUTENTICAÇÃO
 // ============================================
-// Módulo de autenticação (Admin + Cliente)
-// Pizzaria Massa Nostra
+// Autenticação (Admin + Cliente)
 // ============================================
 
 import { ConfigModule } from '@nestjs/config';

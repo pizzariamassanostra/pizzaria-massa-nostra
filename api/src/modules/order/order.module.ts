@@ -1,9 +1,8 @@
 // ============================================
-// MODULE: PEDIDOS E ENDEREÇOS (COMPLETO)
+// MODULO: PEDIDOS E ENDEREÇOS (COMPLETO)
 // ============================================
-// Módulo completo de gestão de pedidos
+// Gestão de pedidos
 // Inclui integração com comprovantes PDF
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Module } from '@nestjs/common';
@@ -43,7 +42,7 @@ import { ReviewService } from './services/review.service';
 // ============================================
 // MÓDULOS EXTERNOS
 // ============================================
-import { ReceiptModule } from '../receipt/receipt.module'; // ⭐ NOVO: Comprovantes
+import { ReceiptModule } from '../receipt/receipt.module'; // Comprovantes
 
 @Module({
   // ============================================
@@ -61,7 +60,7 @@ import { ReceiptModule } from '../receipt/receipt.module'; // ⭐ NOVO: Comprova
       PizzaCrust,
       CrustFilling,
     ]),
-    // ⭐ IMPORTAR MÓDULO DE COMPROVANTES
+
     ReceiptModule, // Permite usar ReceiptService em OrderService
   ],
 

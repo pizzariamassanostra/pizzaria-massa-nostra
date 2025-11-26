@@ -2,10 +2,6 @@
  * ============================================
  * DTO: ATRIBUIR ROLE A USUÁRIO
  * ============================================
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import { IsNotEmpty, IsInt, IsArray, ArrayMinSize } from 'class-validator';

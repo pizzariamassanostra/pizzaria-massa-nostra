@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: AUTENTICAÇÃO
+// SERVIÇO: AUTENTICAÇÃO
 // ============================================
 // Serviço de autenticação de administradores
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';

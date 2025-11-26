@@ -2,7 +2,6 @@
 // API: MERCADO PAGO
 // ============================================
 // Integração com Mercado Pago para pagamentos PIX
-// Pizzaria Massa Nostra
 // ============================================
 
 import axios from 'axios';

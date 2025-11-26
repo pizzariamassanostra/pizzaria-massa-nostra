@@ -2,7 +2,6 @@
 // CONTROLLER: CLIENTES (CUSTOMER)
 // ============================================
 // Endpoints públicos para registro, login e gestão de clientes
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -51,7 +50,7 @@ export class CustomerController {
   // LOGIN DE CLIENTE
   // ============================================
   // Endpoint público - não requer autenticação
-  // ⭐ AGORA RETORNA TOKEN JWT
+  // RETORNA TOKEN JWT
   @Post('login')
   async login(@Body() dto: LoginCustomerDto) {
     const { user, access_token } = await this.customerService.login(dto);
@@ -66,18 +65,18 @@ export class CustomerController {
         email: user.email,
         cpf: user.cpf,
       },
-      access_token, // ⭐ TOKEN JWT
+      access_token, // TOKEN JWT
     };
   }
 
   // ============================================
   // BUSCAR PERFIL DO CLIENTE
   // ============================================
-  // ⭐ PROTEGIDO POR JWT
+  // PROTEGIDO POR JWT
   @Get('profile')
   @UseGuards(JwtCustomerAuthGuard)
   async getProfile(@Request() req) {
-    // ⭐ Agora pega userId do token JWT automaticamente
+    // userId do token JWT automaticamente
     const userId = req.user.id;
 
     const user = await this.customerService.getProfile(userId);
@@ -102,11 +101,11 @@ export class CustomerController {
   // ============================================
   // ATUALIZAR PERFIL DO CLIENTE
   // ============================================
-  // ⭐ PROTEGIDO POR JWT
+  // PROTEGIDO POR JWT
   @Put('profile')
   @UseGuards(JwtCustomerAuthGuard)
   async updateProfile(@Request() req, @Body() dto: UpdateCustomerDto) {
-    // ⭐ Agora pega userId do token JWT automaticamente
+    // userId do token JWT automaticamente
     const userId = req.user.id;
 
     const user = await this.customerService.updateProfile(userId, dto);
@@ -130,11 +129,11 @@ export class CustomerController {
   // ============================================
   // EXCLUIR CONTA (SOFT DELETE - LGPD)
   // ============================================
-  // ⭐ PROTEGIDO POR JWT
+  // PROTEGIDO POR JWT
   @Delete('account')
   @UseGuards(JwtCustomerAuthGuard)
   async deleteAccount(@Request() req) {
-    // ⭐ Agora pega userId do token JWT automaticamente
+    // userId do token JWT automaticamente
     const userId = req.user.id;
 
     await this.customerService.deleteAccount(userId);

@@ -3,8 +3,6 @@
 // ============================================
 // Entidade de comprovantes de pedidos
 // Armazena snapshot do pedido para emissão de PDF
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -90,19 +88,18 @@ export class Receipt {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   discount: number;
 
-  // TOTAL FINAL = subtotal + delivery_fee - discount
+  // TOTAL FINAL
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   total: number;
 
   // ============================================
   // FORMA DE PAGAMENTO
   // ============================================
-  // Valores possíveis: pix, credit_card, debit_card, cash, voucher
   @Column({ type: 'varchar', length: 50 })
   payment_method: string;
 
   // ============================================
-  // URL DO PDF (OPCIONAL)
+  // URL DO PDF
   // ============================================
   // Pode ser usado para armazenar URL do Cloudinary
   // ou outro serviço de armazenamento de arquivos

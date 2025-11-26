@@ -1,5 +1,5 @@
 // ============================================
-// SERVICE: AVALIAÇÕES DE FORNECEDORES
+// SERVIÇO: AVALIAÇÕES DE FORNECEDORES
 // ============================================
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

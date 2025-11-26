@@ -1,14 +1,7 @@
 // ===========================================
 // ENUMERAÇÃO DE ROLES (PAPÉIS)
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
 // Define todos os papéis disponíveis no sistema
-// Hierarquia: SUPER_ADMIN > MANAGER > ANALYST > ASSISTANT > AUXILIARY > WAITER/COOK/DELIVERY
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
+// Hierarquia: ADMIN > GERÊNCIA > ANALISTA > ASSISTENTE > AUXILIAR > GARÇOM/COZINHEIRA/ENTREGADOR
 // ===========================================
 
 export enum RoleEnum {
@@ -29,7 +22,7 @@ export enum RoleEnum {
   DELIVERY = 'delivery',
 }
 
-// ✅ LABELS (NOMES DE EXIBIÇÃO)
+// NOMES DE EXIBIÇÃO
 export const RoleLabels: Record<RoleEnum, string> = {
   [RoleEnum.SUPER_ADMIN]: 'Super Administrador',
   [RoleEnum.MANAGER]: 'Gerente',
@@ -41,7 +34,7 @@ export const RoleLabels: Record<RoleEnum, string> = {
   [RoleEnum.DELIVERY]: 'Motoboy',
 };
 
-// ✅ NÍVEIS HIERÁRQUICOS
+// NÍVEIS HIERÁRQUICOS
 export const RoleLevels: Record<RoleEnum, number> = {
   [RoleEnum.SUPER_ADMIN]: 1,
   [RoleEnum.MANAGER]: 2,

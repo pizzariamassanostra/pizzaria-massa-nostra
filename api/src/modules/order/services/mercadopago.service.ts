@@ -1,5 +1,5 @@
 // ============================================
-// SERVICE: MERCADO PAGO PIX (SDK V2.0+)
+// SERVIÇO: MERCADO PAGO PIX (SDK V2.0+)
 // ============================================
 
 import { Injectable } from '@nestjs/common';

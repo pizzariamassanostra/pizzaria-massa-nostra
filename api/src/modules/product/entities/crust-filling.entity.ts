@@ -2,7 +2,6 @@
 // ENTIDADE: RECHEIOS DE BORDA
 // ============================================
 // Recheios para bordas Vulcão/Trançada
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -52,4 +51,3 @@ export class CrustFilling {
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date;
 }
-

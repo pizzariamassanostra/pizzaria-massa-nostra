@@ -2,7 +2,6 @@
 // INTERFACE: RESPONSE PIX MERCADO PAGO
 // ============================================
 // Resposta da criação de pagamento PIX
-// Pizzaria Massa Nostra
 // ============================================
 
 export interface MercadoPagoPixResponse {

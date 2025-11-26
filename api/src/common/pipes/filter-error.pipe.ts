@@ -2,7 +2,6 @@
 // FILTER: TRATAMENTO DE ERROS GLOBAL
 // ============================================
 // Intercepta e formata todos os erros da API
-// Pizzaria Massa Nostra
 // ============================================
 
 import ApiError from '@/common/error/entities/api-error.entity';

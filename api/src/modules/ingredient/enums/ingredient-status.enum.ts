@@ -3,8 +3,6 @@
 // ============================================
 // Define se o ingrediente está disponível
 // para uso no estoque
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 export enum IngredientStatus {

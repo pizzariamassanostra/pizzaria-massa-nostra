@@ -1,10 +1,8 @@
 // ============================================
-// SERVICE: FORNECEDORES
+// SERVIÇO: FORNECEDORES
 // ============================================
 // Lógica de negócio para gestão de fornecedores
 // CRUD completo + validações
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
 // ============================================
 
 import {
@@ -84,14 +82,14 @@ export class SupplierService {
       status: dto.status || SupplierStatus.PRE_REGISTERED,
     });
 
-    return this.supplierRepo.save(supplier); // ✅ COM RETURN
+    return this.supplierRepo.save(supplier);
   }
 
   // ============================================
   // LISTAR TODOS OS FORNECEDORES
   // ============================================
   // Filtros opcionais:
-  // - status (active, inactive, etc)
+  // - status (active, inactive...)
   // - cidade
   // - estado
   // ============================================
@@ -131,7 +129,7 @@ export class SupplierService {
   async findOne(id: number): Promise<Supplier> {
     const supplier = await this.supplierRepo.findOne({
       where: { id, deleted_at: null },
-      relations: ['quotes', 'purchase_orders', 'evaluations'], // Trazer relacionamentos
+      relations: ['quotes', 'purchase_orders', 'evaluations'],
     });
 
     if (!supplier) {
@@ -220,7 +218,7 @@ export class SupplierService {
   async changeStatus(id: number, newStatus: SupplierStatus): Promise<Supplier> {
     const supplier = await this.findOne(id);
 
-    // Validar transições de status (opcional)
+    // Validar transições de status
     // Exemplo: não pode ir de 'rejected' para 'active' diretamente
     if (
       supplier.status === SupplierStatus.REJECTED &&

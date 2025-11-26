@@ -1,8 +1,6 @@
 // ============================================
 // ENUM: STATUS DO FORNECEDOR
 // ============================================
-// Pizzaria Massa Nostra
-// ============================================
 
 export enum SupplierStatus {
   // Pré-cadastro - aguardando documentos

@@ -2,7 +2,6 @@
 // ENTIDADE: CATEGORIAS DE PRODUTOS
 // ============================================
 // Representa categorias do cardápio
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -44,10 +43,6 @@ export class ProductCategory {
   @Column({ length: 20, default: 'active' })
   status: string;
 
-  // TODO: Relacionamento com Product (quando criar)
-  // @OneToMany(() => Product, product => product.category)
-  // products: Product[];
-
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
@@ -57,4 +52,3 @@ export class ProductCategory {
   @DeleteDateColumn({ type: 'timestamptz', select: false })
   deleted_at: Date;
 }
-

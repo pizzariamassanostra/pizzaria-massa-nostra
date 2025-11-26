@@ -1,8 +1,6 @@
 // ============================================
 // MIGRATION: TABELA DE COMPROVANTES
 // ============================================
-// Pizzaria Massa Nostra
-// ============================================
 
 import {
   MigrationInterface,

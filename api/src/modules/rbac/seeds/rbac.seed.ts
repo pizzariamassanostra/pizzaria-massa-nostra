@@ -1,13 +1,6 @@
 // ===========================================
 // SEED: RBAC (ROLES E PERMISSÕES)
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
 // Popula banco com roles e permissões iniciais
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import { DataSource } from 'typeorm';
@@ -17,7 +10,7 @@ import { RoleEnum, RoleLabels, RoleLevels } from '../enums/role.enum';
 import { PermissionEnum } from '../enums/permission.enum';
 
 export async function seedRBAC(dataSource: DataSource) {
-  console.log('🌱 Iniciando seed de RBAC...');
+  console.log('Iniciando seed de RBAC...');
 
   const permissionRepo = dataSource.getRepository(Permission);
   const roleRepo = dataSource.getRepository(Role);
@@ -258,7 +251,7 @@ export async function seedRBAC(dataSource: DataSource) {
     if (!permission) {
       permission = permissionRepo.create(permData);
       await permissionRepo.save(permission);
-      console.log(`  ✅ Permissão criada: ${permData.display_name}`);
+      console.log(`Permissão criada: ${permData.display_name}`);
     }
 
     permissions.push(permission);
@@ -273,7 +266,7 @@ export async function seedRBAC(dataSource: DataSource) {
     return permissions.filter((p) => names.includes(p.name));
   };
 
-  // SUPER_ADMIN - Todas as permissões
+  // ADMINISTRADOR - Todas as permissões
   let superAdmin = await roleRepo.findOne({
     where: { name: RoleEnum.SUPER_ADMIN },
   });
@@ -287,10 +280,10 @@ export async function seedRBAC(dataSource: DataSource) {
       permissions: permissions, // Todas as permissões
     });
     await roleRepo.save(superAdmin);
-    console.log('  ✅ Role criado: Super Administrador');
+    console.log('Role criado: Super Administrador');
   }
 
-  // MANAGER - Gestão e relatórios
+  // GERÊNCIA - Gestão e relatórios
   let manager = await roleRepo.findOne({ where: { name: RoleEnum.MANAGER } });
   if (!manager) {
     manager = roleRepo.create({
@@ -318,10 +311,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(manager);
-    console.log('  ✅ Role criado: Gerente');
+    console.log('Role criado: Gerente');
   }
 
-  // ANALYST - Relatórios
+  // ANALISTA - Relatórios
   let analyst = await roleRepo.findOne({ where: { name: RoleEnum.ANALYST } });
   if (!analyst) {
     analyst = roleRepo.create({
@@ -341,10 +334,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(analyst);
-    console.log('  ✅ Role criado: Analista');
+    console.log('Role criado: Analista');
   }
 
-  // ASSISTANT - Pedidos e produtos
+  // ASSISTENTE - Pedidos e produtos
   let assistant = await roleRepo.findOne({
     where: { name: RoleEnum.ASSISTANT },
   });
@@ -364,10 +357,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(assistant);
-    console.log('  ✅ Role criado: Assistente');
+    console.log('Role criado: Assistente');
   }
 
-  // AUXILIARY - Pedidos básicos
+  // AUXILIAR - Pedidos básicos
   let auxiliary = await roleRepo.findOne({
     where: { name: RoleEnum.AUXILIARY },
   });
@@ -385,10 +378,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(auxiliary);
-    console.log('  ✅ Role criado: Auxiliar');
+    console.log('Role criado: Auxiliar');
   }
 
-  // WAITER - Pedidos do salão
+  // GARÇOM - Pedidos do salão
   let waiter = await roleRepo.findOne({ where: { name: RoleEnum.WAITER } });
   if (!waiter) {
     waiter = roleRepo.create({
@@ -405,10 +398,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(waiter);
-    console.log('  ✅ Role criado: Garçom');
+    console.log('Role criado: Garçom');
   }
 
-  // COOK - Visualizar pedidos da cozinha
+  // COZINHEIRA - Visualizar pedidos da cozinha
   let cook = await roleRepo.findOne({ where: { name: RoleEnum.COOK } });
   if (!cook) {
     cook = roleRepo.create({
@@ -423,10 +416,10 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(cook);
-    console.log('  ✅ Role criado: Cozinheira');
+    console.log('Role criado: Cozinheira');
   }
 
-  // DELIVERY - Entregas
+  // ENTREGADOR - Entregas
   let delivery = await roleRepo.findOne({ where: { name: RoleEnum.DELIVERY } });
   if (!delivery) {
     delivery = roleRepo.create({
@@ -441,8 +434,8 @@ export async function seedRBAC(dataSource: DataSource) {
       ]),
     });
     await roleRepo.save(delivery);
-    console.log('  ✅ Role criado: Motoboy');
+    console.log('Role criado: Motoboy');
   }
 
-  console.log('✅ Seed de RBAC concluído!');
+  console.log('Seed de RBAC concluído!');
 }

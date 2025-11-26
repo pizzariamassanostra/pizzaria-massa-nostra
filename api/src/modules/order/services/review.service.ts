@@ -1,11 +1,14 @@
 // ============================================
-// SERVICE: AVALIAÇÕES DE PEDIDOS
+// SERVIÇO: AVALIAÇÕES DE PEDIDOS
 // ============================================
 // Lógica de negócio para avaliações
-// Pizzaria Massa Nostra
 // ============================================
 
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderReview } from '../entities/review.entity';
@@ -143,4 +146,3 @@ export class ReviewService {
     };
   }
 }
-

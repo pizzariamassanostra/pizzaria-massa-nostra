@@ -1,9 +1,8 @@
 // ============================================
-// MODULE: USUÁRIOS ADMINISTRADORES
+// MODULO: USUÁRIOS ADMINISTRADORES
 // ============================================
-// Módulo de gerenciamento de administradores da pizzaria
+// Gerenciamento de administradores da pizzaria
 // (Administrador, Gerente, Analista, Assistente, etc)
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Module } from '@nestjs/common';

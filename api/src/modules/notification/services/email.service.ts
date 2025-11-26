@@ -1,5 +1,5 @@
 // ===========================================
-// EMAIL SERVICE - PIZZARIA MASSA NOSTRA
+// EMAIL SERVIÇO
 // Serviço de envio de e-mails usando SendGrid
 // ===========================================
 
@@ -37,7 +37,7 @@ export class EmailService {
     const apiKey = this.configService.get<string>('SENDGRID_API_KEY');
 
     if (!apiKey) {
-      this.logger.error('❌ SENDGRID_API_KEY não configurado no .env');
+      this.logger.error('SENDGRID_API_KEY não configurado no .env');
       throw new Error('SendGrid API Key não encontrado');
     }
 
@@ -50,7 +50,7 @@ export class EmailService {
       'Pizzaria Massa Nostra';
 
     this.logger.log(
-      `✅ EmailService inicializado - Remetente: ${this.fromName} <${this.fromEmail}>`,
+      `EmailService inicializado - Remetente: ${this.fromName} <${this.fromEmail}>`,
     );
   }
 
@@ -63,7 +63,7 @@ export class EmailService {
     try {
       // Validar e-mail do destinatário
       if (!emailData.to || !this.isValidEmail(emailData.to)) {
-        this.logger.warn(`⚠️ E-mail inválido: ${emailData.to}`);
+        this.logger.warn(`E-mail inválido: ${emailData.to}`);
         return false;
       }
 
@@ -80,16 +80,13 @@ export class EmailService {
       };
 
       // Enviar via SendGrid
-      this.logger.log(`📧 Enviando e-mail para: ${emailData.to}`);
+      this.logger.log(`Enviando e-mail para: ${emailData.to}`);
       await sgMail.send(msg);
 
-      this.logger.log(`✅ E-mail enviado com sucesso para: ${emailData.to}`);
+      this.logger.log(`E-mail enviado com sucesso para: ${emailData.to}`);
       return true;
     } catch (error) {
-      this.logger.error(
-        `❌ Erro ao enviar e-mail para ${emailData.to}:`,
-        error,
-      );
+      this.logger.error(`Erro ao enviar e-mail para ${emailData.to}:`, error);
 
       // Log detalhado do erro SendGrid
       if (error.response) {
@@ -141,7 +138,7 @@ export class EmailService {
 
       return await this.sendEmail(emailData);
     } catch (error) {
-      this.logger.error(`❌ Erro ao enviar comprovante para ${to}:`, error);
+      this.logger.error(`Erro ao enviar comprovante para ${to}:`, error);
       return false;
     }
   }
@@ -155,20 +152,20 @@ export class EmailService {
   async sendWelcomeEmail(to: string, customerName: string): Promise<boolean> {
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #d32f2f;">Bem-vindo à Pizzaria Massa Nostra!  🍕</h2>
+        <h2 style="color: #d32f2f;">Bem-vindo à Pizzaria Massa Nostra! </h2>
         <p>Olá, <strong>${customerName}</strong>! </p>
         <p>Estamos felizes em ter você conosco! </p>
         <p>Agora você pode fazer pedidos pelo nosso aplicativo e acompanhar tudo em tempo real.</p>
         <p style="margin-top: 30px;">
           <strong>Pizzaria Massa Nostra</strong><br>
-          A melhor pizza da cidade!  🍕
+          A melhor pizza da cidade!
         </p>
       </div>
     `;
 
     const emailData: EmailData = {
       to,
-      subject: 'Bem-vindo à Pizzaria Massa Nostra!  🍕',
+      subject: 'Bem-vindo à Pizzaria Massa Nostra!',
       html: htmlContent,
     };
 
@@ -188,11 +185,11 @@ export class EmailService {
     status: string,
   ): Promise<boolean> {
     const statusMessages = {
-      confirmed: '✅ Pagamento confirmado!  Estamos preparando seu pedido.',
-      preparing: '👨‍🍳 Seu pedido está sendo preparado com carinho!',
-      ready: '✅ Seu pedido está pronto! ',
-      out_for_delivery: '🛵 Seu pedido saiu para entrega!',
-      delivered: '🎉 Pedido entregue!  Bom apetite!',
+      confirmed: 'Pagamento confirmado!  Estamos preparando seu pedido.',
+      preparing: 'Seu pedido está sendo preparado com carinho!',
+      ready: 'Seu pedido está pronto! ',
+      out_for_delivery: 'Seu pedido saiu para entrega!',
+      delivered: 'Pedido entregue!  Bom apetite!',
     };
 
     const message = statusMessages[status] || 'Status do pedido atualizado. ';
@@ -203,7 +200,7 @@ export class EmailService {
         <p style="font-size: 18px; color: #333;">${message}</p>
         <p style="margin-top: 30px;">
           <strong>Pizzaria Massa Nostra</strong><br>
-          Obrigado pela preferência! 🍕
+          Obrigado pela preferência!
         </p>
       </div>
     `;

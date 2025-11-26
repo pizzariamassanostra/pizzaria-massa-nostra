@@ -2,7 +2,6 @@
 // CONTROLLER: CATEGORIAS DE PRODUTOS
 // ============================================
 // Endpoints para gerenciar categorias do cardápio
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -17,7 +16,6 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-// ✅ Imports corrigidos para caminhos relativos corretos
 import { ProductCategoryService } from '../services/product-category.service';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';

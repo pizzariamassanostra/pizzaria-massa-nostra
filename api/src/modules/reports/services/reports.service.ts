@@ -1,20 +1,14 @@
 // ============================================
-// SERVICE: RELATÓRIOS
+// SERVIÇO: RELATÓRIOS
 // ============================================
 // Lógica de negócio para geração de relatórios
-// Pizzaria Massa Nostra
-//
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 04:00:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Completo com Excel
 // ============================================
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, MoreThanOrEqual } from 'typeorm';
 
-// ✅ CORRIGIDO: Usar paths relativos
+// Usar paths relativos
 import { Order } from '../../order/entities/order.entity';
 import { OrderItem } from '../../order/entities/order-item.entity';
 import { CommonUser } from '../../common-user/entities/common-user.entity';
@@ -98,7 +92,7 @@ export class ReportsService {
 
     const { start_date, end_date } = this.getDateRange(filter);
 
-    // ✅ CORRIGIDO: usar alias 'ord' e relations corretas
+    // Usar alias 'ord' e relations corretas
     const queryBuilder = this.orderRepo
       .createQueryBuilder('ord')
       .leftJoinAndSelect('ord.user', 'user')
@@ -191,7 +185,6 @@ export class ReportsService {
       return acc;
     }, []);
 
-    // Quebra diária
     const daily_breakdown = [];
     const dateMap = new Map();
 
@@ -230,18 +223,18 @@ export class ReportsService {
       by_status,
       daily_breakdown,
       sales: orders.map((order) => ({
-  id: order.id,
-  order_number: `ORD-${order.id}`,  // ✅ GERAR A PARTIR DO ID
-  customer_name: order.user?. name || 'Cliente',
-  items_count: order.items?. length || 0,
-  subtotal: parseFloat(order.subtotal. toString()),
-  delivery_fee: parseFloat(order. delivery_fee.toString()),
-  discount: parseFloat(order.discount. toString()),
-  total: parseFloat(order.total. toString()),
-  payment_method: order.payment_method,
-  status: order.status,
-  created_at: order.created_at,
-})),
+        id: order.id,
+        order_number: `ORD-${order.id}`, // GERAR A PARTIR DO ID
+        customer_name: order.user?.name || 'Cliente',
+        items_count: order.items?.length || 0,
+        subtotal: parseFloat(order.subtotal.toString()),
+        delivery_fee: parseFloat(order.delivery_fee.toString()),
+        discount: parseFloat(order.discount.toString()),
+        total: parseFloat(order.total.toString()),
+        payment_method: order.payment_method,
+        status: order.status,
+        created_at: order.created_at,
+      })),
     };
   }
 
@@ -574,7 +567,7 @@ export class ReportsService {
 
     worksheet.mergeCells('A1:G1');
     const titleCell = worksheet.getCell('A1');
-    titleCell.value = '🍕 PIZZARIA MASSA NOSTRA - RELATÓRIO DE VENDAS';
+    titleCell.value = 'PIZZARIA MASSA NOSTRA - RELATÓRIO DE VENDAS';
     titleCell.font = {
       name: 'Arial',
       size: 16,
@@ -654,7 +647,7 @@ export class ReportsService {
         voucher: 'Vale Refeição',
       };
 
-      // ✅ CORRIGIDO: Garantir que nenhum valor seja undefined
+      // Garantir que nenhum valor seja undefined
       const orderNumber = sale.order_number || `ORD-${sale.id}`;
       const customerName = sale.customer_name || 'Cliente';
       const itemsCount = sale.items_count || 0;

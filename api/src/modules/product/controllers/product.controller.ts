@@ -2,7 +2,6 @@
 // CONTROLLER: PRODUTOS
 // ============================================
 // Endpoints públicos e administrativos de produtos
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

@@ -2,7 +2,6 @@
 // DTO: ATUALIZAR CLIENTE
 // ============================================
 // Dados opcionais para atualização de perfil
-// Pizzaria Massa Nostra
 // ============================================
 
 import {

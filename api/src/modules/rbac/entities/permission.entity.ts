@@ -3,13 +3,8 @@
  * ENTIDADE: PERMISSION (PERMISSÃO)
  * ============================================
  * Define as permissões disponíveis no sistema
- *
  * Relacionamentos:
  * - N:N com Role (role_permissions)
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import {

@@ -1,13 +1,8 @@
 // ===========================================
-// MODULE: RBAC
+// MODULO: RBAC
 // Sistema de Permissões - Pizzaria Massa Nostra
 //
 // Módulo de controle de acesso baseado em roles
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
 // ===========================================
 
 import { Module } from '@nestjs/common';

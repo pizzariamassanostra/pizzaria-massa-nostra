@@ -2,7 +2,6 @@
 // ENTITY: FORNECEDORES
 // ============================================
 // Cadastro completo de fornecedores
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -100,7 +99,7 @@ export class Supplier {
   conta: string;
 
   @Column({ type: 'varchar', length: 10, nullable: true })
-  tipo_conta: string; // Corrente, Poupança
+  tipo_conta: string; // Corrente
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   pix: string; // Chave PIX
@@ -112,7 +111,7 @@ export class Supplier {
   produtos_servicos: string; // Produtos/serviços oferecidos
 
   @Column({ type: 'text', nullable: true })
-  condicoes_comerciais: string; // Prazos, condições, etc
+  condicoes_comerciais: string; // Prazos, condições...
 
   @Column({ type: 'int', nullable: true })
   prazo_entrega_dias: number; // Prazo médio de entrega

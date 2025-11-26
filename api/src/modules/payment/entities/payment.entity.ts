@@ -2,7 +2,6 @@
 // ENTIDADE: PAGAMENTOS
 // ============================================
 // Gerencia pagamentos via Mercado Pago
-// Pizzaria Massa Nostra
 // ============================================
 
 import {
@@ -24,18 +23,14 @@ export class Payment {
   // IDENTIFICAÇÃO
   // ============================================
   @PrimaryGeneratedColumn('uuid')
-  id: string; // UUID
+  id: string;
 
   // ============================================
   // RELACIONAMENTOS
   // ============================================
-  @Column({ nullable: true })
-  raffle_id: string; // ⚠️ TEMPORÁRIO: Ainda referencia raffle_id até migrar para order_id
-
   @Column()
-  common_user_id: string; // FK para common_users
+  common_user_id: string;
 
-  // ✅ RELACIONAMENTO CORRIGIDO (sem referência reversa)
   @ManyToOne(() => CommonUser)
   @JoinColumn({ name: 'common_user_id' })
   commonUser: CommonUser;
@@ -45,9 +40,6 @@ export class Payment {
   // ============================================
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   value: number; // Valor em reais (com centavos)
-
-  @Column({ nullable: true })
-  raffles_quantity: number; // ⚠️ Quantidade de rifas (legado)
 
   @Column()
   status: string; // Status: pending, approved, rejected, cancelled

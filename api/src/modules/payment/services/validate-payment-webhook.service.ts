@@ -1,8 +1,7 @@
 // ============================================
-// SERVICE: VALIDAÇÃO DE WEBHOOK
+// SERVIÇO: VALIDAÇÃO DE WEBHOOK
 // ============================================
 // Valida webhooks do Mercado Pago
-// Pizzaria Massa Nostra
 // ============================================
 
 import ApiError from '@/common/error/entities/api-error.entity';

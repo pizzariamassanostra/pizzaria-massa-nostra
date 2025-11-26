@@ -3,10 +3,6 @@
  * DTO: CRIAR ROLE
  * ============================================
  * Dados necessários para criar um novo role
- *
- * @module RBAC
- * @author Lucas IT Dias
- * @date 2025-11-26
  */
 
 import {

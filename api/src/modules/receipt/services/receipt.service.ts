@@ -1,15 +1,9 @@
 // ============================================
-// SERVICE: COMPROVANTES
+// SERVIÇO: COMPROVANTES
 // ============================================
 // Geração de comprovantes de compra em PDF
 // Cria snapshot do pedido e gera PDF formatado
-// ✅ AGORA COM ENVIO AUTOMÁTICO POR E-MAIL
-//
-// Pizzaria Massa Nostra
-// Referência: PIZZARIA-FASE-FINAL-COMPLETAR-MODULOS-PENDENTES
-// Data: 2025-11-26 03:20:00 UTC
-// Desenvolvedor: @lucasitdias
-// Status: ✅ Completo com E-mail
+// COM ENVIO AUTOMÁTICO POR E-MAIL
 // ============================================
 
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
@@ -17,10 +11,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Receipt } from '../entities/receipt.entity';
 
-// ✅ CORREÇÃO: Usar path relativo
+// Usar path relativo
 import { Order } from '../../order/entities/order.entity';
 
-// ✅ CORREÇÃO: Usar paths relativos para serviços de e-mail
+// Usar paths relativos para serviços de e-mail
 import { EmailService } from '../../notification/services/email.service';
 import {
   generateReceiptEmailHTML,
@@ -31,7 +25,7 @@ const PDFDocument = require('pdfkit');
 
 @Injectable()
 export class ReceiptService {
-  // ✅ NOVO: Logger para rastreamento
+  // Logger para rastreamento
   private readonly logger = new Logger(ReceiptService.name);
 
   constructor(
@@ -41,7 +35,7 @@ export class ReceiptService {
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
 
-    // ✅ NOVO: Injetar EmailService
+    // Injetar EmailService
     private readonly emailService: EmailService,
   ) {}
 
@@ -50,7 +44,7 @@ export class ReceiptService {
   // ============================================
   // Cria um novo comprovante com snapshot do pedido
   // Se já existir, retorna o existente
-  // ✅ NOVO: Agora envia e-mail automaticamente!
+  // Envia e-mail automaticamente
   //
   // @param orderId - ID do pedido
   // @param sendEmail - Se deve enviar e-mail (padrão: true)
@@ -58,9 +52,9 @@ export class ReceiptService {
   // ============================================
   async generateReceipt(
     orderId: number,
-    sendEmail: boolean = true, // ✅ NOVO: Parâmetro para controlar envio
+    sendEmail: boolean = true, // Parâmetro para controlar envio
   ): Promise<Receipt> {
-    this.logger.log(`📄 Gerando comprovante para pedido #${orderId}`);
+    this.logger.log(`Gerando comprovante para pedido #${orderId}`);
 
     // Buscar pedido completo com todas as relações necessárias
     const order = await this.orderRepo.findOne({
@@ -71,7 +65,7 @@ export class ReceiptService {
         'items.product', // Produto de cada item
         'items.variant', // Variação (tamanho) de cada item
         'payment', // Dados do pagamento
-        'delivery_address', // ✅ NOVO: Endereço de entrega
+        'delivery_address', // Endereço de entrega
       ],
     });
 
@@ -85,9 +79,9 @@ export class ReceiptService {
       where: { order_id: orderId },
     });
 
-    // ✅ NOVO: Se já existe e não foi enviado por e-mail, enviar agora
+    // Se já existe e não foi enviado por e-mail, enviar agora
     if (receipt) {
-      this.logger.warn(`⚠️ Comprovante já existe para pedido #${orderId}`);
+      this.logger.warn(`Comprovante já existe para pedido #${orderId}`);
 
       // Se deve enviar e-mail e ainda não foi enviado
       if (sendEmail && !receipt.was_emailed && order.customer?.email) {
@@ -136,7 +130,7 @@ export class ReceiptService {
       // Data de emissão
       issue_date: new Date(),
 
-      // ✅ NOVO: Campos de controle de e-mail
+      // Campos de controle de e-mail
       was_emailed: false,
       emailed_at: null,
     });
@@ -144,20 +138,20 @@ export class ReceiptService {
     // Salvar no banco de dados
     receipt = await this.receiptRepo.save(receipt);
 
-    this.logger.log(`✅ Comprovante ${receiptNumber} gerado com sucesso`);
+    this.logger.log(`Comprovante ${receiptNumber} gerado com sucesso`);
 
-    // ✅ NOVO: Enviar e-mail se solicitado e cliente tiver e-mail
+    // Enviar e-mail se solicitado
     if (sendEmail && order.customer?.email) {
       await this.sendReceiptEmail(receipt, order);
     } else if (sendEmail && !order.customer?.email) {
-      this.logger.warn(`⚠️ Cliente sem e-mail - Comprovante não enviado`);
+      this.logger.warn(`Cliente sem e-mail - Comprovante não enviado`);
     }
 
     return receipt;
   }
 
   // ============================================
-  // ✅ NOVO: ENVIAR COMPROVANTE POR E-MAIL
+  // ENVIAR COMPROVANTE POR E-MAIL
   // ============================================
   // Envia o comprovante em PDF por e-mail
   // Usa o template HTML formatado
@@ -176,11 +170,11 @@ export class ReceiptService {
 
       // Validar e-mail
       if (!customerEmail) {
-        this.logger.warn('⚠️ Cliente sem e-mail cadastrado');
+        this.logger.warn('Cliente sem e-mail cadastrado');
         return false;
       }
 
-      this.logger.log(`📧 Enviando comprovante para ${customerEmail}`);
+      this.logger.log(`Enviando comprovante para ${customerEmail}`);
 
       // Gerar PDF do comprovante
       const pdfBuffer = await this.generatePDF(receipt.id);
@@ -224,18 +218,18 @@ export class ReceiptService {
         receipt.emailed_at = new Date();
         await this.receiptRepo.save(receipt);
 
-        this.logger.log(`✅ Comprovante enviado para ${customerEmail}`);
+        this.logger.log(`Comprovante enviado para ${customerEmail}`);
       }
 
       return sent;
     } catch (error) {
-      this.logger.error(`❌ Erro ao enviar comprovante por e-mail:`, error);
+      this.logger.error(`Erro ao enviar comprovante por e-mail:`, error);
       return false;
     }
   }
 
   // ============================================
-  // ✅ NOVO: FORMATAR ENDEREÇO PARA E-MAIL
+  // FORMATAR ENDEREÇO PARA E-MAIL
   // ============================================
   // Converte objeto de endereço em string formatada
   //
@@ -625,7 +619,7 @@ export class ReceiptService {
   }
 
   // ============================================
-  // ✅ NOVO: REENVIAR E-MAIL DO COMPROVANTE
+  // REENVIAR E-MAIL DO COMPROVANTE
   // ============================================
   // Reenvia o comprovante por e-mail
   // Útil se o cliente não recebeu ou perdeu

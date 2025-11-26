@@ -1,18 +1,11 @@
 // ===========================================
 // DECORATOR: @Roles
-// Sistema de Permissões - Pizzaria Massa Nostra
-//
+//============================================
 // Marca rotas que requerem roles específicos
-//
 // Uso:
-// @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.MANAGER)
+// @Roles(RoleEnum.ADMIN, RoleEnum.MANAGER)
 // @Get('admin-only')
-// adminOnly() { ...  }
-//
-// Referência: PIZZARIA-RBAC-SYSTEM
-// Data: 2025-11-26
-// Desenvolvedor: @lucasitdias
-// Status: ✅ IMPLEMENTADO
+// adminOnly() { ... }
 // ===========================================
 
 import { SetMetadata } from '@nestjs/common';

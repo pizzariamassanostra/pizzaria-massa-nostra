@@ -2,7 +2,6 @@
 // REPOSITORY: PAGAMENTOS
 // ============================================
 // Acesso ao banco de dados para pagamentos
-// Pizzaria Massa Nostra
 // ============================================
 
 import { Injectable } from '@nestjs/common';
@@ -42,7 +41,7 @@ export class PaymentRepository {
       }
     }
 
-    // Filtros adicionais (status, data, etc)
+    // Filtros adicionais (status, data...)
     if (options.where) {
       for (const where of options.where) {
         for (const [key, value] of Object.entries(where)) {

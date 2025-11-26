@@ -1,10 +1,8 @@
 // ============================================
-// SERVICE: INGREDIENTES
+// SERVIÇO: INGREDIENTES
 // ============================================
 // Lógica de negócio para gestão de ingredientes
-// CRUD completo + validações
-// Pizzaria Massa Nostra
-// Desenvolvedor: @lucasitdias
+// CRUD + validações
 // ============================================
 
 import {
