@@ -245,7 +245,7 @@ export class OrderService {
     if (dto.status === 'confirmed') {
       try {
         console.log(`🔄 Gerando comprovante para pedido #${id}...`);
-        const receipt = await this.receiptService.createForOrder(id);
+        const receipt = await this.receiptService.generateReceipt(id);
         console.log(`✅ Comprovante gerado com sucesso!`);
         console.log(`   Número: ${receipt.receipt_number}`);
         console.log(`   PDF URL: ${receipt.pdf_url}`);
