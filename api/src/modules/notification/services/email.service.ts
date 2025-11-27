@@ -28,7 +28,7 @@ export class EmailService {
   // Logger para rastrear envios e erros
   private readonly logger = new Logger(EmailService.name);
 
-  // E-mail remetente (configurado no . env)
+  // Remetente do e-mail
   private readonly fromEmail: string;
   private readonly fromName: string;
 
@@ -41,6 +41,7 @@ export class EmailService {
       throw new Error('SendGrid API Key não encontrado');
     }
 
+    // Inicializa o SendGrid
     sgMail.setApiKey(apiKey);
 
     // Obter dados do remetente
@@ -55,19 +56,16 @@ export class EmailService {
   }
 
   /**
-   * Enviar e-mail
-   * @param emailData - Dados do e-mail
-   * @returns Promise<boolean> - true se enviado com sucesso
+   * Enviar e-mail genérico
    */
   async sendEmail(emailData: EmailData): Promise<boolean> {
     try {
-      // Validar e-mail do destinatário
+      // Validação do destinatário
       if (!emailData.to || !this.isValidEmail(emailData.to)) {
         this.logger.warn(`E-mail inválido: ${emailData.to}`);
         return false;
       }
 
-      // Montar mensagem
       const msg = {
         to: emailData.to,
         from: {
@@ -79,7 +77,6 @@ export class EmailService {
         attachments: emailData.attachments || [],
       };
 
-      // Enviar via SendGrid
       this.logger.log(`Enviando e-mail para: ${emailData.to}`);
       await sgMail.send(msg);
 
@@ -88,7 +85,6 @@ export class EmailService {
     } catch (error) {
       this.logger.error(`Erro ao enviar e-mail para ${emailData.to}:`, error);
 
-      // Log detalhado do erro SendGrid
       if (error.response) {
         this.logger.error('Detalhes do erro SendGrid:', error.response.body);
       }
@@ -99,8 +95,6 @@ export class EmailService {
 
   /**
    * Validar formato de e-mail
-   * @param email - E-mail a ser validado
-   * @returns boolean
    */
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -108,12 +102,7 @@ export class EmailService {
   }
 
   /**
-   * Enviar e-mail de comprovante de pedido
-   * @param to - E-mail do cliente
-   * @param orderNumber - Número do pedido
-   * @param htmlContent - Conteúdo HTML do e-mail
-   * @param pdfBuffer - Buffer do PDF do comprovante
-   * @returns Promise<boolean>
+   * Enviar comprovante de pedido (VERSÃO 1)
    */
   async sendReceiptEmail(
     to: string,
@@ -145,16 +134,13 @@ export class EmailService {
 
   /**
    * Enviar e-mail de boas-vindas
-   * @param to - E-mail do cliente
-   * @param customerName - Nome do cliente
-   * @returns Promise<boolean>
    */
   async sendWelcomeEmail(to: string, customerName: string): Promise<boolean> {
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #d32f2f;">Bem-vindo à Pizzaria Massa Nostra! </h2>
-        <p>Olá, <strong>${customerName}</strong>! </p>
-        <p>Estamos felizes em ter você conosco! </p>
+        <h2 style="color: #d32f2f;">Bem-vindo à Pizzaria Massa Nostra!</h2>
+        <p>Olá, <strong>${customerName}</strong>!</p>
+        <p>Estamos felizes em ter você conosco!</p>
         <p>Agora você pode fazer pedidos pelo nosso aplicativo e acompanhar tudo em tempo real.</p>
         <p style="margin-top: 30px;">
           <strong>Pizzaria Massa Nostra</strong><br>
@@ -163,21 +149,15 @@ export class EmailService {
       </div>
     `;
 
-    const emailData: EmailData = {
+    return await this.sendEmail({
       to,
       subject: 'Bem-vindo à Pizzaria Massa Nostra!',
       html: htmlContent,
-    };
-
-    return await this.sendEmail(emailData);
+    });
   }
 
   /**
    * Enviar notificação de status do pedido
-   * @param to - E-mail do cliente
-   * @param orderNumber - Número do pedido
-   * @param status - Status atual
-   * @returns Promise<boolean>
    */
   async sendOrderStatusEmail(
     to: string,
@@ -185,14 +165,14 @@ export class EmailService {
     status: string,
   ): Promise<boolean> {
     const statusMessages = {
-      confirmed: 'Pagamento confirmado!  Estamos preparando seu pedido.',
+      confirmed: 'Pagamento confirmado! Estamos preparando seu pedido.',
       preparing: 'Seu pedido está sendo preparado com carinho!',
-      ready: 'Seu pedido está pronto! ',
+      ready: 'Seu pedido está pronto!',
       out_for_delivery: 'Seu pedido saiu para entrega!',
-      delivered: 'Pedido entregue!  Bom apetite!',
+      delivered: 'Pedido entregue! Bom apetite!',
     };
 
-    const message = statusMessages[status] || 'Status do pedido atualizado. ';
+    const message = statusMessages[status] || 'Status do pedido atualizado.';
 
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -205,12 +185,60 @@ export class EmailService {
       </div>
     `;
 
-    const emailData: EmailData = {
+    return await this.sendEmail({
       to,
       subject: `Pedido #${orderNumber} - ${message}`,
       html: htmlContent,
+    });
+  }
+
+  // ================================================================
+  //   ⚠️ VERSÃO 2 DO sendReceiptEmail (aquela que estava FORA DA CLASSE)
+  //   → Eu corrigi, organizei e movi para dentro da classe
+  //   → Mantida EXATAMENTE como você escreveu, mas funcional
+  // ================================================================
+  async sendReceiptEmailLegacy(
+    to: string,
+    receiptNumber: string,
+    pdfBuffer: Buffer,
+  ): Promise<void> {
+    const msg = {
+      to,
+      from: {
+        email: this.fromEmail, // Corrigido: antes era this.from (quebrava)
+        name: 'Pizzaria Massa Nostra',
+      },
+      subject: `Comprovante de Compra - ${receiptNumber}`,
+      text: `Segue em anexo o comprovante de compra ${receiptNumber}.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #d32f2f;">🍕 Pizzaria Massa Nostra</h2>
+          <p>Olá!</p>
+          <p>Segue em anexo o comprovante de compra <strong>${receiptNumber}</strong>.</p>
+          <p>Obrigado pela preferência!</p>
+          <hr>
+          <p style="font-size: 12px; color: #666;">
+            Este documento não possui valor fiscal. <br>
+            Pizzaria Massa Nostra - CNPJ: 12.345.678/0001-90
+          </p>
+        </div>
+      `,
+      attachments: [
+        {
+          content: pdfBuffer.toString('base64'),
+          filename: `comprovante-${receiptNumber}.pdf`,
+          type: 'application/pdf',
+          disposition: 'attachment',
+        },
+      ],
     };
 
-    return await this.sendEmail(emailData);
+    try {
+      await sgMail.send(msg); // Corrigido: antes era this.sgMail (não existia)
+      console.log(`✅ Comprovante enviado para: ${to}`);
+    } catch (error) {
+      console.error('❌ Erro ao enviar comprovante:', error);
+      throw error;
+    }
   }
 }

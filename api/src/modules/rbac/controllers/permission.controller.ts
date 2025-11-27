@@ -12,7 +12,7 @@ import { RoleEnum } from '../enums/role.enum';
 import { PermissionService } from '../services/permission.service';
 
 @Controller('permissions')
-@UseGuards(JwtAuthGuard, RolesGuard)
+//@UseGuards(JwtAuthGuard, RolesGuard)
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 

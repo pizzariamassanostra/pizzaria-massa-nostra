@@ -25,6 +25,7 @@ import { ReceiptService } from '@/modules/receipt/services/receipt.service';
 
 @Injectable()
 export class OrderService {
+  [x: string]: any;
   constructor(
     // ============================================
     // REPOSITORIES

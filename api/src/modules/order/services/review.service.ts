@@ -1,7 +1,8 @@
 // ============================================
 // SERVIÇO: AVALIAÇÕES DE PEDIDOS
 // ============================================
-// Lógica de negócio para avaliações
+// Lógica de negócio para avaliações de pedidos
+// Permite clientes avaliarem pedidos entregues
 // ============================================
 
 import {
@@ -27,31 +28,59 @@ export class ReviewService {
   // ============================================
   // CRIAR AVALIAÇÃO
   // ============================================
+  /**
+   * Cria uma avaliação para um pedido
+   *
+   * REGRAS DE NEGÓCIO:
+   * - Pedido deve existir
+   * - Pedido deve pertencer ao cliente
+   * - Pedido deve estar com status "delivered"
+   * - Cliente não pode avaliar o mesmo pedido duas vezes
+   *
+   * @param orderId - ID do pedido
+   * @param customerId - ID do cliente logado
+   * @param dto - Dados da avaliação
+   * @returns Avaliação criada
+   */
   async createReview(
     orderId: number,
     customerId: number,
     dto: CreateReviewDto,
   ): Promise<OrderReview> {
-    // Buscar pedido
+    // ============================================
+    // VALIDAÇÃO 1: Pedido existe?
+    // ============================================
     const order = await this.orderRepository.findOne({
       where: { id: orderId },
+      relations: ['user'], // Carregar relação com usuário
     });
 
     if (!order) {
       throw new NotFoundException('Pedido não encontrado');
     }
 
-    // Verificar se pedido pertence ao cliente
-    if (order.user_id !== customerId) {
-      throw new BadRequestException('Este pedido não pertence a você');
+    // ============================================
+    // VALIDAÇÃO 2: Pedido pertence ao cliente?  (CORRIGIDO)
+    // ============================================
+    // Verificar se o pedido pertence ao cliente logado
+    if (order.common_user_id !== customerId) {
+      throw new BadRequestException(
+        `Este pedido não pertence a você.  Pedido pertence ao usuário ${order.common_user_id}, você é ${customerId}`,
+      );
     }
 
-    // Verificar se pedido foi entregue
+    // ============================================
+    // VALIDAÇÃO 3: Pedido foi entregue?
+    // ============================================
     if (order.status !== 'delivered') {
-      throw new BadRequestException('Só é possível avaliar pedidos entregues');
+      throw new BadRequestException(
+        `Só é possível avaliar pedidos entregues. Status atual: ${order.status}`,
+      );
     }
 
-    // Verificar se já existe avaliação
+    // ============================================
+    // VALIDAÇÃO 4: Já existe avaliação?
+    // ============================================
     const existingReview = await this.reviewRepository.findOne({
       where: { order_id: orderId, customer_id: customerId },
     });
@@ -60,14 +89,16 @@ export class ReviewService {
       throw new BadRequestException('Você já avaliou este pedido');
     }
 
-    // Criar avaliação
+    // ============================================
+    // CRIAR AVALIAÇÃO
+    // ============================================
     const review = this.reviewRepository.create({
       order_id: orderId,
       customer_id: customerId,
       overall_rating: dto.overall_rating,
-      food_quality: dto.food_quality,
-      delivery_time: dto.delivery_time,
-      packaging: dto.packaging,
+      food_quality: dto.food_quality || dto.overall_rating,
+      delivery_time: dto.delivery_time || dto.overall_rating,
+      packaging: dto.packaging || dto.overall_rating,
       comment: dto.comment,
     });
 
@@ -77,6 +108,13 @@ export class ReviewService {
   // ============================================
   // BUSCAR AVALIAÇÃO DO PEDIDO
   // ============================================
+  /**
+   * Busca a avaliação de um pedido específico
+   *
+   * @param orderId - ID do pedido
+   * @returns Avaliação encontrada
+   * @throws NotFoundException se não houver avaliação
+   */
   async getReviewByOrder(orderId: number): Promise<OrderReview> {
     const review = await this.reviewRepository.findOne({
       where: { order_id: orderId },
@@ -93,6 +131,12 @@ export class ReviewService {
   // ============================================
   // LISTAR AVALIAÇÕES DO CLIENTE
   // ============================================
+  /**
+   * Lista todas as avaliações feitas por um cliente
+   *
+   * @param customerId - ID do cliente
+   * @returns Lista de avaliações do cliente
+   */
   async getCustomerReviews(customerId: number): Promise<OrderReview[]> {
     return this.reviewRepository.find({
       where: { customer_id: customerId },
@@ -104,6 +148,14 @@ export class ReviewService {
   // ============================================
   // LISTAR TODAS AS AVALIAÇÕES (ADMIN)
   // ============================================
+  /**
+   * Lista todas as avaliações com paginação
+   * Endpoint protegido para administradores
+   *
+   * @param page - Página atual (padrão: 1)
+   * @param limit - Itens por página (padrão: 20)
+   * @returns Lista paginada de avaliações
+   */
   async getAllReviews(
     page: number = 1,
     limit: number = 20,
@@ -121,6 +173,18 @@ export class ReviewService {
   // ============================================
   // MÉDIA DE AVALIAÇÕES (ESTATÍSTICAS)
   // ============================================
+  /**
+   * Calcula a média geral de todas as avaliações
+   *
+   * Retorna:
+   * - Média de nota geral
+   * - Média de qualidade da comida
+   * - Média de tempo de entrega
+   * - Média de embalagem
+   * - Total de avaliações
+   *
+   * @returns Estatísticas de avaliações
+   */
   async getAverageRating(): Promise<{
     overall: number;
     food_quality: number;

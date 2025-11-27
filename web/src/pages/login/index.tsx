@@ -1,56 +1,136 @@
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
-import React, { FormEvent } from "react";
-import { toast } from "react-toastify";
-import Api from "@/common/api";
-import { toastError } from "@/lib/toastError";
-import { Card } from "@nextui-org/card";
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
+import Link from "next/link";
+import Head from "next/head";
+import { Eye, EyeOff } from "lucide-react";
 
-const LoginPage = () => {
+export default function LoginPage() {
+  const { login, isAuthenticated } = useAuth();
   const router = useRouter();
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const username = formData.get("email");
-    const password = formData.get("password");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/cardapio");
+    }
+  }, [isAuthenticated, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    console.log("Tentando fazer login... ", { username });
 
     try {
-      const { data } = await Api.post("/auth/authenticate", {
-        username,
-        password,
-      });
-      toast.success("Login efetuado com sucesso");
-      localStorage.setItem("user_token", data.access_token);
-      router.push("/admin");
-    } catch (error) {
-      toastError(error);
+      await login({ username, password });
+      console.log("Login bem-sucedido!  ");
+    } catch (error: any) {
+      console.error("Erro no login:", error);
+      if (error?.response?.data) {
+        console.error("Resposta da API:", error.response.data);
+      }
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
   return (
-    <div className="w-full h-full flex-col justify-center flex items-center p-8">
-      <Card isBlurred className="p-8 space-y-6 max-w-md w-full">
-        <span className="text-2xl">Painel Administrativo</span>
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-          <div>
-            <label htmlFor="email">Insira seu email</label>
-            <Input type="email" name="email" id="email" required />
+    <>
+      <Head>
+        <title>Login - Pizzaria Massa Nostra</title>
+      </Head>
+
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-600 to-red-700 px-4">
+        <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
+              🍕
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800">Massa Nostra</h1>
+            <p className="text-gray-600 mt-2">Faça login para continuar</p>
           </div>
 
-          <div>
-            <label htmlFor="password">Insira sua senha</label>
-            <Input type="password" name="password" id="password" required />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Email ou Telefone
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 bg-white"
+                placeholder="seu@email.com ou (38) 99999-9999"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Senha
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent pr-12 text-gray-900 bg-white"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Entrando..." : "Entrar"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center space-y-3">
+            <p className="text-gray-600">
+              Não tem uma conta?{" "}
+              <Link
+                href="/cadastro"
+                className="text-red-600 font-semibold hover:underline"
+              >
+                Cadastre-se
+              </Link>
+            </p>
+
+            <Link href="/" className="block text-gray-500 hover:text-gray-700">
+              Voltar para o início
+            </Link>
           </div>
-          <div className="flex flex-col w-fit space-y-2">
-            <Button type="submit" className="w-min" color="success">
-              Login
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
-};
-
-export default LoginPage;
+}

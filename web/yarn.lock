@@ -442,7 +442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/accordion@npm:2.2.7, @nextui-org/accordion@npm:^2.0.42":
+"@nextui-org/accordion@npm:2.2.7":
   version: 2.2.7
   resolution: "@nextui-org/accordion@npm:2.2.7"
   dependencies:
@@ -564,7 +564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/badge@npm:2.2.5, @nextui-org/badge@npm:^2.0.36":
+"@nextui-org/badge@npm:2.2.5":
   version: 2.2.5
   resolution: "@nextui-org/badge@npm:2.2.5"
   dependencies:
@@ -600,7 +600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/button@npm:2.2.9, @nextui-org/button@npm:^2.0.42":
+"@nextui-org/button@npm:2.2.9":
   version: 2.2.9
   resolution: "@nextui-org/button@npm:2.2.9"
   dependencies:
@@ -660,7 +660,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/card@npm:2.2.9, @nextui-org/card@npm:^2.0.39":
+"@nextui-org/card@npm:2.2.9":
   version: 2.2.9
   resolution: "@nextui-org/card@npm:2.2.9"
   dependencies:
@@ -1230,7 +1230,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/react@npm:^2.6.10":
+"@nextui-org/react@npm:^2.6.11":
   version: 2.6.11
   resolution: "@nextui-org/react@npm:2.6.11"
   dependencies:
@@ -1447,7 +1447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/spinner@npm:2.2.6, @nextui-org/spinner@npm:^2.0.38":
+"@nextui-org/spinner@npm:2.2.6":
   version: 2.2.6
   resolution: "@nextui-org/spinner@npm:2.2.6"
   dependencies:
@@ -1498,7 +1498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/system@npm:2.4.6, @nextui-org/system@npm:^2.3.3":
+"@nextui-org/system@npm:2.4.6":
   version: 2.4.6
   resolution: "@nextui-org/system@npm:2.4.6"
   dependencies:
@@ -1573,7 +1573,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/theme@npm:2.4.5, @nextui-org/theme@npm:^2.3.2":
+"@nextui-org/theme@npm:2.4.5":
   version: 2.4.5
   resolution: "@nextui-org/theme@npm:2.4.5"
   dependencies:
@@ -3336,36 +3336,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-input/core@npm:^1.0.19":
-  version: 1.0.19
-  resolution: "@react-input/core@npm:1.0.19"
-  peerDependencies:
-    "@types/react": ">=16.8"
-    react: ">=16.8 || ^19.0.0-rc"
-    react-dom: ">=16.8 || ^19.0.0-rc"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10/a854cbdf9e12b164e1a824f9ec890b8c5e52833f030e0e71882cd303f154e1c83a5e5f7707b6ec7f1184296d2f979d6f2ec131aafbf0d138b516dcc040846225
-  languageName: node
-  linkType: hard
-
-"@react-input/mask@npm:^1.2.10":
-  version: 1.2.15
-  resolution: "@react-input/mask@npm:1.2.15"
-  dependencies:
-    "@react-input/core": "npm:^1.0.19"
-  peerDependencies:
-    "@types/react": ">=16.8"
-    react: ">=16.8 || ^19.0.0-rc"
-    react-dom: ">=16.8 || ^19.0.0-rc"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10/623ca92f986ea833e00e8c0edfc6fa1b12e30bc0049b70a6cb13caa166dac617ee6707024698d27f8f69c11b07322c2df58f04e613fb0b26ecd579cb7cf3ed77
-  languageName: node
-  linkType: hard
-
 "@react-stately/calendar@npm:3.6.0":
   version: 3.6.0
   resolution: "@react-stately/calendar@npm:3.6.0"
@@ -4454,64 +4424,65 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/auth-js@npm:2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/auth-js@npm:2.84.0"
+"@supabase/auth-js@npm:2.86.0":
+  version: 2.86.0
+  resolution: "@supabase/auth-js@npm:2.86.0"
   dependencies:
     tslib: "npm:2.8.1"
-  checksum: 10/d899c3c8e3bf375d86e240d1f41443a08bd2a98e701ad5af3ce349cab965693e15b2edc983e5515552efa9355b6e0c56d645e542d0d63c1c71d3964af3f8410c
+  checksum: 10/cb8468f82d74d602b31439b4c409a53ffa4367f4bf01fe91f22d79eb143184e7d5655f8a88f47e5b18bb924567ff2e957ca070d2319e44154725593689fa371a
   languageName: node
   linkType: hard
 
-"@supabase/functions-js@npm:2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/functions-js@npm:2.84.0"
+"@supabase/functions-js@npm:2.86.0":
+  version: 2.86.0
+  resolution: "@supabase/functions-js@npm:2.86.0"
   dependencies:
     tslib: "npm:2.8.1"
-  checksum: 10/c30f4eaf1e2176e7b329f60894d5066988300680f47e111c4a7e9ae31b845163fa7dfc45df04421c92c438673952da4c71db6556c6baf1722ca96637ef9d6bae
+  checksum: 10/d265cfbf1d8ddcba0cf56ffff4cf512f4f6f7cc9e39021cba093bed652038abd5f16a437d01fb79dcdba8bbbf72f4c381071b0f897407841ea46557593766ca3
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/postgrest-js@npm:2.84.0"
+"@supabase/postgrest-js@npm:2.86.0":
+  version: 2.86.0
+  resolution: "@supabase/postgrest-js@npm:2.86.0"
   dependencies:
     tslib: "npm:2.8.1"
-  checksum: 10/d04239dd6b3444561df611b27bda90849c49cdcc166df9426470364631f6533d55cb44c7826c948995d7df120a50e3f5c45773097205c1f2f7244057e78277c4
+  checksum: 10/7210a38043b9ec5e04cf5ae837fe9eed49b93ff8bee8b12387e495881a569a56978feae96fa5757e9fae98c117b65618da22ef3aa6383302eeedefbd2654c27f
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/realtime-js@npm:2.84.0"
+"@supabase/realtime-js@npm:2.86.0":
+  version: 2.86.0
+  resolution: "@supabase/realtime-js@npm:2.86.0"
   dependencies:
     "@types/phoenix": "npm:^1.6.6"
     "@types/ws": "npm:^8.18.1"
     tslib: "npm:2.8.1"
     ws: "npm:^8.18.2"
-  checksum: 10/0cf088817f5fe6ce3ebfd07e7f033e2c6a23d7eb6952f279e65706881905a738455ad4c547f339fb1fc3c1d0caf646ce8c1ad4c56a4b1c5eabd0c1b266a11a16
+  checksum: 10/881eedc2eb00a4ff90e2d1914eaf5b5171dd9e8fe47908d94c53b7238ce3860ae649862920bf644dad89b8c13339368372b820c6b67df1301f2c0eb6ec1105a2
   languageName: node
   linkType: hard
 
-"@supabase/storage-js@npm:2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/storage-js@npm:2.84.0"
+"@supabase/storage-js@npm:2.86.0":
+  version: 2.86.0
+  resolution: "@supabase/storage-js@npm:2.86.0"
   dependencies:
+    iceberg-js: "npm:^0.8.0"
     tslib: "npm:2.8.1"
-  checksum: 10/62d4cda1c837a6deae371f59c5b6b44e15da7bb54ac02fdc2ecb32fc48dc59868736e002b19d3a6feb4ce034446eb20d68678a2f7ff865aabff432af38efe179
+  checksum: 10/b0c488cedd02a650a6e9f6e12b8c288edba0ba6f1464a1527d143742a5ba555984dcfa68dc9bdac043c00a6dc4902df0a0c3c4c7b86d7755d9eff489ac9a629f
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.84.0":
-  version: 2.84.0
-  resolution: "@supabase/supabase-js@npm:2.84.0"
+"@supabase/supabase-js@npm:^2.48.0":
+  version: 2.86.0
+  resolution: "@supabase/supabase-js@npm:2.86.0"
   dependencies:
-    "@supabase/auth-js": "npm:2.84.0"
-    "@supabase/functions-js": "npm:2.84.0"
-    "@supabase/postgrest-js": "npm:2.84.0"
-    "@supabase/realtime-js": "npm:2.84.0"
-    "@supabase/storage-js": "npm:2.84.0"
-  checksum: 10/b80d506c45ef853ca520a8fe39b158f01743676990e46fccd3e0c6bb87dec245c8fe0758619d88102fcdac1fc82422d111b19f42d954eb71d39df569c540b8fc
+    "@supabase/auth-js": "npm:2.86.0"
+    "@supabase/functions-js": "npm:2.86.0"
+    "@supabase/postgrest-js": "npm:2.86.0"
+    "@supabase/realtime-js": "npm:2.86.0"
+    "@supabase/storage-js": "npm:2.86.0"
+  checksum: 10/3791e2b365a2f0b5c6d69cbf6aa6b32a7adbdec84f30a67bcbc4781ea099a9d904a5ea818b3a792e895162af0373bf1d19e7d90a9fa1fdb113395ed08c5b3e38
   languageName: node
   linkType: hard
 
@@ -4630,9 +4601,9 @@ __metadata:
   linkType: hard
 
 "@types/lodash@npm:*":
-  version: 4.17.20
-  resolution: "@types/lodash@npm:4.17.20"
-  checksum: 10/8cd8ad3bd78d2e06a93ae8d6c9907981d5673655fec7cb274a4d9a59549aab5bb5b3017361280773b8990ddfccf363e14d1b37c97af8a9fe363de677f9a61524
+  version: 4.17.21
+  resolution: "@types/lodash@npm:4.17.21"
+  checksum: 10/34920830a3bc82ba619cda05e606fef00c148a69b4f19f770645d2587ccdb8e42ef3ddfc174b7884c0c709fc0a1aeb48f7326da969bad12a1464a03efbbe414c
   languageName: node
   linkType: hard
 
@@ -5554,7 +5525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.2.2":
+"csstype@npm:^3.1.3, csstype@npm:^3.2.2":
   version: 3.2.3
   resolution: "csstype@npm:3.2.3"
   checksum: 10/ad41baf7e2ffac65ab544d79107bf7cd1a4bb9bab9ac3302f59ab4ba655d5e30942a8ae46e10ba160c6f4ecea464cc95b975ca2fefbdeeacd6ac63f12f99fe1f
@@ -5598,6 +5569,13 @@ __metadata:
     es-errors: "npm:^1.3.0"
     is-data-view: "npm:^1.0.1"
   checksum: 10/fa3bdfa0968bea6711ee50375094b39f561bce3f15f9e558df59de9c25f0bdd4cddc002d9c1d70ac7772ebd36854a7e22d1761e7302a934e6f1c2263bcf44aa2
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10/d5f6e9de5bbc52310f786099e18609289ed5e30af60a71e0646784c8185ddd1d0eebcf7c96b7faaaefc4a8366f3a3a4244d099b6d0866ee2bec80d1361e64342
   languageName: node
   linkType: hard
 
@@ -5733,15 +5711,6 @@ __metadata:
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
   checksum: 10/9b1d3e1baefeaf7d70799db8774149cef33b97183a6addceeba0cf6b85ba23ee2686f302f14482006df32df75d32b17c509c143a3689627929e4a8efaf483952
-  languageName: node
-  linkType: hard
-
-"embla-carousel-autoplay@npm:^8.5.1":
-  version: 8.6.0
-  resolution: "embla-carousel-autoplay@npm:8.6.0"
-  peerDependencies:
-    embla-carousel: 8.6.0
-  checksum: 10/5dee505b891e93da6ac8072c2b1a6bda63533ceaef0eec77fa15425974c08242cf6b6a745159eab33f6fad886b5d05148bf06f01ce3fca87811a79e764b5aad2
   languageName: node
   linkType: hard
 
@@ -6394,12 +6363,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^11.14.4":
-  version: 11.18.2
-  resolution: "framer-motion@npm:11.18.2"
+"framer-motion@npm:^12.23.24":
+  version: 12.23.24
+  resolution: "framer-motion@npm:12.23.24"
   dependencies:
-    motion-dom: "npm:^11.18.1"
-    motion-utils: "npm:^11.18.1"
+    motion-dom: "npm:^12.23.23"
+    motion-utils: "npm:^12.23.6"
     tslib: "npm:^2.4.0"
   peerDependencies:
     "@emotion/is-prop-valid": "*"
@@ -6412,7 +6381,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/f8805f9f5664b86aad6b9ed280a79b10e7ed4e31048728d4c3767d95a5c9feeb0279844bbe613dcb3741bb784cdf6ad761e726249fa4feeec9bec4a29f78a397
+  checksum: 10/c46015626d140557f3f225ffeaea14146988a42a99b33e46e3efbab88814343867a63014544169283b9518e1a3abed231ccefd890e601cf66b6c43425b0465e2
   languageName: node
   linkType: hard
 
@@ -6626,6 +6595,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"goober@npm:^2.1.16":
+  version: 2.1.18
+  resolution: "goober@npm:2.1.18"
+  peerDependencies:
+    csstype: ^3.0.10
+  checksum: 10/eca3db81a709a03f6ec9bb2624027e157c0b6fab6dccbe53b2ddd25a155a7e6e23a0b864574c33bdb0a05e0d0b865de8cc5151401e5a00d63f51be08fe7ccde6
+  languageName: node
+  linkType: hard
+
 "gopd@npm:^1.0.1, gopd@npm:^1.2.0":
   version: 1.2.0
   resolution: "gopd@npm:1.2.0"
@@ -6728,6 +6706,13 @@ __metadata:
     agent-base: "npm:^7.1.2"
     debug: "npm:4"
   checksum: 10/784b628cbd55b25542a9d85033bdfd03d4eda630fb8b3c9477959367f3be95dc476ed2ecbb9836c359c7c698027fc7b45723a302324433590f45d6c1706e8c13
+  languageName: node
+  linkType: hard
+
+"iceberg-js@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "iceberg-js@npm:0.8.0"
+  checksum: 10/17dc3240aaf6398b20019bc00cfc3cf8e764c45bf4bc11b7668eb09e52847c673c981910395c5e25da54e317644e0dbd4e0953dcb537893ca93cf6b937923231
   languageName: node
   linkType: hard
 
@@ -7334,12 +7319,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.468.0":
-  version: 0.468.0
-  resolution: "lucide-react@npm:0.468.0"
+"lucide-react@npm:^0.555.0":
+  version: 0.555.0
+  resolution: "lucide-react@npm:0.555.0"
   peerDependencies:
-    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
-  checksum: 10/b61907e20c529a6040e43901ba3e4dbcae226b7f9faf9a3c03ccbd3acab1b8241d309e481d6103eca584ed21fb1471204d6d729539079c09ab3313174bf40efc
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/3f6c7ea61df3927e43cb9251ceddec58382b6bddf266737ee2c8462fd80cc022e972f7a807ce594d17b75828579bea8363be069023062f78724ffa2a56184e42
   languageName: node
   linkType: hard
 
@@ -7528,19 +7513,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^11.18.1":
-  version: 11.18.1
-  resolution: "motion-dom@npm:11.18.1"
+"motion-dom@npm:^12.23.23":
+  version: 12.23.23
+  resolution: "motion-dom@npm:12.23.23"
   dependencies:
-    motion-utils: "npm:^11.18.1"
-  checksum: 10/d9172638e05998486800b1045fd2060dce13c748bdef2071b8d6f94adf87da9f5e11d44367a6ea2b4d2a8701d150a21427c1676b023dfe0e48f36c0383b2ceec
+    motion-utils: "npm:^12.23.6"
+  checksum: 10/6bec34c28b478622bd23ce919c0d64e7f372cbc3f88e665f1e34fbf590e9bb53eebea086fb28f4e0c31941bd5274e086dc9b5360b68c4976891b94c4e92ca01a
   languageName: node
   linkType: hard
 
-"motion-utils@npm:^11.18.1":
-  version: 11.18.1
-  resolution: "motion-utils@npm:11.18.1"
-  checksum: 10/8af61c8260ed6abe9c0d4e1037bd80de95a461a62c89daaf26bfdcdccc96799eed5c45adbdff90ea78614336bf2e3b91f4eb6ecb4e4028a3bce53977b54822a2
+"motion-utils@npm:^12.23.6":
+  version: 12.23.6
+  resolution: "motion-utils@npm:12.23.6"
+  checksum: 10/fae741319e72389eca8f3e73e644ffe6501409d00c7febb2f9b836629ae86ef735e73d670d0591706ca5e93ce10228ddbcff0ecdeb09b4cd8df14df7007aedd9
   languageName: node
   linkType: hard
 
@@ -7943,10 +7928,6 @@ __metadata:
   dependencies:
     "@brazilian-utils/is-valid-phone": "npm:^0.1.1"
     "@mona-health/react-input-mask": "npm:^3.0.3"
-    "@nextui-org/accordion": "npm:^2.0.42"
-    "@nextui-org/badge": "npm:^2.0.36"
-    "@nextui-org/button": "npm:^2.0.42"
-    "@nextui-org/card": "npm:^2.0.39"
     "@nextui-org/checkbox": "npm:^2.1.6"
     "@nextui-org/divider": "npm:^2.0.37"
     "@nextui-org/image": "npm:^2.0.36"
@@ -7955,22 +7936,18 @@ __metadata:
     "@nextui-org/pagination": "npm:^2.0.40"
     "@nextui-org/popover": "npm:^2.1.32"
     "@nextui-org/progress": "npm:^2.0.38"
-    "@nextui-org/react": "npm:^2.6.10"
+    "@nextui-org/react": "npm:^2.6.11"
     "@nextui-org/scroll-shadow": "npm:^2.2.3"
     "@nextui-org/select": "npm:^2.2.11"
     "@nextui-org/skeleton": "npm:^2.0.37"
-    "@nextui-org/spinner": "npm:^2.0.38"
-    "@nextui-org/system": "npm:^2.3.3"
     "@nextui-org/table": "npm:^2.0.45"
-    "@nextui-org/theme": "npm:^2.3.2"
     "@nextui-org/tooltip": "npm:^2.0.45"
     "@radix-ui/react-alert-dialog": "npm:^1.1.4"
     "@radix-ui/react-select": "npm:^2.1.4"
     "@radix-ui/react-separator": "npm:^1.1.1"
     "@radix-ui/react-slot": "npm:^1.1.1"
-    "@react-input/mask": "npm:^1.2.10"
     "@reduxjs/toolkit": "npm:^2.4.0"
-    "@supabase/supabase-js": "npm:^2.84.0"
+    "@supabase/supabase-js": "npm:^2.48.0"
     "@tanstack/react-query": "npm:^5.62.8"
     "@tanstack/react-table": "npm:^8.20.6"
     "@types/dinero.js": "npm:^1.9.4"
@@ -7980,13 +7957,13 @@ __metadata:
     axios: "npm:^1.7.9"
     class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
+    date-fns: "npm:^4.1.0"
     dinero.js: "npm:^1.9.1"
-    embla-carousel-autoplay: "npm:^8.5.1"
     embla-carousel-react: "npm:^8.5.1"
     eslint: "npm:^8.57.1"
     eslint-config-next: "npm:^14.2.21"
-    framer-motion: "npm:^11.14.4"
-    lucide-react: "npm:^0.468.0"
+    framer-motion: "npm:^12.23.24"
+    lucide-react: "npm:^0.555.0"
     moment-timezone: "npm:^0.5.46"
     next: "npm:^14.2.21"
     postcss: "npm:^8.4.49"
@@ -7994,8 +7971,8 @@ __metadata:
     react-confirm-alert: "npm:^3.0.6"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.54.2"
+    react-hot-toast: "npm:^2.6.0"
     react-redux: "npm:^9.2.0"
-    react-timer-hook: "npm:^3.0.7"
     react-toastify: "npm:^10.0.6"
     tailwind-merge: "npm:^2.6.0"
     tailwindcss: "npm:^3.4.17"
@@ -8195,6 +8172,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hot-toast@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "react-hot-toast@npm:2.6.0"
+  dependencies:
+    csstype: "npm:^3.1.3"
+    goober: "npm:^2.1.16"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/825ebbaa03c63dc2f22795ac8d535b40f1066c3ace5b792d0de740070693f195b910c98f46a00f7f6195f804ecf41b03201f6ff6950a540098dd2b7a0069df5b
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -8282,15 +8272,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10/9babf6d667e93ea4629c79dce837551634f2b3309d191013908d781a98cd4bf211ea8e529ea5eb4f0046f6ea1e3c985272c1309fe09390917eb2e5c86ba75b72
-  languageName: node
-  linkType: hard
-
-"react-timer-hook@npm:^3.0.7":
-  version: 3.0.8
-  resolution: "react-timer-hook@npm:3.0.8"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 10/2674ab074d147981ec61708e2ce3658f2cf4284e667197b40e16f3c85c8c112911b867584792bd8a0bc28da29f6fbc397601cbbb6ada4f34551d72879cf15c39
   languageName: node
   linkType: hard
 

@@ -19,10 +19,22 @@ export const DataTablePagination = <T,>({
 }: DataTablePaginationProps<T>) => {
   const { pageIndex, pageSize } = table.getState().pagination;
 
+  // Resolve o erro: nunca será undefined
+  const totalItems = itemsCount ?? 0;
+  const isLastPage = pageIndex === table.getPageCount() - 1;
+
+  // Extrai a lógica do ternário aninhado
+  let endIndex = (pageIndex + 1) * pageSize;
+  if (isLastPage) endIndex = totalItems;
+  if (pageIndex === 0) endIndex = pageSize;
+
+  const startIndex = pageIndex * pageSize + 1;
+
   return (
     <div className="flex justify-between mt-2 gap-3">
       <div className="flex items-center space-x-2">
         <p className="text-sm font-medium">Por página</p>
+
         <Select
           value={`${pageSize}`}
           onValueChange={(value) => {
@@ -41,30 +53,22 @@ export const DataTablePagination = <T,>({
           </SelectContent>
         </Select>
       </div>
+
       <div className="flex space-x-2 items-center">
         <p className="text-sm font-medium">
-          {pageIndex * pageSize + 1} -{" "}
-          {pageIndex === table.getPageCount() - 1
-            ? itemsCount
-            : pageIndex === 0
-              ? pageSize
-              : pageIndex * pageSize + pageSize}{" "}
-          de {itemsCount}{" "}
+          {startIndex} - {endIndex} de {totalItems}
         </p>
+
         <button
           className="h-8 w-8 flex items-center justify-center rounded-md border border-gray-300"
-          onClick={() => {
-            table.previousPage();
-          }}
+          onClick={() => table.previousPage()}
         >
           <ArrowLeft />
         </button>
 
         <button
           className="h-8 w-8 flex items-center justify-center rounded-md border border-gray-300"
-          onClick={() => {
-            table.nextPage();
-          }}
+          onClick={() => table.nextPage()}
         >
           <ArrowRight />
         </button>

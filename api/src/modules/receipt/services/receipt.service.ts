@@ -60,12 +60,13 @@ export class ReceiptService {
     const order = await this.orderRepo.findOne({
       where: { id: orderId },
       relations: [
-        'customer', // Dados do cliente
+        'user', // Dados do cliente
+        'address', // Endereço de entrega
         'items', // Itens do pedido
         'items.product', // Produto de cada item
         'items.variant', // Variação (tamanho) de cada item
-        'payment', // Dados do pagamento
-        'delivery_address', // Endereço de entrega
+        'items.crust', // Borda
+        'items.filling', // Recheio
       ],
     });
 
@@ -84,7 +85,7 @@ export class ReceiptService {
       this.logger.warn(`Comprovante já existe para pedido #${orderId}`);
 
       // Se deve enviar e-mail e ainda não foi enviado
-      if (sendEmail && !receipt.was_emailed && order.customer?.email) {
+      if (sendEmail && !receipt.was_emailed && order.user?.email) {
         await this.sendReceiptEmail(receipt, order);
       }
 
@@ -103,9 +104,9 @@ export class ReceiptService {
       receipt_number: receiptNumber,
 
       // Dados do cliente (snapshot)
-      customer_name: order.customer.nome_completo,
-      customer_cpf: order.customer.cpf || null,
-      customer_email: order.customer.email || null,
+      customer_name: order.user.name,
+      customer_cpf: order.user.cpf || null,
+      customer_email: order.user.email || null,
 
       // Itens em formato JSON
       items_json: JSON.stringify(
@@ -114,7 +115,7 @@ export class ReceiptService {
           variant_name: item.variant?.size || item.variant?.label || 'Padrão',
           quantity: item.quantity,
           unit_price: parseFloat(item.unit_price.toString()),
-          total_price: parseFloat(item.total_price.toString()),
+          total_price: parseFloat(item.subtotal.toString()),
         })),
       ),
 
@@ -141,9 +142,9 @@ export class ReceiptService {
     this.logger.log(`Comprovante ${receiptNumber} gerado com sucesso`);
 
     // Enviar e-mail se solicitado
-    if (sendEmail && order.customer?.email) {
+    if (sendEmail && order.user?.email) {
       await this.sendReceiptEmail(receipt, order);
-    } else if (sendEmail && !order.customer?.email) {
+    } else if (sendEmail && !order.user?.email) {
       this.logger.warn(`Cliente sem e-mail - Comprovante não enviado`);
     }
 
@@ -166,7 +167,7 @@ export class ReceiptService {
     order: any,
   ): Promise<boolean> {
     try {
-      const customerEmail = receipt.customer_email || order.customer?.email;
+      const customerEmail = receipt.customer_email || order.user?.email;
 
       // Validar e-mail
       if (!customerEmail) {
@@ -182,7 +183,7 @@ export class ReceiptService {
       // Preparar dados para o template de e-mail
       const emailData: ReceiptEmailData = {
         customerName: receipt.customer_name,
-        orderNumber: order.order_number,
+        orderNumber: `#${order.id}`,
         orderDate: new Date(receipt.issue_date).toLocaleString('pt-BR'),
         items: JSON.parse(receipt.items_json).map((item: any) => ({
           name: `${item.product_name}${item.variant_name ? ` (${item.variant_name})` : ''}`,
@@ -196,9 +197,7 @@ export class ReceiptService {
         total: parseFloat(receipt.total.toString()),
         paymentMethod: receipt.payment_method,
         deliveryToken: order.delivery_token || '',
-        address: order.delivery_address
-          ? this.formatAddress(order.delivery_address)
-          : undefined,
+        address: order.address ? this.formatAddress(order.address) : undefined,
       };
 
       // Gerar HTML formatado do e-mail
@@ -207,7 +206,7 @@ export class ReceiptService {
       // Enviar e-mail com PDF anexo
       const sent = await this.emailService.sendReceiptEmail(
         customerEmail,
-        order.order_number,
+        `#${order.id}`,
         htmlContent,
         pdfBuffer,
       );
@@ -238,11 +237,11 @@ export class ReceiptService {
   // ============================================
   private formatAddress(address: any): string {
     const parts = [
-      `${address.rua}, ${address.numero}`,
-      address.complemento,
-      address.bairro,
-      `${address.cidade}/${address.estado}`,
-      `CEP: ${address.cep}`,
+      `${address.street}, ${address.number}`,
+      address.complement,
+      address.neighborhood,
+      `${address.city}/${address.state}`,
+      `CEP: ${address.zip_code}`,
     ];
 
     return parts.filter(Boolean).join(', ');
@@ -379,7 +378,7 @@ export class ReceiptService {
         doc
           .fontSize(10)
           .font('Helvetica')
-          .text('CNPJ: 12.345. 678/0001-90', { align: 'center' })
+          .text('CNPJ: 12.345.678/0001-90', { align: 'center' })
           .text('Avenida Exemplo, 1000 - Centro - Montes Claros/MG', {
             align: 'center',
           })
@@ -634,11 +633,13 @@ export class ReceiptService {
     const order = await this.orderRepo.findOne({
       where: { id: orderId },
       relations: [
-        'customer',
+        'user',
+        'address',
         'items',
         'items.product',
         'items.variant',
-        'delivery_address',
+        'items.crust',
+        'items.filling',
       ],
     });
 

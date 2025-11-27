@@ -1,104 +1,179 @@
-// Importa estilos globais e estilos do Toastify (notificações)
-import "@/styles/globals.css";
-import "react-toastify/dist/ReactToastify.css";
+// ============================================
+// APP ROOT - CONFIGURAÇÃO GLOBAL
+// ============================================
+// Providers: Auth, Cart, Redux, React Query
+// Layout condicional: Admin vs Cliente
+// Toaster para notificações
+// ============================================
 
-// Tipagem para propriedades do componente principal da aplicação
+import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
-// React Query para gerenciamento de cache e requisições
+// ============================================
+// REACT QUERY (Cache e requisições)
+// ============================================
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// Componentes visuais e de layout
-import LayoutHeader from "@/components/LayoutHeader";
-import Footer from "@/components/footer";
-import TitleWithLogo from "@/components/title-with-logo";
+// ============================================
+// CONTEXTS (Auth e Cart)
+// ============================================
+import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
 
-// Redux para gerenciamento de estado global
+// ============================================
+// REDUX (Estado global - mantido do projeto antigo)
+// ============================================
 import { Provider } from "react-redux";
 import { store } from "@/lib/redux/store";
 
-// Toastify para exibir notificações
+// ============================================
+// COMPONENTES DE LAYOUT
+// ============================================
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+
+// ============================================
+// TOASTIFY (Notificações toast)
+// ============================================
 import { ToastContainer } from "react-toastify";
 
-// Hook do Next.js para obter a rota atual
-import { usePathname } from "next/navigation";
-
-// Função de verificação de autenticação para rotas protegidas
-import isAuth from "@/common/enum/guard/isAuth";
-
-// Hooks do React para controle de renderização e efeitos
+// ============================================
+// NEXT.JS ROUTER
+// ============================================
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+// ============================================
+// GUARD DE AUTENTICAÇÃO (mantido do projeto antigo)
+// ============================================
+import isAuth from "@/common/enum/guard/isAuth";
+
 export default function App({ Component, pageProps }: AppProps) {
-  // Instância do React Query para cache e requisições
-  const queryClient = new QueryClient();
+  const router = useRouter();
+  const pathname = router.pathname;
 
-  // Obtém o caminho atual da rota
-  const pathname = usePathname();
+  // ============================================
+  // REACT QUERY CLIENT
+  // ============================================
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: 1,
+            staleTime: 5 * 60 * 1000, // 5 minutos
+          },
+        },
+      })
+  );
 
-  // Executa verificação de autenticação apenas no cliente (evita erro de hidratação)
-  useEffect(() => {
-    if (pathname?.includes("admin")) {
-      isAuth();
-    }
-  }, [pathname]);
-
-  // Controla se o componente está sendo renderizado no cliente
+  // ============================================
+  // CONTROLE DE RENDERIZAÇÃO NO CLIENTE
+  // ============================================
+  // Evita erro de hidratação do Next.js
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Evita renderização no servidor para prevenir erro de hidratação
+  // ============================================
+  // GUARD DE AUTENTICAÇÃO PARA ROTAS ADMIN
+  // ============================================
+  // Verifica autenticação apenas em rotas /admin
+  useEffect(() => {
+    if (pathname?.includes("/admin")) {
+      isAuth();
+    }
+  }, [pathname]);
+
+  // ============================================
+  // PREVENIR RENDERIZAÇÃO NO SERVIDOR
+  // ============================================
   if (!isClient) return null;
 
+  // ============================================
+  // DEFINIR PÁGINAS SEM LAYOUT PADRÃO
+  // ============================================
+  const noLayoutPages = ["/login", "/cadastro"];
+  const isAdminPage = pathname?.startsWith("/admin");
+  const isNoLayoutPage = noLayoutPages.includes(pathname || "");
+
+  // ============================================
+  // LAYOUT CONDICIONAL EXTRAÍDO (resolve nested ternary)
+  // ============================================
+  let layout;
+  if (isAdminPage) {
+    layout = (
+      <div className="min-h-screen bg-gray-100">
+        <Component {...pageProps} />
+      </div>
+    );
+  } else if (isNoLayoutPage) {
+    layout = <Component {...pageProps} />;
+  } else {
+    layout = (
+      <div className="flex flex-col min-h-screen">
+        {/* Header fixo */}
+        <Header />
+
+        {/* Conteúdo principal */}
+        <main className="flex-1 bg-gray-50">
+          <Component {...pageProps} />
+        </main>
+
+        {/* Botão flutuante de suporte (WhatsApp) */}
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
+            onClick={() => window.open("https://wa.me/5538999999999", "_blank")}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 transition-all hover:scale-110"
+            aria-label="Suporte via WhatsApp"
+          >
+            <span className="font-bold hidden md:block">Suporte</span>
+            <img src="/whatsapp.svg" height={24} width={24} alt="WhatsApp" />
+          </button>
+        </div>
+
+        {/* Footer */}
+        <Footer />
+
+        {/* Drawer do carrinho */}
+        <CartDrawer />
+      </div>
+    );
+  }
+
+  // ============================================
+  // RENDER FINAL: Providers + layout
+  // ============================================
   return (
-    // Provedor do React Query
     <QueryClientProvider client={queryClient}>
-      {/* Provedor do Redux */}
       <Provider store={store}>
-        {/* Container de notificações */}
-        <ToastContainer theme="dark" />
+        <AuthProvider>
+          <CartProvider>
+            {/* ============================================ */}
+            {/* TOAST CONTAINER (Notificações) */}
+            {/* ============================================ */}
+            <ToastContainer
+              theme="dark"
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
 
-        {/* Cabeçalho fixo da aplicação */}
-        <LayoutHeader />
-
-        {/* Renderização condicional para rotas administrativas */}
-        {pathname && pathname?.includes("admin") ? (
-          // Layout para páginas administrativas
-          <div className="min-h-screen bg-fixed bg-contain md:bg-cover bg-left-top bg-repeat-y bg-[url('/sortelancada-transformed2.webp')] p-8 w-full h-full flex justify-center overflow-y-auto">
-            <Component {...pageProps} />
-          </div>
-        ) : (
-          <>
-            {/* Layout para páginas públicas */}
-            <div className="text-black bg-fixed bg-contain md:bg-cover bg-left-top bg-repeat-y min-h-screen bg-[url('/sortelancada-transformed2.webp')] w-full h-full flex justify-center overflow-y-auto">
-              <div className="space-y-4 my-8 h-full w-full px-8 md:max-w-3xl overflow-y-hidden flex flex-col justify-center items-center">
-                {/* Título com logotipo */}
-                <TitleWithLogo />
-
-                {/* Componente da página atual */}
-                <Component {...pageProps} />
-              </div>
-            </div>
-
-            {/* Botão fixo de suporte via WhatsApp */}
-            <div className="w-full cursor-pointer sticky pr-4 bottom-10 right-0 bg-none flex justify-end">
-              <div
-                className="bg-black flex-row flex px-2 py-1 space-x-1 rounded-xl"
-                onClick={() =>
-                  window.open("https://wa.me/553891920497", "_blank")
-                }
-              >
-                <span className="font-bold">Suporte</span>
-                <img src="/whatsapp.svg" height={20} width={20} />
-              </div>
-            </div>
-
-            {/* Rodapé da aplicação */}
-            <Footer />
-          </>
-        )}
+            {/* ============================================ */}
+            {/* LAYOUT RENDERIZADO */}
+            {/* ============================================ */}
+            {layout}
+          </CartProvider>
+        </AuthProvider>
       </Provider>
     </QueryClientProvider>
   );

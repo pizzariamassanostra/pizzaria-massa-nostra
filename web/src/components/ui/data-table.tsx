@@ -18,10 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTablePagination } from "./pagination";
-import { useEffect, useMemo, useState } from "react";
 
-// Props
+import { DataTablePagination } from "./pagination";
+import { useMemo, useState } from "react";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -32,7 +32,6 @@ interface DataTableProps<TData, TValue> {
   tableOptions?: Partial<TableOptions<TData>>;
 }
 
-// Component itself
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -41,43 +40,57 @@ export function DataTable<TData, TValue>({
   paginationEnabled,
   onPaginationChange,
   tableOptions,
-}: DataTableProps<TData, TValue>) {
+}: Readonly<DataTableProps<TData, TValue>>) {
   const defaultData = useMemo(() => [], []);
 
-  // Table definition
+  const [internalPagination, setInternalPagination] = useState<PaginationState>(
+    pagination ?? { pageIndex: 0, pageSize: 10 }
+  );
+
   const defaultTableOptions: TableOptions<TData> = {
     data: data.length ? data : defaultData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
-    pageCount: Math.ceil(itemsCount / (pagination?.pageSize ?? 10)),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+
+    pageCount: Math.ceil(itemsCount / internalPagination.pageSize),
+
     ...tableOptions,
   };
-
-  const [internalPagination, setPagination] = useState<PaginationState>(
-    pagination ?? { pageIndex: 0, pageSize: 10 },
-  );
 
   if (pagination) {
     defaultTableOptions.state = {
       ...defaultTableOptions.state,
       pagination,
     };
+
     defaultTableOptions.manualPagination = true;
-    defaultTableOptions.onPaginationChange = setPagination;
+
+    // CORREÇÃO IMPORTANTE — agora é uma função e não um objeto
+    defaultTableOptions.onPaginationChange = (updater) => {
+      const newValue =
+        typeof updater === "function" ? updater(pagination) : updater;
+
+      onPaginationChange?.(newValue);
+    };
+  } else {
+    defaultTableOptions.state = {
+      ...defaultTableOptions.state,
+      pagination: internalPagination,
+    };
+
+    defaultTableOptions.onPaginationChange = (updater) => {
+      setInternalPagination((old) => {
+        const newValue = typeof updater === "function" ? updater(old) : updater;
+        onPaginationChange?.(newValue);
+        return newValue;
+      });
+    };
   }
 
-  useEffect(() => {
-    onPaginationChange?.(internalPagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [internalPagination]);
-
-  const table = useReactTable<TData>({
-    ...defaultTableOptions,
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  const table = useReactTable<TData>(defaultTableOptions);
 
   return (
     <div>
@@ -86,21 +99,20 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -112,7 +124,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -131,6 +143,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       {paginationEnabled && (
         <DataTablePagination itemsCount={itemsCount} table={table} />
       )}

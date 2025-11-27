@@ -21,6 +21,7 @@ import { CreateOrderDto } from '../dtos/create-order.dto';
 import { CreateAddressDto } from '../dtos/create-address.dto';
 import { UpdateOrderStatusDto } from '../dtos/update-order-status.dto';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { JwtCustomerAuthGuard } from '../../../common/guards/jwt-customer-auth.guard';
 
 @Controller('order')
 export class OrderController {
@@ -29,19 +30,40 @@ export class OrderController {
     private readonly addressService: AddressService,
   ) {}
 
-  // ============================================
-  // CRIAR PEDIDO
-  // ============================================
+  /**
+   * ➕ CRIAR PEDIDO
+   *
+   * Cliente cria um novo pedido
+   * O ID do cliente é extraído automaticamente do token JWT
+   */
   @Post()
-  async createOrder(@Body() dto: CreateOrderDto) {
-    const order = await this.orderService.create(dto);
+  @UseGuards(JwtCustomerAuthGuard)
+  async createOrder(@Body() dto: CreateOrderDto, @Request() req) {
+    // Extrair ID do cliente do token JWT
+    const customerId = req.user.id;
+
+    console.log('=== CRIAR PEDIDO ===');
+    console.log('Customer ID (do JWT):', customerId);
+    console.log('Dados do pedido:', dto);
+
+    // Criar objeto completo do pedido
+    const orderData = {
+      common_user_id: customerId,
+      address_id: dto.address_id,
+      items: dto.items,
+      payment_method: dto.payment_method,
+      notes: dto.notes,
+    };
+
+    // Chamar o service correto
+    const order = await this.orderService.create(orderData); // ← CORRIGIDO
+
     return {
       ok: true,
       message: 'Pedido criado com sucesso',
       order,
     };
   }
-
   // ============================================
   // BUSCAR PEDIDO POR ID
   // ============================================

@@ -1,13 +1,43 @@
-import { Payment } from "./payments.interface";
-import { UsersRaffleNumber } from "./users-raffle-number.interface";
-
+// ============================================
+// INTERFACE: USUÁRIO COMUM (CLIENTE)
+// ============================================
 export interface CommonUser {
-  id: string;
+  id: number;
   name: string;
+  cpf: string;
+  birth_date: string;
   phone: string;
-  created_at: Date;
-  raffles_numbers_bought: UsersRaffleNumber[];
-  payments: Payment[];
-  all_raffles_numbers_bought: number;
-  updated_at: Date;
+  phone_alternative: string | null;
+  email: string;
+  accept_terms: boolean;
+  accept_promotions: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// DTO para cadastro
+export interface RegisterDto {
+  name: string;
+  cpf: string;
+  birth_date: string;
+  phone: string;
+  phone_alternative?: string;
+  email: string;
+  password: string;
+  accept_terms: boolean;
+  accept_promotions: boolean;
+}
+
+// DTO para login
+export interface LoginDto {
+  username: string; // Email ou telefone
+  password: string;
+}
+
+// Resposta de login
+export interface LoginResponse {
+  ok: boolean;
+  message: string;
+  user: CommonUser;
+  access_token: string;
 }

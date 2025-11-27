@@ -1,5 +1,11 @@
+// ============================================
+// ENUM: STATUS DE PAGAMENTO
+// ============================================
+
 export enum PaymentStatus {
-  PENDING = "PENDING",
-  SUCCESS = "SUCCESS",
-  FAILED = "FAILED",
+  PENDING = "pending", // Aguardando pagamento
+  APPROVED = "approved", // Aprovado
+  REJECTED = "rejected", // Rejeitado
+  CANCELLED = "cancelled", // Cancelado
+  REFUNDED = "refunded", // Reembolsado
 }
