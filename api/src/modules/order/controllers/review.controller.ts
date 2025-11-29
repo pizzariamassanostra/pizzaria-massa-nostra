@@ -1,10 +1,3 @@
-// ============================================
-// CONTROLLER: AVALIAÇÕES DE PEDIDOS
-// ============================================
-// Endpoints para gerenciar avaliações de pedidos
-// Clientes podem avaliar pedidos entregues
-// ============================================
-
 import {
   Body,
   Controller,
@@ -19,31 +12,12 @@ import { ReviewService } from '../services/review.service';
 import { CreateReviewDto } from '../dtos/create-review.dto';
 import { JwtCustomerAuthGuard } from '../../../common/guards/jwt-customer-auth.guard';
 
+// Controller responsável pelos endpoints de avaliações de pedidos
 @Controller('review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
-  // ============================================
-  // CRIAR AVALIAÇÃO
-  // ============================================
-  /**
-   * Endpoint para cliente criar avaliação
-   *
-   * AUTENTICAÇÃO:
-   * - Requer token JWT de CLIENTE
-   * - O ID do cliente é extraído automaticamente do token
-   *
-   * VALIDAÇÕES:
-   * - Pedido deve existir
-   * - Pedido deve pertencer ao cliente logado
-   * - Pedido deve estar com status "delivered"
-   * - Não pode avaliar o mesmo pedido duas vezes
-   *
-   * @param orderId - ID do pedido a ser avaliado
-   * @param dto - Dados da avaliação (notas + comentário)
-   * @param req - Request com dados do usuário logado (JWT)
-   * @returns Avaliação criada
-   */
+  // Cria uma avaliação para um pedido entregue (requer autenticação)
   @Post('order/:orderId')
   @UseGuards(JwtCustomerAuthGuard)
   async createReview(
@@ -51,13 +25,8 @@ export class ReviewController {
     @Body() dto: CreateReviewDto,
     @Request() req,
   ) {
-    // Extrair ID do cliente do token JWT
+    // Extrai ID do cliente do token JWT
     const customerId = req.user.id;
-
-    console.log('=== CRIAR AVALIAÇÃO ===');
-    console.log('Order ID:', orderId);
-    console.log('Customer ID (do JWT):', customerId);
-    console.log('Dados da avaliação:', dto);
 
     const review = await this.reviewService.createReview(
       Number(orderId),
@@ -72,17 +41,7 @@ export class ReviewController {
     };
   }
 
-  // ============================================
-  // BUSCAR AVALIAÇÃO DO PEDIDO
-  // ============================================
-  /**
-   * Busca a avaliação de um pedido específico
-   *
-   * PÚBLICO: Não requer autenticação
-   *
-   * @param orderId - ID do pedido
-   * @returns Avaliação do pedido
-   */
+  // Busca a avaliação de um pedido específico
   @Get('order/:orderId')
   async getReviewByOrder(@Param('orderId') orderId: string) {
     const review = await this.reviewService.getReviewByOrder(Number(orderId));
@@ -93,26 +52,14 @@ export class ReviewController {
     };
   }
 
-  // ============================================
-  // LISTAR AVALIAÇÕES DO CLIENTE
-  // ============================================
-  /**
-   * Lista todas as avaliações de um cliente
-   *
-   * PROTEGIDO: Requer autenticação de cliente
-   * Cliente só pode ver suas próprias avaliações
-   *
-   * @param customerId - ID do cliente
-   * @param req - Request com dados do usuário logado
-   * @returns Lista de avaliações do cliente
-   */
+  // Lista avaliações do cliente logado
   @Get('customer/:customerId')
   @UseGuards(JwtCustomerAuthGuard)
   async getCustomerReviews(
     @Param('customerId') customerId: string,
     @Request() req,
   ) {
-    // Validar se está consultando suas próprias avaliações
+    // Valida se o cliente está consultando suas próprias avaliações
     const loggedCustomerId = req.user.id;
 
     if (Number(customerId) !== loggedCustomerId) {
@@ -129,19 +76,7 @@ export class ReviewController {
     };
   }
 
-  // ============================================
-  // LISTAR TODAS (ADMIN)
-  // ============================================
-  /**
-   * Lista todas as avaliações (paginado)
-   *
-   * PÚBLICO: Qualquer pessoa pode ver as avaliações
-   * (pode adicionar @UseGuards para restringir a admin se necessário)
-   *
-   * @param page - Página atual (padrão: 1)
-   * @param limit - Itens por página (padrão: 20)
-   * @returns Lista paginada de avaliações
-   */
+  // Lista todas as avaliações com paginação
   @Get()
   async getAllReviews(
     @Query('page') page: string = '1',
@@ -161,23 +96,7 @@ export class ReviewController {
     };
   }
 
-  // ============================================
-  // MÉDIA DE AVALIAÇÕES (ESTATÍSTICAS)
-  // ============================================
-  /**
-   * Retorna estatísticas gerais de avaliações
-   *
-   * PÚBLICO: Qualquer pessoa pode ver
-   *
-   * Retorna:
-   * - Média de nota geral
-   * - Média de qualidade da comida
-   * - Média de tempo de entrega
-   * - Média de embalagem
-   * - Total de avaliações
-   *
-   * @returns Estatísticas de avaliações
-   */
+  // Retorna estatísticas gerais de avaliações
   @Get('stats/average')
   async getAverageRating() {
     const stats = await this.reviewService.getAverageRating();

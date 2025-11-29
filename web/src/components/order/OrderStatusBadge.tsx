@@ -1,8 +1,7 @@
 // ============================================
 // COMPONENTE: BADGE DE STATUS DO PEDIDO
 // ============================================
-// Exibe status do pedido com cor apropriada
-// Traduz status para português
+// Exibe status do pedido
 // ============================================
 
 import React from "react";

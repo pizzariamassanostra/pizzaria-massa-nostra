@@ -18,7 +18,9 @@ import {
 
 export class CreateRBACTables1732620000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // ============================================
     // Tabela: roles
+    // ============================================
     await queryRunner.createTable(
       new Table({
         name: 'roles',
@@ -82,7 +84,9 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
       true,
     );
 
+    // ============================================
     // Tabela: permissions
+    // ============================================
     await queryRunner.createTable(
       new Table({
         name: 'permissions',
@@ -146,7 +150,9 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
       true,
     );
 
+    // ============================================
     // Tabela: role_permissions (N:N)
+    // ============================================
     await queryRunner.createTable(
       new Table({
         name: 'role_permissions',
@@ -185,7 +191,9 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
       }),
     );
 
+    // ============================================
     // Tabela: user_roles
+    // ============================================
     await queryRunner.createTable(
       new Table({
         name: 'user_roles',
@@ -241,19 +249,23 @@ export class CreateRBACTables1732620000000 implements MigrationInterface {
       }),
     );
 
-    // Índices
-    await queryRunner.query(`CREATE INDEX idx_roles_name ON roles(name)`);
+    // ============================================
+    // Índices (ajustados com IF NOT EXISTS)
+    // ============================================
     await queryRunner.query(
-      `CREATE INDEX idx_permissions_name ON permissions(name)`,
+      `CREATE INDEX IF NOT EXISTS idx_roles_name ON roles(name)`,
     );
     await queryRunner.query(
-      `CREATE INDEX idx_permissions_resource ON permissions(resource)`,
+      `CREATE INDEX IF NOT EXISTS idx_permissions_name ON permissions(name)`,
     );
     await queryRunner.query(
-      `CREATE INDEX idx_user_roles_user ON user_roles(user_id)`,
+      `CREATE INDEX IF NOT EXISTS idx_permissions_resource ON permissions(resource)`,
     );
     await queryRunner.query(
-      `CREATE INDEX idx_user_roles_role ON user_roles(role_id)`,
+      `CREATE INDEX IF NOT EXISTS idx_user_roles_user ON user_roles(user_id)`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX IF NOT EXISTS idx_user_roles_role ON user_roles(role_id)`,
     );
 
     console.log('Tabelas RBAC criadas com sucesso');

@@ -37,7 +37,7 @@ export class StockMovement {
     type: 'enum',
     enum: MovementType,
   })
-  type: MovementType; // Entrada, Saída, Ajuste, etc
+  type: MovementType; // Entrada, Saída, Ajuste
 
   // ============================================
   // INGREDIENTE E LOTE

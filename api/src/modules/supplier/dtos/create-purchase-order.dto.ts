@@ -6,7 +6,7 @@ import {
   IsString,
   // IsDecimal, Verificar regra***
   IsEnum,
-  IsDateString,
+  // IsDateString, Verificar regra***
   IsOptional,
   IsArray,
   ValidateNested,

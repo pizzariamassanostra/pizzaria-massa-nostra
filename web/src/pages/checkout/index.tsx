@@ -1,12 +1,3 @@
-// ============================================
-// PÁGINA: CHECKOUT
-// ============================================
-// Finalização do pedido
-// Seleção de endereço ou cadastro de novo
-// Escolha de forma de pagamento
-// Confirmação e criação do pedido
-// ============================================
-
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -27,15 +18,13 @@ import {
   Loader,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { CardPaymentForm } from "@/components/checkout/CardPaymentForm";
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
-  // ============================================
-  // ESTADOS
-  // ============================================
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
@@ -43,7 +32,6 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [loadingAddresses, setLoadingAddresses] = useState(true);
 
-  // Formulário de novo endereço
   const [newAddress, setNewAddress] = useState<CreateAddressDto>({
     street: "",
     number: "",
@@ -56,34 +44,23 @@ export default function CheckoutPage() {
     is_default: false,
   });
 
-  // ============================================
-  // VERIFICAR AUTENTICAÇÃO
-  // ============================================
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/login?redirect=/checkout");
+      router.push("/login? redirect=/checkout");
       return;
     }
-
-    // Verificar se tem itens no carrinho
     if (items.length === 0) {
       router.push("/cardapio");
       return;
     }
-
     loadAddresses();
   }, [isAuthenticated, items, router]);
 
-  // ============================================
-  // CARREGAR ENDEREÇOS DO USUÁRIO
-  // ============================================
   const loadAddresses = async () => {
     try {
       setLoadingAddresses(true);
       const response = await addressService.getMyAddresses();
       setAddresses(response.addresses);
-
-      // Selecionar endereço padrão automaticamente
       const defaultAddress = response.addresses.find((addr) => addr.is_default);
       if (defaultAddress) {
         setSelectedAddress(defaultAddress.id);
@@ -95,20 +72,14 @@ export default function CheckoutPage() {
     }
   };
 
-  // ============================================
-  // BUSCAR CEP
-  // ============================================
   const handleSearchCep = async () => {
     const cleanCep = newAddress.zip_code.replaceAll(/\D/g, "");
-
     if (cleanCep.length !== 8) {
       toast.error("CEP inválido");
       return;
     }
-
     try {
       const data = await addressService.searchCep(cleanCep);
-
       setNewAddress((prev) => ({
         ...prev,
         street: data.logradouro,
@@ -116,29 +87,21 @@ export default function CheckoutPage() {
         city: data.localidade,
         state: data.uf,
       }));
-
       toast.success("CEP encontrado!");
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("Erro ao buscar CEP:", error);
       toast.error("CEP não encontrado");
     }
   };
 
-  // ============================================
-  // CADASTRAR NOVO ENDEREÇO
-  // ============================================
   const handleCreateAddress = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const response = await addressService.create(newAddress);
-
       setAddresses((prev) => [...prev, response.address]);
       setSelectedAddress(response.address.id);
       setShowNewAddressForm(false);
       toast.success("Endereço cadastrado com sucesso!");
-
-      // Limpar formulário
       setNewAddress({
         street: "",
         number: "",
@@ -150,31 +113,24 @@ export default function CheckoutPage() {
         reference: "",
         is_default: false,
       });
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("Erro ao cadastrar endereço:", error);
       toast.error("Erro ao cadastrar endereço");
     }
   };
 
-  // ============================================
-  // FINALIZAR PEDIDO
-  // ============================================
   const handleFinishOrder = async () => {
-    // Validações
     if (!selectedAddress) {
       toast.error("Selecione um endereço de entrega");
       return;
     }
-
     if (!paymentMethod) {
       toast.error("Selecione uma forma de pagamento");
       return;
     }
 
     setLoading(true);
-
     try {
-      // Montar payload do pedido
       const orderData = {
         address_id: selectedAddress,
         items: items.map((item) => ({
@@ -187,36 +143,30 @@ export default function CheckoutPage() {
         payment_method: paymentMethod as any,
       };
 
-      // Criar pedido
       const response = await orderService.create(orderData);
-
-      // Limpar carrinho
       clearCart();
-
       toast.success("Pedido realizado com sucesso!");
-      router.push(`/meus-pedidos/${response.order.id}`);
-    } catch (error: unknown) {
+      router.push(`/pedido/${response.order.id}`);
+    } catch (error) {
       console.error("Erro ao finalizar pedido:", error);
-
       const userMessage =
         (error as any)?.response?.data?.errors?.[0]?.userMessage ||
         "Erro ao finalizar pedido";
-
       toast.error(userMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  // ============================================
-  // FORMATAR PREÇO
-  // ============================================
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
     }).format(price);
   };
+
+  const showCardForm =
+    paymentMethod === "cartao_debito" || paymentMethod === "cartao_credito";
 
   return (
     <>
@@ -225,26 +175,19 @@ export default function CheckoutPage() {
       </Head>
 
       <div className="container mx-auto px-4 py-8">
-        {/* ============================================ */}
-        {/* HEADER */}
-        {/* ============================================ */}
         <h1 className="text-4xl font-bold text-gray-800 mb-8">
           Finalizar Pedido
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ============================================ */}
-          {/* COLUNA ESQUERDA: ENDEREÇO E PAGAMENTO */}
-          {/* ============================================ */}
           <div className="lg:col-span-2 space-y-6">
-            {/* ========== ENDEREÇO ========== */}
+            {/* ENDEREÇO */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                   <MapPin className="w-6 h-6 text-red-600" />
                   Endereço de Entrega
                 </h2>
-
                 {!showNewAddressForm && (
                   <button
                     onClick={() => setShowNewAddressForm(true)}
@@ -256,14 +199,12 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              {/* Loading endereços */}
               {loadingAddresses && (
                 <div className="flex justify-center py-8">
                   <Loader className="w-8 h-8 text-red-600 animate-spin" />
                 </div>
               )}
 
-              {/* Lista de endereços */}
               {!loadingAddresses && !showNewAddressForm && (
                 <div className="space-y-3">
                   {addresses.map((address) => (
@@ -311,7 +252,6 @@ export default function CheckoutPage() {
                       </div>
                     </label>
                   ))}
-
                   {addresses.length === 0 && (
                     <p className="text-gray-500 text-center py-4">
                       Você ainda não tem endereços cadastrados
@@ -320,10 +260,8 @@ export default function CheckoutPage() {
                 </div>
               )}
 
-              {/* Formulário de novo endereço */}
               {showNewAddressForm && (
                 <form onSubmit={handleCreateAddress} className="space-y-4">
-                  {/* CEP */}
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -346,8 +284,6 @@ export default function CheckoutPage() {
                       Buscar
                     </button>
                   </div>
-
-                  {/* Rua e Número */}
                   <div className="grid grid-cols-3 gap-2">
                     <input
                       type="text"
@@ -370,8 +306,6 @@ export default function CheckoutPage() {
                       required
                     />
                   </div>
-
-                  {/* Complemento */}
                   <input
                     type="text"
                     placeholder="Complemento (opcional)"
@@ -384,8 +318,6 @@ export default function CheckoutPage() {
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   />
-
-                  {/* Bairro */}
                   <input
                     type="text"
                     placeholder="Bairro"
@@ -399,8 +331,6 @@ export default function CheckoutPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                     required
                   />
-
-                  {/* Cidade e Estado */}
                   <div className="grid grid-cols-3 gap-2">
                     <input
                       type="text"
@@ -424,8 +354,6 @@ export default function CheckoutPage() {
                       required
                     />
                   </div>
-
-                  {/* Referência */}
                   <input
                     type="text"
                     placeholder="Ponto de referência (opcional)"
@@ -438,8 +366,6 @@ export default function CheckoutPage() {
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   />
-
-                  {/* Botões */}
                   <div className="flex gap-2">
                     <button
                       type="submit"
@@ -459,7 +385,7 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* ========== FORMA DE PAGAMENTO ========== */}
+            {/* PAGAMENTO */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
                 <CreditCard className="w-6 h-6 text-red-600" />
@@ -467,7 +393,6 @@ export default function CheckoutPage() {
               </h2>
 
               <div className="space-y-3">
-                {/* PIX */}
                 <label
                   className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                     paymentMethod === "pix"
@@ -487,7 +412,6 @@ export default function CheckoutPage() {
                   <span className="font-semibold">PIX</span>
                 </label>
 
-                {/* Dinheiro */}
                 <label
                   className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                     paymentMethod === "dinheiro"
@@ -507,7 +431,6 @@ export default function CheckoutPage() {
                   <span className="font-semibold">Dinheiro</span>
                 </label>
 
-                {/* Cartão de Débito */}
                 <label
                   className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                     paymentMethod === "cartao_debito"
@@ -527,7 +450,6 @@ export default function CheckoutPage() {
                   <span className="font-semibold">Cartão de Débito</span>
                 </label>
 
-                {/* Cartão de Crédito */}
                 <label
                   className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                     paymentMethod === "cartao_credito"
@@ -547,17 +469,17 @@ export default function CheckoutPage() {
                   <span className="font-semibold">Cartão de Crédito</span>
                 </label>
               </div>
+
+              {showCardForm && (
+                <CardPaymentForm onSubmit={(data) => console.log(data)} />
+              )}
             </div>
           </div>
 
-          {/* ============================================ */}
-          {/* COLUNA DIREITA: RESUMO DO PEDIDO */}
-          {/* ============================================ */}
+          {/* RESUMO */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
               <h2 className="text-xl font-bold mb-4">Resumo do Pedido</h2>
-
-              {/* Itens */}
               <div className="space-y-2 mb-4">
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
@@ -570,7 +492,6 @@ export default function CheckoutPage() {
                   </div>
                 ))}
               </div>
-
               <div className="border-t pt-4 mb-6">
                 <div className="flex justify-between mb-2">
                   <span className="text-gray-600">Subtotal</span>
@@ -589,8 +510,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Botão finalizar */}
               <button
                 onClick={handleFinishOrder}
                 disabled={loading || !selectedAddress || !paymentMethod}
@@ -598,7 +517,6 @@ export default function CheckoutPage() {
               >
                 {loading ? "Processando..." : "Confirmar Pedido"}
               </button>
-
               <p className="text-xs text-gray-500 text-center mt-3">
                 Ao confirmar, você concorda com nossos termos de uso
               </p>

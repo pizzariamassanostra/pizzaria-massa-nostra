@@ -163,5 +163,5 @@ export class Supplier {
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date; // Soft delete
+  deleted_at: Date;
 }

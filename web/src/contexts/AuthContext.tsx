@@ -129,9 +129,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(updatedUser));
   };
 
-  // ============================================
-  // useMemo — CORRIGE O ERRO DO SONARQUBE (S6481)
-  // ============================================
   const value = useMemo(
     () => ({
       user,

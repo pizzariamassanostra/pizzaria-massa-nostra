@@ -2,7 +2,6 @@
 // REDUX REDUCER: AUTH
 // ============================================
 // Gerencia estado de autenticação no Redux
-// (Opcional - já temos AuthContext)
 // ============================================
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";

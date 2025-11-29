@@ -3,9 +3,8 @@
 // Template HTML para envio de comprovante
 // ===========================================
 
-/**
- * Interface para dados do comprovante
- */
+// Interface com dados do comprovante de pedido
+
 export interface ReceiptEmailData {
   customerName: string;
   orderNumber: string;
@@ -25,13 +24,9 @@ export interface ReceiptEmailData {
   address?: string;
 }
 
-/**
- * Gerar HTML do e-mail de comprovante
- * @param data - Dados do comprovante
- * @returns string - HTML formatado
- */
+// Gera o HTML do e-mail de comprovante de pedido
 export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
-  // Formatar valores para moeda brasileira
+  // Formata valores para moeda brasileira (R$)
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -39,7 +34,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
     }).format(value);
   };
 
-  // Mapear forma de pagamento para nome amigável
+  // Mapeia forma de pagamento para nome amigável ao cliente
   const paymentMethodNames = {
     pix: 'PIX',
     credit_card: 'Cartão de Crédito',
@@ -51,7 +46,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
   const paymentMethodDisplay =
     paymentMethodNames[data.paymentMethod] || data.paymentMethod;
 
-  // Gerar linhas dos itens
+  // Gera linhas HTML dos itens do pedido
   const itemsHTML = data.items
     .map(
       (item) => `
@@ -67,7 +62,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
     )
     .join('');
 
-  // Template completo
+  // Template HTML completo do e-mail
   return `
 <! DOCTYPE html>
 <html lang="pt-BR">
@@ -82,7 +77,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           
-          <!-- CABEÇALHO -->
+          <!-- Cabeçalho com logo da pizzaria -->
           <tr>
             <td style="background-color: #d32f2f; padding: 30px; text-align: center;">
               <h1 style="color: #ffffff; margin: 0; font-size: 28px;">PIZZARIA MASSA NOSTRA</h1>
@@ -90,7 +85,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- MENSAGEM DE BOAS-VINDAS -->
+          <!-- Mensagem de confirmação -->
           <tr>
             <td style="padding: 30px;">
               <h2 style="color: #333; margin: 0 0 10px 0;">Olá, ${data.customerName}!  </h2>
@@ -100,7 +95,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- DETALHES DO PEDIDO -->
+          <!-- Seção com detalhes do pedido -->
           <tr>
             <td style="padding: 0 30px 20px 30px;">
               <table width="100%" style="background-color: #f9f9f9; border-radius: 6px; padding: 20px;">
@@ -121,7 +116,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- ITENS DO PEDIDO -->
+          <!-- Lista dos itens pedidos -->
           <tr>
             <td style="padding: 0 30px 20px 30px;">
               <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">Itens do Pedido</h3>
@@ -131,7 +126,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- TOTAIS -->
+          <!-- Seção de totais e valores -->
           <tr>
             <td style="padding: 0 30px 30px 30px;">
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9f9f9; padding: 20px; border-radius: 6px;">
@@ -163,7 +158,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- FORMA DE PAGAMENTO E TOKEN -->
+          <!-- Forma de pagamento e token de entrega -->
           <tr>
             <td style="padding: 0 30px 30px 30px;">
               <table width="100%" style="background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 15px;">
@@ -191,7 +186,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- ENDEREÇO DE ENTREGA -->
+          <!-- Endereço de entrega do pedido -->
           ${
             data.address
               ? `
@@ -205,7 +200,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
               : ''
           }
 
-          <!-- ANEXO -->
+          <!-- Informação sobre comprovante em PDF -->
           <tr>
             <td style="padding: 0 30px 30px 30px;">
               <div style="background-color: #e3f2fd; border: 1px solid #2196f3; border-radius: 6px; padding: 15px; text-align: center;">
@@ -216,7 +211,7 @@ export function generateReceiptEmailHTML(data: ReceiptEmailData): string {
             </td>
           </tr>
 
-          <!-- RODAPÉ -->
+          <!-- Rodapé com informações da pizzaria -->
           <tr>
             <td style="background-color: #f9f9f9; padding: 30px; text-align: center; border-top: 1px solid #eee;">
               <p style="margin: 0; color: #666; font-size: 14px;">

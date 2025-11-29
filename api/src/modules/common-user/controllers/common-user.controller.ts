@@ -1,27 +1,31 @@
-// ============================================
-// CONTROLLER: CLIENTES (ADMIN)
-// ============================================
-// Endpoints administrativos de clientes
-// APENAS PARA ADMINISTRADORES
-// ============================================
-
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { FindOneCommonUserService } from '../services/find-one-common-user.service';
 import { PaginationDto } from '@/common/dtos/pagination.dto';
 import { CommonUser } from '../entities/common-user.entity';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 
+// Controller administrativo para gerenciar clientes (restrito a admins)
+@ApiTags('Clientes (Admin)')
 @Controller('common-user')
 export class CommonUserController {
   constructor(private readonly findOneCommonUser: FindOneCommonUserService) {}
 
-  // ============================================
-  // LISTAR TODOS OS CLIENTES (ADMIN)
-  // ============================================
-  // Endpoint protegido por JWT (apenas administradores)
-  // Retorna lista paginada de todos os clientes
+  // Lista todos os clientes com paginação (somente admin)
   @Get('list')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Listar todos os clientes (ADMIN)' })
+  @ApiResponse({ status: 200, description: 'Lista de clientes' })
+  @ApiResponse({ status: 401, description: 'Não autenticado' })
+  @ApiResponse({ status: 403, description: 'Sem permissão' })
   async list(@Query() options: PaginationDto<CommonUser>) {
     const { commonUsers, count } = await this.findOneCommonUser.list({
       ...options,
@@ -32,6 +36,9 @@ export class CommonUserController {
       ok: true,
       commonUsers,
       count,
+      page: options.page || 1,
+      per_page: options.per_page || 10,
+      total_pages: Math.ceil(count / (options.per_page || 10)),
     };
   }
 }

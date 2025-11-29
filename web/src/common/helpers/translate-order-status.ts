@@ -1,16 +1,7 @@
-// ============================================
-// HELPER: TRADUÇÃO DE STATUS DO PEDIDO
-// ============================================
-// Traduz status do pedido para português
-// ============================================
-
+// traduz status do pedido
 import { OrderStatus } from "../enum/order-status.enum";
 
-/**
- * Traduz status do pedido para português
- * @param status - Status do pedido
- * @returns Texto em português
- */
+// retorna o texto em português
 export function translateOrderStatus(status: OrderStatus): string {
   const translations: Record<OrderStatus, string> = {
     [OrderStatus.PENDING]: "Aguardando Confirmação",
@@ -24,11 +15,7 @@ export function translateOrderStatus(status: OrderStatus): string {
   return translations[status] || status;
 }
 
-/**
- * Retorna cor do status para badges
- * @param status - Status do pedido
- * @returns Classe CSS Tailwind
- */
+// retorna cor do badge
 export function getOrderStatusColor(status: OrderStatus): string {
   const colors: Record<OrderStatus, string> = {
     [OrderStatus.PENDING]: "bg-yellow-100 text-yellow-800",

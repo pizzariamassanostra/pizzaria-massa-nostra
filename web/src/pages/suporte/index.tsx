@@ -2,7 +2,6 @@
 // PÁGINA: SUPORTE
 // ============================================
 // FAQ e contato via WhatsApp
-// Adaptado para pizzaria
 // ============================================
 
 import React from "react";

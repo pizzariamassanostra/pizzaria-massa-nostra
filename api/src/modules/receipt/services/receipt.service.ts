@@ -45,10 +45,6 @@ export class ReceiptService {
   // Cria um novo comprovante com snapshot do pedido
   // Se já existir, retorna o existente
   // Envia e-mail automaticamente
-  //
-  // @param orderId - ID do pedido
-  // @param sendEmail - Se deve enviar e-mail (padrão: true)
-  // @returns Promise<Receipt>
   // ============================================
   async generateReceipt(
     orderId: number,
@@ -157,10 +153,6 @@ export class ReceiptService {
   // Envia o comprovante em PDF por e-mail
   // Usa o template HTML formatado
   // Marca o comprovante como enviado
-  //
-  // @param receipt - Comprovante gerado
-  // @param order - Pedido completo
-  // @returns Promise<boolean> - true se enviado com sucesso
   // ============================================
   private async sendReceiptEmail(
     receipt: Receipt,
@@ -231,9 +223,6 @@ export class ReceiptService {
   // FORMATAR ENDEREÇO PARA E-MAIL
   // ============================================
   // Converte objeto de endereço em string formatada
-  //
-  // @param address - Objeto endereço
-  // @returns string - Endereço formatado
   // ============================================
   private formatAddress(address: any): string {
     const parts = [
@@ -271,7 +260,6 @@ export class ReceiptService {
       .orderBy('receipt.id', 'DESC')
       .getOne();
 
-    // Definir próxima sequência
     let sequence = 1;
     if (lastReceipt) {
       const lastNumber = lastReceipt.receipt_number.split('-').pop();
@@ -285,9 +273,9 @@ export class ReceiptService {
   // ============================================
   // BUSCAR COMPROVANTE POR PEDIDO
   // ============================================
-  // @param orderId - ID do pedido
-  // @returns Promise<Receipt>
-  // @throws NotFoundException se não encontrar
+  // orderId - ID do pedido
+  // Promise<Receipt>
+  // NotFoundException se não encontrar
   // ============================================
   async findByOrder(orderId: number): Promise<Receipt> {
     const receipt = await this.receiptRepo.findOne({
@@ -307,9 +295,9 @@ export class ReceiptService {
   // ============================================
   // BUSCAR COMPROVANTE POR NÚMERO
   // ============================================
-  // @param receiptNumber - Número do comprovante (REC-YYYYMMDD-XXXX)
-  // @returns Promise<Receipt>
-  // @throws NotFoundException se não encontrar
+  // receiptNumber - Número do comprovante (REC-YYYYMMDD-XXXX)
+  // Promise<Receipt>
+  // NotFoundException se não encontrar
   // ============================================
   async findByNumber(receiptNumber: string): Promise<Receipt> {
     const receipt = await this.receiptRepo.findOne({
@@ -331,9 +319,9 @@ export class ReceiptService {
   // ============================================
   // Gera PDF formatado com dados do comprovante
   // Mantém toda a formatação original
-  // @param receiptId - ID do comprovante
-  // @returns Promise<Buffer> - Buffer do PDF gerado
-  // @throws NotFoundException se comprovante não existir
+  // receiptId - ID do comprovante
+  // Promise<Buffer> - Buffer do PDF gerado
+  // NotFoundException se comprovante não existir
   // ============================================
   async generatePDF(receiptId: number): Promise<Buffer> {
     // Buscar comprovante
@@ -368,7 +356,7 @@ export class ReceiptService {
         doc.on('error', reject);
 
         // ============================================
-        // SEÇÃO 1: CABEÇALHO
+        // CABEÇALHO
         // ============================================
         doc
           .fontSize(20)
@@ -386,7 +374,7 @@ export class ReceiptService {
           .moveDown(2);
 
         // ============================================
-        // SEÇÃO 2: TÍTULO
+        // TÍTULO
         // ============================================
         doc
           .fontSize(16)
@@ -395,7 +383,7 @@ export class ReceiptService {
           .moveDown(1);
 
         // ============================================
-        // SEÇÃO 3: INFORMAÇÕES DO COMPROVANTE
+        // INFORMAÇÕES DO COMPROVANTE
         // ============================================
         doc.fontSize(10).font('Helvetica');
 
@@ -410,7 +398,7 @@ export class ReceiptService {
         doc.moveDown(2);
 
         // ============================================
-        // SEÇÃO 4: DADOS DO CLIENTE
+        // DADOS DO CLIENTE
         // ============================================
         doc
           .fontSize(12)
@@ -430,7 +418,7 @@ export class ReceiptService {
         doc.moveDown(2);
 
         // ============================================
-        // SEÇÃO 5: TABELA DE ITENS
+        // TABELA DE ITENS
         // ============================================
         doc
           .fontSize(12)
@@ -489,7 +477,7 @@ export class ReceiptService {
         yPos += 15;
 
         // ============================================
-        // SEÇÃO 6: TOTAIS
+        // TOTAIS
         // ============================================
         doc.fontSize(10).font('Helvetica');
 
@@ -554,7 +542,7 @@ export class ReceiptService {
         yPos += 30;
 
         // ============================================
-        // SEÇÃO 7: FORMA DE PAGAMENTO
+        // FORMA DE PAGAMENTO
         // ============================================
         doc.fontSize(10).font('Helvetica');
 
@@ -576,7 +564,7 @@ export class ReceiptService {
         );
 
         // ============================================
-        // SEÇÃO 8: RODAPÉ
+        // RODAPÉ
         // ============================================
         doc
           .fontSize(8)
@@ -602,8 +590,8 @@ export class ReceiptService {
   // REEMITIR COMPROVANTE
   // ============================================
   // Busca comprovante existente ou gera um novo
-  // @param orderId - ID do pedido
-  // @returns Promise<Receipt>
+  // orderId - ID do pedido
+  // Promise<Receipt>
   // ============================================
   async reissue(orderId: number): Promise<Receipt> {
     const existing = await this.receiptRepo.findOne({
@@ -623,11 +611,11 @@ export class ReceiptService {
   // Reenvia o comprovante por e-mail
   // Útil se o cliente não recebeu ou perdeu
   //
-  // @param orderId - ID do pedido
-  // @returns Promise<boolean> - true se enviado
+  // orderId - ID do pedido
+  // Promise<boolean> - true se enviado
   // ============================================
   async resendEmail(orderId: number): Promise<boolean> {
-    this.logger.log(`📧 Reenviando comprovante para pedido #${orderId}`);
+    this.logger.log(`Reenviando comprovante para pedido #${orderId}`);
 
     const receipt = await this.findByOrder(orderId);
     const order = await this.orderRepo.findOne({

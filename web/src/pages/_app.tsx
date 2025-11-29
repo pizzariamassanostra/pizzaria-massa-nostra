@@ -21,7 +21,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 
 // ============================================
-// REDUX (Estado global - mantido do projeto antigo)
+// REDUX (Estado global
 // ============================================
 import { Provider } from "react-redux";
 import { store } from "@/lib/redux/store";
@@ -45,7 +45,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // ============================================
-// GUARD DE AUTENTICAÇÃO (mantido do projeto antigo)
+// GUARD DE AUTENTICAÇÃO
 // ============================================
 import isAuth from "@/common/enum/guard/isAuth";
 
@@ -101,7 +101,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const isNoLayoutPage = noLayoutPages.includes(pathname || "");
 
   // ============================================
-  // LAYOUT CONDICIONAL EXTRAÍDO (resolve nested ternary)
+  // LAYOUT CONDICIONAL EXTRAÍDO
   // ============================================
   let layout;
   if (isAdminPage) {

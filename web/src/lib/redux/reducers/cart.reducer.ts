@@ -2,7 +2,6 @@
 // REDUX REDUCER: CART
 // ============================================
 // Gerencia estado do carrinho no Redux
-// (Opcional - já temos CartContext)
 // ============================================
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";

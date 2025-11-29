@@ -159,7 +159,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       )}
 
       {/* ============================================ */}
-      {/* TOKEN DE ENTREGA (se status = on_delivery) */}
+      {/* TOKEN DE ENTREGA */}
       {/* ============================================ */}
       {order.status === "on_delivery" && order.delivery_token && (
         <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">

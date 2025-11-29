@@ -57,7 +57,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   }, [product.variants, selectedVariant]);
 
   // ============================================
-  // CARREGAR BORDAS E RECHEIOS DA API
+  // CARREGAR BORDAS E RECHEIOS
   // ============================================
   const loadCrustsAndFillings = async () => {
     try {

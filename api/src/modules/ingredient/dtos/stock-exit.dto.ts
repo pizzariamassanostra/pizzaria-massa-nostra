@@ -23,7 +23,7 @@ export class StockExitDto {
 
   @IsInt()
   @IsOptional()
-  stock_id?: number; // Lote específico (opcional)
+  stock_id?: number; // Lote específico
 
   // ============================================
   // QUANTIDADE
@@ -36,7 +36,7 @@ export class StockExitDto {
   // MOTIVO
   // ============================================
   @IsEnum(MovementType)
-  type: MovementType; // SALE, LOSS, etc
+  type: MovementType;
 
   @IsString()
   @IsOptional()

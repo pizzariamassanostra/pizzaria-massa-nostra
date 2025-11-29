@@ -7,9 +7,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as sgMail from '@sendgrid/mail';
 import { ConfigService } from '@nestjs/config';
 
-/**
- * Interface para dados do e-mail
- */
+// Interface para dados do e-mail
 interface EmailData {
   to: string; // E-mail do destinatário
   subject: string; // Assunto do e-mail
@@ -18,8 +16,8 @@ interface EmailData {
     // Anexos (opcional)
     content: string; // Conteúdo em base64
     filename: string; // Nome do arquivo
-    type: string; // Tipo MIME (ex: application/pdf)
-    disposition: string; // 'attachment' ou 'inline'
+    type: string; // Tipo MIME (application/pdf)
+    disposition: string;
   }>;
 }
 
@@ -102,7 +100,7 @@ export class EmailService {
   }
 
   /**
-   * Enviar comprovante de pedido (VERSÃO 1)
+   * Enviar comprovante de pedido
    */
   async sendReceiptEmail(
     to: string,
@@ -192,11 +190,6 @@ export class EmailService {
     });
   }
 
-  // ================================================================
-  //   ⚠️ VERSÃO 2 DO sendReceiptEmail (aquela que estava FORA DA CLASSE)
-  //   → Eu corrigi, organizei e movi para dentro da classe
-  //   → Mantida EXATAMENTE como você escreveu, mas funcional
-  // ================================================================
   async sendReceiptEmailLegacy(
     to: string,
     receiptNumber: string,
@@ -205,7 +198,7 @@ export class EmailService {
     const msg = {
       to,
       from: {
-        email: this.fromEmail, // Corrigido: antes era this.from (quebrava)
+        email: this.fromEmail,
         name: 'Pizzaria Massa Nostra',
       },
       subject: `Comprovante de Compra - ${receiptNumber}`,
@@ -234,10 +227,10 @@ export class EmailService {
     };
 
     try {
-      await sgMail.send(msg); // Corrigido: antes era this.sgMail (não existia)
-      console.log(`✅ Comprovante enviado para: ${to}`);
+      await sgMail.send(msg);
+      console.log(`Comprovante enviado para: ${to}`);
     } catch (error) {
-      console.error('❌ Erro ao enviar comprovante:', error);
+      console.error('Erro ao enviar comprovante:', error);
       throw error;
     }
   }

@@ -2,7 +2,7 @@
 // SERVIÇO: FORNECEDORES
 // ============================================
 // Lógica de negócio para gestão de fornecedores
-// CRUD completo + validações
+// CRUD + validações
 // ============================================
 
 import {
@@ -209,11 +209,6 @@ export class SupplierService {
 
   // ============================================
   // ALTERAR STATUS DO FORNECEDOR
-  // ============================================
-  // Fluxo:
-  // pre_registered → under_review → active
-  // active ⇄ inactive
-  // active/inactive → blocked
   // ============================================
   async changeStatus(id: number, newStatus: SupplierStatus): Promise<Supplier> {
     const supplier = await this.findOne(id);

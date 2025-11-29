@@ -1,5 +1,5 @@
 // ============================================
-// SERVICE: CONFIGURAÇÃO BASE DA API
+// SERVIÇO: CONFIGURAÇÃO BASE DA API
 // ============================================
 // Configuração do Axios com interceptors
 // Base URL, timeout, headers, autenticação JWT

@@ -27,8 +27,6 @@ export default function AdminPedidosPage() {
       setLoading(true);
 
       // TODO: Criar endpoint admin para listar todos os pedidos
-      // const response = await orderService.getAllAdmin();
-      // setOrders(response.orders);
     } catch (error) {
       console.error("Erro ao carregar pedidos:", error);
     } finally {

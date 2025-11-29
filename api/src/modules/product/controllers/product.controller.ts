@@ -22,6 +22,7 @@ import { FillingService } from '../services/filling.service';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { UpdateProductDto } from '../dtos/update-product.dto';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { FindProductsQueryDto } from '../dtos/find-products-query.dto';
 
 @Controller('product')
 export class ProductController {
@@ -40,15 +41,12 @@ export class ProductController {
   // - type: filtrar por tipo (pizza/bebida/sobremesa)
   // ============================================
   @Get()
-  async findAll(
-    @Query('category_id') categoryId?: string,
-    @Query('status') status?: string,
-    @Query('type') type?: string,
-  ) {
+  async findAll(@Query() query: FindProductsQueryDto) {
+    // CORREÇÃO: Usar DTO em vez de parâmetros individuais
     // Se tem category_id, buscar por categoria
-    if (categoryId) {
+    if (query.category_id) {
       const products = await this.productService.findByCategory(
-        parseInt(categoryId),
+        parseInt(query.category_id),
       );
       return {
         ok: true,
@@ -59,8 +57,8 @@ export class ProductController {
 
     // Senão, buscar todos (com filtros opcionais)
     const products = await this.productService.findAllWithFilters({
-      status,
-      type,
+      status: query.status,
+      type: query.type,
     });
 
     return {

@@ -45,7 +45,7 @@ export class SupplierController {
   ) {}
 
   // ============================================
-  // SEÇÃO 1: CRUD DE FORNECEDORES
+  // CRUD DE FORNECEDORES
   // ============================================
 
   // ============================================
@@ -109,7 +109,7 @@ export class SupplierController {
   }
 
   // ============================================
-  // SEÇÃO 2: COTAÇÕES (QUOTES)
+  // COTAÇÕES (QUOTES)
   // ============================================
   // ============================================
   // POST /supplier/quote
@@ -235,13 +235,7 @@ export class SupplierController {
   }
 
   // ============================================
-  // SEÇÃO 3: PEDIDOS DE COMPRA (PURCHASE ORDERS)
-  // ============================================
-  // Fluxo: draft → pending_approval → approved →
-  //        confirmed → in_transit → delivered →
-  //        received → completed
-  // ============================================
-
+  // PEDIDOS DE COMPRA (PURCHASE ORDERS)
   // ============================================
   // POST /supplier/purchase-order
   // Cria um novo pedido de compra
@@ -431,12 +425,10 @@ export class SupplierController {
   }
 
   // ============================================
-  // SEÇÃO 4: ROTAS COM PARÂMETRO :id
+  // ROTAS COM PARÂMETRO :id
   // ============================================
   // para não capturar rotas específicas como
   // /active, /quotes, /purchase-order, etc
-  // ============================================
-
   // ============================================
   // GET /supplier/:id
   // Busca um fornecedor específico por ID

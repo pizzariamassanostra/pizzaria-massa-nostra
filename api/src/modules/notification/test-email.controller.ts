@@ -28,11 +28,6 @@ export class TestEmailController {
     private readonly notificationService: NotificationService,
   ) {}
 
-  /**
-   * TESTE 1: Enviar e-mail de boas-vindas
-   * POST http://localhost:3001/test-email/welcome
-   * Body: { "email": "seu-email@gmail.com", "customerName": "Seu Nome" }
-   */
   @Post('welcome')
   async testWelcomeEmail(@Body() data: TestEmailDto) {
     console.log('Dados recebidos:', data);
@@ -51,11 +46,6 @@ export class TestEmailController {
     };
   }
 
-  /**
-   * TESTE 2: Enviar e-mail de status de pedido
-   * POST http://localhost:3001/test-email/order-status
-   * Body: { "email": "seu-email@gmail.com" }
-   */
   @Post('order-status')
   async testOrderStatusEmail(@Body() data: TestEmailDto) {
     const result = await this.emailService.sendOrderStatusEmail(
@@ -73,10 +63,6 @@ export class TestEmailController {
     };
   }
 
-  /**
-   * TESTE 3: Enviar notificação de novo pedido (admin)
-   * POST http://localhost:3001/test-email/new-order
-   */
   @Post('new-order')
   async testNewOrderNotification() {
     const result = await this.notificationService.notifyNewOrder(
@@ -94,10 +80,6 @@ export class TestEmailController {
     };
   }
 
-  /**
-   * TESTE 4: Verificar configuração
-   * GET http://localhost:3001/test-email/config
-   */
   @Get('config')
   async checkConfig() {
     return {

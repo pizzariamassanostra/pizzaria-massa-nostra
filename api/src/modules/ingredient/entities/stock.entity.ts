@@ -71,7 +71,7 @@ export class Stock {
   // LOCALIZAÇÃO
   // ============================================
   @Column({ type: 'varchar', length: 50, nullable: true })
-  location: string; // Ex: "Prateleira A3", "Freezer 1"
+  location: string; // "Prateleira A3", "Freezer 1"
 
   // ============================================
   // OBSERVAÇÕES

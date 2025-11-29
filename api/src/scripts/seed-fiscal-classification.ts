@@ -2,7 +2,7 @@
 // SCRIPT: POPULAR CLASSIFICAÇÃO FISCAL
 // ============================================
 // Popula NCM, CEST e CFOP dos ingredientes
-// Baseado na tabela oficial da Receita Federal
+// Baseado na tabela da Receita Federal
 // ============================================
 
 import { DataSource } from 'typeorm';
@@ -13,7 +13,7 @@ dotenv.config();
 /**
  * TABELA DE CLASSIFICAÇÃO FISCAL
  *
- * NCM: Nomenclatura Comum do Mercosul (8 dígitos)
+ * NCM: Nomenclatura Comum (8 dígitos)
  * CEST: Código Especificador da Substituição Tributária (7 dígitos)
  * CFOP: Código Fiscal de Operações e Prestações (4 dígitos)
  */
@@ -161,7 +161,7 @@ async function seedFiscalClassification() {
 
   try {
     await dataSource.initialize();
-    console.log('✅ Conectado ao banco de dados');
+    console.log('Conectado ao banco de dados');
 
     const queryRunner = dataSource.createQueryRunner();
 
@@ -181,17 +181,17 @@ async function seedFiscalClassification() {
       );
 
       if (result[1] > 0) {
-        console.log(`✅ ${name}: NCM ${classification.ncm}`);
+        console.log(`${name}: NCM ${classification.ncm}`);
       } else {
-        console.log(`⚠️  ${name}: Ingrediente não encontrado`);
+        console.log(`${name}: Ingrediente não encontrado`);
       }
     }
 
-    console.log('\n🎉 Classificação fiscal populada com sucesso!');
+    console.log('\nClassificação fiscal populada com sucesso!');
 
     await dataSource.destroy();
   } catch (error) {
-    console.error('❌ Erro:', error);
+    console.error('Erro:', error);
     process.exit(1);
   }
 }

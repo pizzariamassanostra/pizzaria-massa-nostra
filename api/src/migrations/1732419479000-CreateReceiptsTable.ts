@@ -27,10 +27,6 @@ export class CreateReceiptsTable1732419479000 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: 'customer_id',
-            type: 'int',
-          },
-          {
             name: 'receipt_number',
             type: 'varchar',
             length: '50',
@@ -105,16 +101,6 @@ export class CreateReceiptsTable1732419479000 implements MigrationInterface {
         columnNames: ['order_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'orders',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'receipts',
-      new TableForeignKey({
-        columnNames: ['customer_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'common_users',
         onDelete: 'CASCADE',
       }),
     );

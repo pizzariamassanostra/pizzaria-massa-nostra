@@ -1,5 +1,5 @@
 // ============================================
-// PÁGINA: MEU PERFIL
+// PÁGINA: MEU PERFIL - Pizzaria Massa Nostra
 // ============================================
 // Visualização e edição dos dados do usuário
 // Gerenciamento de endereços
@@ -59,7 +59,7 @@ export default function MeuPerfilPage() {
   // ============================================
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/login? redirect=/meu-perfil");
+      router.push("/login?redirect=/meu-perfil");
       return;
     }
 
@@ -111,7 +111,7 @@ export default function MeuPerfilPage() {
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
 
-    setNewAddress((prev: any) => ({
+    setNewAddress((prev: CreateAddressDto) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
@@ -131,7 +131,7 @@ export default function MeuPerfilPage() {
     try {
       const data = await addressService.searchCep(cleanCep);
 
-      setNewAddress((prev: any) => ({
+      setNewAddress((prev: CreateAddressDto) => ({
         ...prev,
         street: data.logradouro,
         neighborhood: data.bairro,
@@ -139,7 +139,7 @@ export default function MeuPerfilPage() {
         state: data.uf,
       }));
 
-      toast.success("CEP encontrado!  ");
+      toast.success("CEP encontrado!");
     } catch (error) {
       toast.error("CEP não encontrado");
     }
@@ -163,7 +163,7 @@ export default function MeuPerfilPage() {
       const response = await authService.updateProfile(cleanData);
       updateUser(response.user);
       setEditMode(false);
-      toast.success("Perfil atualizado com sucesso!  ");
+      toast.success("Perfil atualizado com sucesso!");
     } catch (error) {
       toast.error("Erro ao atualizar perfil");
     } finally {
@@ -181,7 +181,7 @@ export default function MeuPerfilPage() {
       const response = await addressService.create(newAddress);
       setAddresses((prev) => [...prev, response.address]);
       setShowNewAddressForm(false);
-      toast.success("Endereço cadastrado com sucesso! ");
+      toast.success("Endereço cadastrado com sucesso!");
 
       // Limpar formulário
       setNewAddress({
@@ -221,7 +221,7 @@ export default function MeuPerfilPage() {
   const handleDeleteAccount = async () => {
     const confirmText = "DELETAR MINHA CONTA";
     const userInput = window.prompt(
-      `Esta ação é IRREVERSÍVEL!   Todos os seus dados serão permanentemente removidos.\n\nDigite "${confirmText}" para confirmar:`
+      `Esta ação é IRREVERSÍVEL! Todos os seus dados serão permanentemente removidos.\n\nDigite "${confirmText}" para confirmar:`
     );
 
     if (userInput !== confirmText) {
@@ -255,8 +255,14 @@ export default function MeuPerfilPage() {
     }
   };
 
+  // ============================================
+  // LOADING STATE
+  // ============================================
   if (!user) return null;
 
+  // ============================================
+  // RENDER
+  // ============================================
   return (
     <>
       <Head>
@@ -267,9 +273,13 @@ export default function MeuPerfilPage() {
         <h1 className="text-4xl font-bold text-gray-800 mb-8">Meu Perfil</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* COLUNA ESQUERDA: DADOS PESSOAIS */}
+          {/* ============================================ */}
+          {/* COLUNA ESQUERDA: DADOS PESSOAIS E ENDEREÇOS */}
+          {/* ============================================ */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Dados Pessoais */}
+            {/* ------------------------------------------ */}
+            {/* DADOS PESSOAIS */}
+            {/* ------------------------------------------ */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-2">
@@ -289,6 +299,7 @@ export default function MeuPerfilPage() {
               </div>
 
               <form onSubmit={handleSave} className="space-y-4">
+                {/* Campo: Nome Completo */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Nome Completo
@@ -304,6 +315,7 @@ export default function MeuPerfilPage() {
                   />
                 </div>
 
+                {/* Campo: CPF (somente leitura) */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     CPF
@@ -319,6 +331,7 @@ export default function MeuPerfilPage() {
                   </p>
                 </div>
 
+                {/* Campo: Telefone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Telefone
@@ -334,6 +347,7 @@ export default function MeuPerfilPage() {
                   />
                 </div>
 
+                {/* Campo: Telefone Alternativo */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Telefone Alternativo
@@ -348,6 +362,7 @@ export default function MeuPerfilPage() {
                   />
                 </div>
 
+                {/* Campo: Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Email
@@ -363,6 +378,7 @@ export default function MeuPerfilPage() {
                   />
                 </div>
 
+                {/* Botões de Ação (modo edição) */}
                 {editMode && (
                   <div className="flex gap-3">
                     <button
@@ -386,7 +402,9 @@ export default function MeuPerfilPage() {
               </form>
             </div>
 
-            {/* Endereços */}
+            {/* ------------------------------------------ */}
+            {/* ENDEREÇOS */}
+            {/* ------------------------------------------ */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-2">
@@ -410,6 +428,7 @@ export default function MeuPerfilPage() {
                   onSubmit={handleSaveAddress}
                   className="space-y-4 mb-6 bg-gray-50 p-4 rounded-lg"
                 >
+                  {/* CEP com botão de busca */}
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -430,6 +449,7 @@ export default function MeuPerfilPage() {
                     </button>
                   </div>
 
+                  {/* Rua e Número */}
                   <div className="grid grid-cols-3 gap-2">
                     <input
                       type="text"
@@ -451,6 +471,7 @@ export default function MeuPerfilPage() {
                     />
                   </div>
 
+                  {/* Complemento */}
                   <input
                     type="text"
                     name="complement"
@@ -460,6 +481,7 @@ export default function MeuPerfilPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900"
                   />
 
+                  {/* Bairro */}
                   <input
                     type="text"
                     name="neighborhood"
@@ -470,6 +492,7 @@ export default function MeuPerfilPage() {
                     required
                   />
 
+                  {/* Cidade e Estado */}
                   <div className="grid grid-cols-3 gap-2">
                     <input
                       type="text"
@@ -492,6 +515,7 @@ export default function MeuPerfilPage() {
                     />
                   </div>
 
+                  {/* Ponto de Referência */}
                   <input
                     type="text"
                     name="reference"
@@ -501,6 +525,25 @@ export default function MeuPerfilPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900"
                   />
 
+                  {/* Checkbox: Endereço Padrão */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="is_default"
+                      id="is_default"
+                      checked={newAddress.is_default}
+                      onChange={handleAddressChange}
+                      className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                    />
+                    <label
+                      htmlFor="is_default"
+                      className="text-sm text-gray-700"
+                    >
+                      Definir como endereço padrão
+                    </label>
+                  </div>
+
+                  {/* Botões de Ação */}
                   <div className="flex gap-2">
                     <button
                       type="submit"
@@ -546,6 +589,11 @@ export default function MeuPerfilPage() {
                         <p className="text-sm text-gray-600">
                           CEP: {address.zip_code}
                         </p>
+                        {address.reference && (
+                          <p className="text-sm text-gray-500 italic">
+                            Ref: {address.reference}
+                          </p>
+                        )}
                         {address.is_default && (
                           <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
                             Padrão
@@ -556,6 +604,7 @@ export default function MeuPerfilPage() {
                       <button
                         onClick={() => handleDeleteAddress(address.id)}
                         className="text-red-600 hover:text-red-700 ml-4"
+                        title="Excluir endereço"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -566,8 +615,11 @@ export default function MeuPerfilPage() {
             </div>
           </div>
 
+          {/* ============================================ */}
           {/* COLUNA DIREITA: AÇÕES SENSÍVEIS */}
+          {/* ============================================ */}
           <div className="lg:col-span-1 space-y-6">
+            {/* SEGURANÇA */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                 <Lock className="w-5 h-5 text-red-600" />
@@ -584,6 +636,7 @@ export default function MeuPerfilPage() {
               </button>
             </div>
 
+            {/* ZONA DE PERIGO */}
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
               <h3 className="font-bold text-lg mb-2 flex items-center gap-2 text-red-800">
                 <Trash2 className="w-5 h-5" />

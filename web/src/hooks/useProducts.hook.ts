@@ -14,7 +14,10 @@ import { productService } from "@/services/product.service";
 export const useProducts = () => {
   return useQuery({
     queryKey: ["products"],
-    queryFn: () => productService.getAll(),
+    queryFn: async () => {
+      const response = await productService.getAll();
+      return response.products; // Retorna apenas o array de produtos
+    },
     staleTime: 5 * 60 * 1000, // 5 minutos
   });
 };
@@ -25,7 +28,10 @@ export const useProducts = () => {
 export const useProduct = (id: number) => {
   return useQuery({
     queryKey: ["product", id],
-    queryFn: () => productService.getById(id),
+    queryFn: async () => {
+      const response = await productService.getById(id);
+      return response.product; // Retorna apenas o produto
+    },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
   });
@@ -37,7 +43,10 @@ export const useProduct = (id: number) => {
 export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],
-    queryFn: () => productService.getCategories(),
+    queryFn: async () => {
+      const response = await productService.getCategories();
+      return response.categories;
+    },
     staleTime: 10 * 60 * 1000, // 10 minutos
   });
 };
@@ -48,7 +57,10 @@ export const useCategories = () => {
 export const useCrusts = () => {
   return useQuery({
     queryKey: ["crusts"],
-    queryFn: () => productService.getCrusts(),
+    queryFn: async () => {
+      const response = await productService.getCrusts();
+      return response.crusts;
+    },
     staleTime: 10 * 60 * 1000,
   });
 };
@@ -59,7 +71,10 @@ export const useCrusts = () => {
 export const useFillings = () => {
   return useQuery({
     queryKey: ["fillings"],
-    queryFn: () => productService.getFillings(),
+    queryFn: async () => {
+      const response = await productService.getFillings();
+      return response.fillings;
+    },
     staleTime: 10 * 60 * 1000,
   });
 };

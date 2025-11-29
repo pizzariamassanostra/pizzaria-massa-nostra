@@ -1,7 +1,7 @@
 // ============================================
 // ENTIDADE: USUÁRIOS ADMIN (GESTÃO)
 // ============================================
-// Representa usuários do sistema de gestão (admin, gerente, etc.)
+// Representa usuários do sistema de gestão (admin, gerente)
 // ============================================
 
 import {
@@ -24,7 +24,6 @@ export class AdminUser {
   @Column({ unique: true })
   email: string;
 
-  // CORRIGIDO: Campo password_hash (não password)
   @Column({ select: false, name: 'password' })
   password_hash: string;
 

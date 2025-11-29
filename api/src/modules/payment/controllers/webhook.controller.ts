@@ -63,12 +63,6 @@ export class WebhookController {
   // 5. Envia e-mail para cliente
   // 6. Notifica admin por e-mail
   // 7. Envia notificações WebSocket
-  //
-  // @param signature - Assinatura HMAC (header x-signature)
-  // @param requestId - ID da requisição (header x-request-id)
-  // @param dataId - ID do pagamento (query data. id)
-  // @param body - Corpo da notificação
-  // @returns { ok: boolean, message: string, payment_status?: string }
   // ============================================
   @Post('mercadopago')
   @HttpCode(200)
@@ -246,9 +240,6 @@ export class WebhookController {
   // - cancelled: Cancelado
   // - refunded: Estornado
   // - charged_back: Chargeback
-  //
-  // @param mpStatus - Status do Mercado Pago
-  // @returns Status padronizado
   // ============================================
   private mapMercadoPagoStatus(mpStatus: string): string {
     const statusMap = {

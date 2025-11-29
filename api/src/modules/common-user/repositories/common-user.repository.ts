@@ -158,7 +158,7 @@ export class CommonUserRepository {
   }
 
   // ============================================
-  // DELETAR CLIENTE (SOFT DELETE)
+  // DELETAR CLIENTE
   // ============================================
   async softDelete(id: number): Promise<void> {
     await this.commonUserRepository.softDelete(id);

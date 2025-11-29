@@ -62,21 +62,6 @@ export class CommonUser {
   accept_promotions: boolean; // Cliente aceitou receber promoções por email/WhatsApp
 
   // ============================================
-  // RELACIONAMENTOS (COMENTADOS TEMPORARIAMENTE)
-  // ============================================
-  // DESCOMENTAR quando Payment entity estiver correta
-  // @OneToMany(() => Payment, (payment) => payment.commonUser)
-  // payments: Payment[];
-
-  // DESCOMENTAR quando Order entity estiver correta
-  // @OneToMany(() => Order, (order) => order.user)
-  // orders: Order[];
-
-  // DESCOMENTAR quando Address entity estiver correta
-  // @OneToMany(() => Address, (address) => address.user)
-  // addresses: Address[];
-
-  // ============================================
   // AUDITORIA E CONTROLE
   // ============================================
   @CreateDateColumn({ type: 'timestamptz' })

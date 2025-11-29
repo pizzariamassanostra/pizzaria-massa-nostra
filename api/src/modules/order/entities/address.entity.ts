@@ -54,6 +54,9 @@ export class Address {
   @Column({ length: 255, nullable: true })
   reference: string; // Ponto de referência
 
+  @Column({ length: 500, nullable: true })
+  delivery_instructions: string; // Instruções de entrega
+
   // Endereço padrão
   @Column({ default: false })
   is_default: boolean;

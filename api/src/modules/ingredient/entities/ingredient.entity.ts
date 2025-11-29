@@ -37,10 +37,10 @@ export class Ingredient {
   description: string; // Descrição detalhada
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  brand: string; // Ex: "Anaconda"
+  brand: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  manufacturer: string; // Ex: "Moinho Anaconda"
+  manufacturer: string;
 
   // ============================================
   // CÓDIGO INTERNO E EXTERNO
@@ -62,7 +62,7 @@ export class Ingredient {
     enum: UnitMeasure,
     default: UnitMeasure.UN,
   })
-  unit_measure: UnitMeasure; // kg, litro, unidade, etc
+  unit_measure: UnitMeasure; // kg, litro, unidade
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   package_quantity: number; // Quantidade na embalagem (ex: 25kg)
@@ -91,7 +91,7 @@ export class Ingredient {
   cost_price: number; // Preço de custo unitário
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  sale_price: number; // Preço de venda (se aplicável)
+  sale_price: number; // Preço de venda
 
   @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
   profit_margin: number; // Margem de lucro (%)
@@ -100,7 +100,7 @@ export class Ingredient {
   // CLASSIFICAÇÃO FISCAL
   // ============================================
   @Column({ type: 'varchar', length: 8, nullable: true })
-  ncm: string; // Nomenclatura Comum do Mercosul
+  ncm: string;
 
   @Column({ type: 'varchar', length: 7, nullable: true })
   cest: string; // Código Especificador da ST
@@ -125,7 +125,7 @@ export class Ingredient {
   // OBSERVAÇÕES
   // ============================================
   @Column({ type: 'text', nullable: true })
-  notes: string; // Observações gerais
+  notes: string;
 
   // ============================================
   // RELACIONAMENTOS
@@ -146,5 +146,5 @@ export class Ingredient {
   updated_at: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deleted_at: Date; // Soft delete
+  deleted_at: Date;
 }

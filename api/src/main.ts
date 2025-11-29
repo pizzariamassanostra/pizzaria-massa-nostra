@@ -5,6 +5,8 @@
 // Configura porta, CORS, validação, filtros de erro, Swagger...
 // ============================================
 
+//src/main.ts
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppValidationPipe } from './common/pipes/app-validation.pipe';
@@ -50,7 +52,7 @@ async function bootstrap() {
   // ============================================
   // CORS (Cross-Origin Resource Sharing)
   // ============================================
-  // Permite que o frontend acesse a API
+  // Permite que o frontend acesse a API e preflight requests
   app.enableCors({
     origin: [
       'http://localhost:3000', // Frontend local
@@ -60,6 +62,7 @@ async function bootstrap() {
     credentials: true, // Permite cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false,
   });
 
   // ============================================

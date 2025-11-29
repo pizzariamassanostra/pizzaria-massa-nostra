@@ -20,7 +20,7 @@ import { toast } from "react-hot-toast";
 // ============================================
 
 export interface CartItem {
-  id: string; // ID único gerado (product_id-variant_id-crust_id-filling_id)
+  id: string; // ID único gerado
   product_id: number;
   product_name: string;
   product_image: string | null;
@@ -35,7 +35,7 @@ export interface CartItem {
   filling_price: number;
   quantity: number;
   unit_price: number; // Preço unitário
-  total_price: number; // unit_price * quantity
+  total_price: number;
 }
 
 interface CartContextData {
@@ -188,9 +188,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const subtotal = items.reduce((sum, i) => sum + i.total_price, 0);
   const total = subtotal + deliveryFee;
 
-  // ============================================
-  // MEMO — evita re-render desnecessário no Provider
-  // ============================================
   const value = useMemo(
     () => ({
       items,

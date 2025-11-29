@@ -83,7 +83,7 @@ export class CreateIngredientDto {
   @IsNumber()
   @IsOptional()
   @Min(0)
-  sale_price?: number; // Preço de venda (opcional)
+  sale_price?: number; // Preço de venda
 
   @IsNumber()
   @IsOptional()

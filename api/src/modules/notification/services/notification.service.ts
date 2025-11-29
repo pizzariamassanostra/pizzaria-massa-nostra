@@ -1,59 +1,38 @@
-// ===========================================
-// NOTIFICAÇÃO DE SERVIÇO
-// Serviço central de notificações
-// Gerencia envio de e-mails, SMS e push notifications
-// ===========================================
-
 import { Injectable, Logger } from '@nestjs/common';
 import { EmailService } from './email.service';
 
-/**
- * Tipos de notificação suportados
- */
+// Tipos de notificação suportados
 export enum NotificationType {
   EMAIL = 'email',
   SMS = 'sms',
   PUSH = 'push',
 }
 
-/**
- * Interface para dados de notificação genérica
- */
+// Interface com dados genéricos de notificação
 export interface NotificationData {
-  type: NotificationType; // Tipo da notificação
-  recipient: string; // Destinatário (e-mail, telefone, token)
-  subject?: string; // Assunto (apenas e-mail)
-  message: string; // Mensagem/corpo
-  data?: any; // Dados adicionais opcionais
+  type: NotificationType;
+  recipient: string;
+  subject?: string;
+  message: string;
+  data?: any;
 }
 
+// Serviço central de gerenciamento de notificações
 @Injectable()
 export class NotificationService {
-  // Logger para rastreamento de notificações
   private readonly logger = new Logger(NotificationService.name);
 
-  /**
-   * Construtor - Injeta EmailService
-   * @param emailService - Serviço de e-mail
-   */
   constructor(private readonly emailService: EmailService) {
     this.logger.log('NotificationService inicializado');
   }
 
-  /**
-   * Enviar notificação (roteador principal)
-   * Decide qual canal usar baseado no tipo
-   *
-   * @param notificationData - Dados da notificação
-   * @returns Promise<boolean> - true se enviado com sucesso
-   */
+  // Roteia notificações para o canal apropriado (e-mail, SMS, push)
   async send(notificationData: NotificationData): Promise<boolean> {
     try {
       this.logger.log(
         `Enviando notificação ${notificationData.type} para ${notificationData.recipient}`,
       );
 
-      // Roteamento por tipo de notificação
       switch (notificationData.type) {
         case NotificationType.EMAIL:
           return await this.sendEmail(notificationData);
@@ -76,13 +55,7 @@ export class NotificationService {
     }
   }
 
-  /**
-   * Enviar notificação por e-mail
-   * Usa o EmailService para envio
-   *
-   * @param data - Dados da notificação
-   * @returns Promise<boolean>
-   */
+  // Envia notificação por e-mail
   private async sendEmail(data: NotificationData): Promise<boolean> {
     try {
       return await this.emailService.sendEmail({
@@ -96,36 +69,17 @@ export class NotificationService {
     }
   }
 
-  /**
-   * Enviar notificação por SMS
-   * TODO: Implementar integração com Twilio ou similar
-   *
-   * @param data - Dados da notificação
-   * @returns Promise<boolean>
-   */
+  // Envia notificação por SMS (TODO: implementar Twilio)
   private async sendSMS(data: NotificationData): Promise<boolean> {
-    // TODO: Futura integração com Twilio
     this.logger.warn('Envio de SMS ainda não implementado');
     this.logger.debug(
       `SMS seria enviado para: ${data.recipient} - Mensagem: ${data.message}`,
     );
 
-    // Quando implementar Twilio:
-    // const twilioService = new TwilioService();
-    // return await twilioService.sendSMS(data.recipient, data.message);
-
     return false;
   }
 
-  /**
-   * Enviar push notification
-   * TODO: Implementar integração com Firebase Cloud Messaging
-   *
-   * @param data - Dados da notificação
-   * @returns Promise<boolean>
-   */
   private async sendPush(data: NotificationData): Promise<boolean> {
-    // TODO: Futura integração com Firebase FCM
     this.logger.warn('Push notification ainda não implementado');
     this.logger.debug(
       `Push seria enviado para: ${data.recipient} - Mensagem: ${data.message}`,
@@ -133,19 +87,7 @@ export class NotificationService {
     return false;
   }
 
-  // ============================================
-  // MÉTODOS AUXILIARES ESPECÍFICOS
-  // ============================================
-
-  /**
-   * Notificar administradores sobre novo pedido
-   * Envia e-mail para LOG_EMAIL configurado no . env
-   *
-   * @param orderNumber - Número do pedido
-   * @param customerName - Nome do cliente
-   * @param total - Valor total do pedido
-   * @returns Promise<boolean>
-   */
+  // Notifica administradores sobre novo pedido
   async notifyNewOrder(
     orderNumber: string,
     customerName: string,
@@ -196,20 +138,12 @@ export class NotificationService {
     });
   }
 
-  /**
-   * Notificar cliente sobre mudança de status do pedido
-   *
-   * @param email - E-mail do cliente
-   * @param orderNumber - Número do pedido
-   * @param status - Status atual
-   * @returns Promise<boolean>
-   */
+  // Notifica cliente sobre mudança de status do pedido
   async notifyOrderStatus(
     email: string,
     orderNumber: string,
     status: string,
   ): Promise<boolean> {
-    // Validar se cliente tem e-mail
     if (!email || email.trim() === '') {
       this.logger.warn(
         `Cliente sem e-mail cadastrado - Pedido #${orderNumber}`,
@@ -217,7 +151,6 @@ export class NotificationService {
       return false;
     }
 
-    // Usar método específico do EmailService
     return await this.emailService.sendOrderStatusEmail(
       email,
       orderNumber,
@@ -225,13 +158,7 @@ export class NotificationService {
     );
   }
 
-  /**
-   * Enviar e-mail de boas-vindas para novo cliente
-   *
-   * @param email - E-mail do cliente
-   * @param customerName - Nome do cliente
-   * @returns Promise<boolean>
-   */
+  // Envia e-mail de boas-vindas para novo cliente
   async sendWelcomeEmail(
     email: string,
     customerName: string,

@@ -168,10 +168,9 @@ export default function CadastroPage() {
           formData.phone_alternative?.replaceAll(/\D/g, "") || undefined,
       };
 
-      await register(cleanData); // OK – erro tratado no AuthContext
+      await register(cleanData);
     } catch (error: unknown) {
       console.error("Erro ao registrar:", error);
-      // Toast já é exibido no AuthContext
     } finally {
       setLoading(false);
     }

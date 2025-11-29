@@ -1,14 +1,7 @@
-// ============================================
-// HELPER: TRADUÇÃO DE STATUS DE PAGAMENTO
-// ============================================
-
+// traduz status de pagamento
 import { PaymentStatus } from "../enum/payment-status.enum";
 
-/**
- * Traduz status de pagamento para português
- * @param status - Status do pagamento
- * @returns Texto em português
- */
+// retorna o texto em português
 export function translatePaymentStatus(status: PaymentStatus): string {
   const translations: Record<PaymentStatus, string> = {
     [PaymentStatus.PENDING]: "Aguardando Pagamento",
@@ -21,11 +14,7 @@ export function translatePaymentStatus(status: PaymentStatus): string {
   return translations[status] || status;
 }
 
-/**
- * Retorna cor do status para badges
- * @param status - Status do pagamento
- * @returns Classe CSS Tailwind
- */
+// retorna cor do badge
 export function getPaymentStatusColor(status: PaymentStatus): string {
   const colors: Record<PaymentStatus, string> = {
     [PaymentStatus.PENDING]: "bg-yellow-100 text-yellow-800",

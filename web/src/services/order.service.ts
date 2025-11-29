@@ -81,7 +81,7 @@ class OrderService {
   // ============================================
   // CANCELAR PEDIDO
   // ============================================
-  // Cancela um pedido (apenas se status = pending ou confirmed)
+  // Cancela um pedido (apenas se status = pendente ou confirmado)
   async cancel(id: number): Promise<{ ok: boolean; message: string }> {
     const response = await api.post(`/order/${id}/cancel`);
     return response.data;

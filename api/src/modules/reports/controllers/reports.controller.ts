@@ -33,11 +33,6 @@ export class ReportsController {
   // - Ticket médio
   // - Top 5 produtos da semana
   // - Últimos 10 pedidos
-  //
-  // @returns {
-  //   ok: boolean,
-  //   data: DashboardStats
-  // }
   // ============================================
   @Get('dashboard')
   async getDashboard() {
@@ -58,13 +53,6 @@ export class ReportsController {
   // Inclui: resumo, breakdown por pagamento/status, vendas diárias
   //
   // Aceita apenas 2 parâmetros de query
-  //
-  // @param startDate - Data inicial (query, opcional)
-  // @param endDate - Data final (query, opcional)
-  // @returns {
-  //   ok: boolean,
-  //   data: SalesReport
-  // }
   // ============================================
   @Get('sales')
   async getSalesReport(
@@ -87,12 +75,6 @@ export class ReportsController {
   //
   // Lista os produtos mais vendidos do período
   // Ordenado por quantidade vendida (maior para menor)
-  //
-  // @param filter - Filtros de período e limite
-  // @returns {
-  //   ok: boolean,
-  //   data: TopProductsReport
-  // }
   // ============================================
   @Get('top-products')
   async getTopProducts(@Query() filter: TopProductsFilterDto) {
@@ -113,12 +95,6 @@ export class ReportsController {
   // - Total de clientes (ativos, novos)
   // - Top 20 clientes por valor gasto
   // - Ticket médio por cliente
-  //
-  // @param filter - Filtros de período
-  // @returns {
-  //   ok: boolean,
-  //   data: CustomerReport
-  // }
   // ============================================
   @Get('customers')
   async getCustomerReport(@Query() filter: ReportFilterDto) {
@@ -140,12 +116,6 @@ export class ReportsController {
   // - Pedidos por dia da semana
   //
   // Útil para: planejamento de equipe, promoções
-  //
-  // @param filter - Filtros de período
-  // @returns {
-  //   ok: boolean,
-  //   data: PeakHoursReport
-  // }
   // ============================================
   @Get('peak-hours')
   async getPeakHours(@Query() filter: ReportFilterDto) {
@@ -169,13 +139,7 @@ export class ReportsController {
   // - Totalizações
   // - Filtros automáticos
   // - Células mescladas
-  //
-  // Importa Response do Express
-  //
-  // @param startDate - Data inicial (query, opcional)
-  // @param endDate - Data final (query, opcional)
-  // @param res - Response do Express (para enviar arquivo)
-  // @returns Arquivo Excel para download
+  // - Arquivo Excel para download
   // ============================================
   @Get('export/sales/excel')
   async exportSalesToExcel(
@@ -211,13 +175,6 @@ export class ReportsController {
   //
   // Exporta vendas em formato CSV (simples)
   // Compatível com Excel, Google Sheets
-  //
-  // @param filter - Filtros de período
-  // @returns {
-  //   ok: boolean,
-  //   filename: string,
-  //   data: string (conteúdo CSV)
-  // }
   // ============================================
   @Get('export/sales')
   async exportSalesCSV(@Query() filter: ReportFilterDto) {

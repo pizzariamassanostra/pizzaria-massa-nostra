@@ -1,9 +1,3 @@
-// ============================================
-// CONTROLLER: CLIENTES (CUSTOMER)
-// ============================================
-// Endpoints públicos para registro, login e gestão de clientes
-// ============================================
-
 import {
   Body,
   Controller,
@@ -13,22 +7,28 @@ import {
   Put,
   Request,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { CustomerService } from '../services/customer.service';
 import { RegisterCustomerDto } from '../dtos/register-customer.dto';
 import { LoginCustomerDto } from '../dtos/login-customer.dto';
 import { UpdateCustomerDto } from '../dtos/update-customer.dto';
 import { JwtCustomerAuthGuard } from '@/common/guards/jwt-customer-auth.guard';
 
+// Controller público com endpoints de autenticação e perfil de clientes
+@ApiTags('Clientes')
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
-  // ============================================
-  // REGISTRAR NOVO CLIENTE
-  // ============================================
-  // Endpoint público - não requer autenticação
+  // Registra novo cliente com validações
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Registrar novo cliente' })
+  @ApiResponse({ status: 201, description: 'Cliente registrado com sucesso' })
+  @ApiResponse({ status: 400, description: 'Validação falhou' })
   async register(@Body() dto: RegisterCustomerDto) {
     const user = await this.customerService.register(dto);
 
@@ -46,12 +46,15 @@ export class CustomerController {
     };
   }
 
-  // ============================================
-  // LOGIN DE CLIENTE
-  // ============================================
-  // Endpoint público - não requer autenticação
-  // RETORNA TOKEN JWT
+  // Autentica cliente com email ou telefone
   @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Login de cliente',
+    description: 'Realizar login com email ou telefone',
+  })
+  @ApiResponse({ status: 200, description: 'Login realizado com sucesso' })
+  @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   async login(@Body() dto: LoginCustomerDto) {
     const { user, access_token } = await this.customerService.login(dto);
 
@@ -65,20 +68,19 @@ export class CustomerController {
         email: user.email,
         cpf: user.cpf,
       },
-      access_token, // TOKEN JWT
+      access_token,
     };
   }
 
-  // ============================================
-  // BUSCAR PERFIL DO CLIENTE
-  // ============================================
-  // PROTEGIDO POR JWT
+  // Busca dados do perfil do cliente autenticado
   @Get('profile')
   @UseGuards(JwtCustomerAuthGuard)
+  @ApiOperation({ summary: 'Buscar perfil do cliente autenticado' })
+  @ApiResponse({ status: 200, description: 'Perfil encontrado' })
+  @ApiResponse({ status: 401, description: 'Não autenticado' })
+  @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
   async getProfile(@Request() req) {
-    // userId do token JWT automaticamente
     const userId = req.user.id;
-
     const user = await this.customerService.getProfile(userId);
 
     return {
@@ -98,16 +100,16 @@ export class CustomerController {
     };
   }
 
-  // ============================================
-  // ATUALIZAR PERFIL DO CLIENTE
-  // ============================================
-  // PROTEGIDO POR JWT
+  // Atualiza dados do perfil do cliente
   @Put('profile')
   @UseGuards(JwtCustomerAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Atualizar perfil do cliente' })
+  @ApiResponse({ status: 200, description: 'Perfil atualizado' })
+  @ApiResponse({ status: 401, description: 'Não autenticado' })
+  @ApiResponse({ status: 400, description: 'Validação falhou' })
   async updateProfile(@Request() req, @Body() dto: UpdateCustomerDto) {
-    // userId do token JWT automaticamente
     const userId = req.user.id;
-
     const user = await this.customerService.updateProfile(userId, dto);
 
     return {
@@ -121,27 +123,27 @@ export class CustomerController {
         cpf: user.cpf,
         birth_date: user.birth_date,
         phone_alternative: user.phone_alternative,
+        accept_promotions: user.accept_promotions,
         updated_at: user.updated_at,
       },
     };
   }
 
-  // ============================================
-  // EXCLUIR CONTA (SOFT DELETE - LGPD)
-  // ============================================
-  // PROTEGIDO POR JWT
+  // Deleta a conta do cliente (soft delete - LGPD)
   @Delete('account')
   @UseGuards(JwtCustomerAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Excluir conta de cliente (LGPD)' })
+  @ApiResponse({ status: 200, description: 'Conta excluída' })
+  @ApiResponse({ status: 401, description: 'Não autenticado' })
   async deleteAccount(@Request() req) {
-    // userId do token JWT automaticamente
     const userId = req.user.id;
-
     await this.customerService.deleteAccount(userId);
 
     return {
       ok: true,
       message:
-        'Conta excluída com sucesso. Seus dados foram mantidos no sistema para fins de histórico (LGPD).',
+        'Conta excluída com sucesso. Seus dados foram mantidos para fins de histórico (LGPD).',
     };
   }
 }

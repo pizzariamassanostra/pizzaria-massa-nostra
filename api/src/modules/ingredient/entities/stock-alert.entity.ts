@@ -32,7 +32,7 @@ export class StockAlert {
     type: 'enum',
     enum: AlertType,
   })
-  type: AlertType; // Baixo estoque, vencido, etc
+  type: AlertType; // Baixo estoque, vencido
 
   // ============================================
   // INGREDIENTE E LOTE
@@ -45,7 +45,7 @@ export class StockAlert {
   ingredient: Ingredient;
 
   @Column({ type: 'int', nullable: true })
-  stock_id: number; // Lote específico (se aplicável)
+  stock_id: number; // Lote específico
 
   @ManyToOne(() => Stock, { nullable: true })
   @JoinColumn({ name: 'stock_id' })
@@ -85,7 +85,7 @@ export class StockAlert {
   // PRIORIDADE
   // ============================================
   @Column({ type: 'varchar', length: 20, default: 'medium' })
-  priority: string; // low, medium, high, critical
+  priority: string;
 
   // ============================================
   // AUDITORIA

@@ -37,7 +37,7 @@ import { NotificationModule } from '../notification/notification.module';
   providers: [
     ReceiptRepository,
     ReceiptService,
-    PdfGeneratorService, // nome correto
+    PdfGeneratorService,
     CloudinaryService,
   ],
 

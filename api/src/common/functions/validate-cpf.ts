@@ -1,53 +1,32 @@
 // ============================================
 // FUNÇÃO: VALIDAÇÃO DE CPF
 // ============================================
-// Valida CPF brasileiro com dígitos verificadores
-// Remove máscaras automaticamente
-// ============================================
-
 /**
- * Valida um CPF brasileiro
+ * Valida um CPF verificando dígitos verificadores
  *
- * REGRAS:
+ * Regras:
  * - Remove pontos e traços automaticamente
  * - CPF deve ter 11 dígitos
- * - Não aceita CPFs com todos os dígitos iguais (ex: 111.111.111-11)
+ * - Não aceita CPFs com todos os dígitos iguais
  * - Valida os dois dígitos verificadores
- *
- * @param cpf - CPF com ou sem máscara (xxx.xxx.xxx-xx ou xxxxxxxxxxx)
- * @returns true se CPF é válido, false se inválido
- *
- * @example
- * validateCPF('123.456.789-09') // true
- * validateCPF('12345678909') // true
- * validateCPF('111.111.111-11') // false (todos iguais)
- * validateCPF('123.456.789-00') // false (dígito verificador inválido)
  */
+
 export function validateCPF(cpf: string): boolean {
-  // ============================================
-  // PASSO 1: Remover máscara (pontos e traços)
-  // ============================================
+  // Remove máscara (pontos e traços) deixando apenas números
   const cleanCPF = cpf.replace(/[^\d]/g, '');
 
-  // ============================================
-  // PASSO 2: Verificar se tem 11 dígitos
-  // ============================================
+  // Verifica se tem exatamente 11 dígitos
   if (cleanCPF.length !== 11) {
     return false;
   }
 
-  // ============================================
-  // PASSO 3: Verificar se todos os dígitos são iguais
-  // ============================================
-  // CPFs inválidos: 000.000.000-00, 111.111.111-11, etc
+  // Rejeita CPFs com todos os dígitos iguais (000.000.000-00, 111.111.111-11, etc)
   const allSameDigits = /^(\d)\1{10}$/.test(cleanCPF);
   if (allSameDigits) {
     return false;
   }
 
-  // ============================================
-  // PASSO 4: Validar PRIMEIRO dígito verificador
-  // ============================================
+  // Valida o primeiro dígito verificador
   let sum = 0;
   for (let i = 0; i < 9; i++) {
     sum += parseInt(cleanCPF.charAt(i)) * (10 - i);
@@ -60,9 +39,7 @@ export function validateCPF(cpf: string): boolean {
     return false;
   }
 
-  // ============================================
-  // PASSO 5: Validar SEGUNDO dígito verificador
-  // ============================================
+  // Valida o segundo dígito verificador
   sum = 0;
   for (let i = 0; i < 10; i++) {
     sum += parseInt(cleanCPF.charAt(i)) * (11 - i);
@@ -75,27 +52,22 @@ export function validateCPF(cpf: string): boolean {
     return false;
   }
 
-  // ============================================
-  // CPF VÁLIDO!
-  // ============================================
+  // CPF passou em todas as validações
   return true;
 }
 
 /**
- * Formata CPF com máscara
- *
- * @param cpf - CPF sem máscara (11 dígitos)
- * @returns CPF formatado (xxx.xxx.xxx-xx)
- *
- * @example
- * formatCPF('12345678909') // '123.456.789-09'
+ * Formata CPF adicionando máscara (xxx.xxx.xxx-xx)
  */
 export function formatCPF(cpf: string): string {
+  // Remove qualquer caractere que não seja número
   const cleanCPF = cpf.replace(/[^\d]/g, '');
 
+  // Verifica se tem 11 dígitos
   if (cleanCPF.length !== 11) {
     throw new Error('CPF deve ter 11 dígitos');
   }
 
+  // Formata com padrão brasileiro (XXX.XXX.XXX-XX)
   return cleanCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
 }

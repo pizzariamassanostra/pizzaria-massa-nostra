@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-// USAR MESMA CONFIGURAÇÃO DO APP
+// CONFIGURAÇÃO DO APP
 const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,

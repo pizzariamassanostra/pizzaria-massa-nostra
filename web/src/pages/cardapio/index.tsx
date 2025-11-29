@@ -64,7 +64,6 @@ export default function CardapioPage() {
   // FILTRAR PRODUTOS
   // ============================================
   // Filtra por categoria E por termo de busca
-  // Usa || [] para garantir que sempre seja um array
   const filteredProducts = (products || []).filter((product) => {
     const matchesCategory =
       selectedCategory === null || product.category_id === selectedCategory;
@@ -189,7 +188,7 @@ export default function CardapioPage() {
         )}
 
         {/* ============================================ */}
-        {/* NENHUM PRODUTO ENCONTRADO (MAS API FUNCIONANDO) */}
+        {/* NENHUM PRODUTO ENCONTRADO
         {/* ============================================ */}
         {!loading &&
           !error &&
@@ -217,7 +216,7 @@ export default function CardapioPage() {
           )}
 
         {/* ============================================ */}
-        {/* CARDÁPIO VAZIO (API FUNCIONANDO MAS SEM PRODUTOS) */}
+        {/* CARDÁPIO VAZIO
         {/* ============================================ */}
         {!loading && !error && products.length === 0 && (
           <div className="text-center py-20">

@@ -14,14 +14,14 @@ import {
 import { Response } from 'express';
 import { ReceiptService } from '../services/receipt.service';
 import { JwtFlexibleAuthGuard } from '@/common/guards/jwt-flexible-auth.guard';
-import { EmailService } from '@/modules/notification/services/email.service'; // NECESSÁRIO para enviar email
+import { EmailService } from '@/modules/notification/services/email.service';
 
 @Controller('receipt')
 @UseGuards(JwtFlexibleAuthGuard)
 export class ReceiptController {
   constructor(
     private readonly receiptService: ReceiptService,
-    private readonly emailService: EmailService, // Injetado para envio de e-mail
+    private readonly emailService: EmailService,
   ) {}
 
   // ============================================
@@ -67,7 +67,7 @@ export class ReceiptController {
 
       res.end(pdfBuffer);
     } catch (error) {
-      console.error('❌ Erro ao gerar PDF:', error);
+      console.error('Erro ao gerar PDF:', error);
       throw error;
     }
   }
@@ -123,15 +123,6 @@ export class ReceiptController {
       // Gerar o PDF do comprovante
       const pdfBuffer = await this.receiptService.generatePDF(receipt.id);
 
-      // -----------------------------
-      // CORREÇÃO PRINCIPAL:
-      // A assinatura de sendReceiptEmail requer 4 argumentos:
-      //   (to, orderNumber, htmlContent, pdfBuffer)
-      // No código anterior foi passado apenas (to, orderNumber, pdfBuffer)
-      // Aqui criamos um htmlContent simples e passamos os 4 argumentos.
-      // -----------------------------
-
-      // Construir um htmlContent básico para o e-mail (pode ser substituído por template real)
       const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #d32f2f;">Comprovante de Pedido #${receipt.receipt_number}</h2>
@@ -147,12 +138,11 @@ export class ReceiptController {
         </div>
       `;
 
-      // Agora sim: enviamos os 4 argumentos exigidos pelo EmailService
       await this.emailService.sendReceiptEmail(
-        receipt.customer_email, // to
-        receipt.receipt_number, // orderNumber
-        htmlContent, // htmlContent (ADICIONADO)
-        pdfBuffer, // pdfBuffer
+        receipt.customer_email,
+        receipt.receipt_number,
+        htmlContent,
+        pdfBuffer,
       );
 
       return {
@@ -162,7 +152,7 @@ export class ReceiptController {
         sent_to: receipt.customer_email,
       };
     } catch (error) {
-      console.error('❌ Erro ao gerar PDF e enviar email:', error);
+      console.error('Erro ao gerar PDF e enviar email:', error);
       throw error;
     }
   }

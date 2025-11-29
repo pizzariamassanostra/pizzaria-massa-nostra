@@ -201,8 +201,8 @@ export class CustomerService {
       updateData.email = dto.email.toLowerCase();
     }
 
-    if (dto.new_password) {
-      updateData.password_hash = await hashPassword(dto.new_password);
+    if (dto.password) {
+      updateData.password_hash = await hashPassword(dto.password);
     }
 
     const updatedUser = await this.userRepository.update(userId, updateData);

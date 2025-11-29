@@ -1,9 +1,6 @@
 // ============================================
 // PÁGINA: HOME
 // ============================================
-// Página inicial do site
-// Hero section + destaques + call-to-action
-// ============================================
 
 import React from "react";
 import { useRouter } from "next/router";
@@ -97,7 +94,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold mb-3">Horário Flexível</h3>
               <p className="text-gray-600">
-                Aberto todos os dias das 18h às 23h. Finais de semana até
+                Aberto DE Terça á Domingo das 18h às 23h. Finais de semana até
                 meia-noite!
               </p>
             </div>

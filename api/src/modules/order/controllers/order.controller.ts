@@ -31,7 +31,7 @@ export class OrderController {
   ) {}
 
   /**
-   * ➕ CRIAR PEDIDO
+   * CRIAR PEDIDO
    *
    * Cliente cria um novo pedido
    * O ID do cliente é extraído automaticamente do token JWT
@@ -56,7 +56,7 @@ export class OrderController {
     };
 
     // Chamar o service correto
-    const order = await this.orderService.create(orderData); // ← CORRIGIDO
+    const order = await this.orderService.create(orderData);
 
     return {
       ok: true,

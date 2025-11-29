@@ -1,8 +1,6 @@
 // ============================================
 // MÓDULO PRINCIPAL DA APLICAÇÃO
 // ============================================
-// Este é o módulo raiz que importa todos os outros módulos
-// ============================================
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -15,6 +13,7 @@ import { config } from 'dotenv';
 import { AuthModule } from './modules/auth/auth.module';
 import { AdminUserModule } from './modules/admin-user/admin-user.module';
 import { CommonUserModule } from './modules/common-user/common-user.module';
+import { CustomerAddressModule } from './modules/customer-address/customer-address.module'; // 👈 ADICIONE ESTA LINHA
 import { PaymentModule } from './modules/payment/payment.module';
 import { ProductCategoryModule } from './modules/product-category/product-category.module';
 import { ProductModule } from './modules/product/product.module';
@@ -23,115 +22,64 @@ import { NotificationModule } from './modules/notification/notification.module';
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { RbacModule } from './modules/rbac/rbac.module';
-
-// ============================================
-// FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
-// ============================================
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { IngredientModule } from './modules/ingredient/ingredient.module';
-// import { StockModule } from './modules/stock/stock.module';
-// import { PermissionModule } from './modules/permission/permission.module';
-// import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 
-// Carrega variáveis de ambiente (.env)
 config();
 
 @Module({
   imports: [
-    // ============================================
-    // CONFIG MODULE - Carrega .env
-    // ============================================
-    // Torna variáveis de ambiente disponíveis globalmente
     ConfigModule.forRoot({
-      isGlobal: true, // Disponível em toda aplicação sem precisar importar
-      envFilePath: '.env', // Arquivo de configuração
+      isGlobal: true,
+      envFilePath: '.env',
     }),
 
-    // ============================================
-    // SCHEDULE MODULE - Tarefas agendadas (cron)
-    // ============================================
-    // Permite criar jobs agendados (exemplo: limpar logs diariamente)
     ScheduleModule.forRoot(),
 
-    // ============================================
-    // TYPEORM MODULE - Conexão com Supabase
-    // ============================================
     TypeOrmModule.forRoot({
-      type: 'postgres', // Supabase usa PostgreSQL
-
-      // ============================================
-      // CREDENCIAIS SUPABASE (vindas do .env)
-      // ============================================
-      host: process.env.DB_HOST, // db.immtupjumavgpefcvzpg.supabase.co
-      port: Number(process.env.DB_PORT), // 5432
-      username: process.env.DB_USERNAME, // postgres
-      password: process.env.DB_PASSWORD, // Pizza@Massa@Nostra
-      database: process.env.DB_DATABASE, // postgres
-
-      // ============================================
-      // ENTIDADES (MODELOS)
-      // ============================================
-      // TypeORM vai buscar automaticamente todos os arquivos .entity.ts
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-
-      // ============================================
-      // CRIAÇÃO AUTOMÁTICA DE TABELAS
-      // ============================================
-      // ATENÇÃO: APENAS TRUE EM DESENVOLVIMENTO!
-      // Em produção, SEMPRE usar false e criar tabelas via migrations
-      synchronize: false, // TRUE: Cria tabelas automaticamente
-
-      // ============================================
-      // LOGGING - EXIBE QUERIES SQL NO CONSOLE
-      // ============================================
-      // Útil para debug em desenvolvimento
+      synchronize: false,
       logging: process.env.NODE_ENV === 'development',
-
-      // ============================================
-      // SSL - OBRIGATÓRIO PARA SUPABASE
-      // ============================================
       ssl: {
-        rejectUnauthorized: false, // Aceita certificados auto-assinados
+        rejectUnauthorized: false,
       },
     }),
 
-    // ============================================
-    // MÓDULOS ATIVOS DA APLICAÇÃO
-    // ============================================
-
     // AUTENTICAÇÃO E USUÁRIOS
-    AuthModule, // Login JWT (admin e cliente)
-    CommonUserModule, // Cadastro e gestão de clientes
-    AdminUserModule, // Usuários admin (gestão interna)
-    RbacModule, // Níveis de acesso (admin, gerente)
+    AuthModule,
+    CommonUserModule,
+    AdminUserModule,
+    RbacModule,
+    CustomerAddressModule,
 
     // PAGAMENTOS
-    PaymentModule, // Integração MercadoPago + Webhook
+    PaymentModule,
 
     // PRODUTOS
-    ProductCategoryModule, // Categorias (Pizzas Salgadas, Doces, Bebidas...)
-    ProductModule, // Produtos e variações (P, M, G)
+    ProductCategoryModule,
+    ProductModule,
 
     // PEDIDOS
-    OrderModule, // Criação, atualização, histórico de pedidos
+    OrderModule,
 
     // COMPROVANTES
-    ReceiptModule, // Geração de comprovantes PDF
+    ReceiptModule,
 
     // NOTIFICAÇÕES
-    NotificationModule, // WebSocket para notificações em tempo real
+    NotificationModule,
 
     // RELATÓRIOS
     ReportsModule,
 
-    // ============================================
-    // FUTUROS MÓDULOS (DESCOMENTAR QUANDO CRIAR)
-    // ============================================
-    SupplierModule, // Gestão de fornecedores
-    IngredientModule, // Cadastro de insumos
-    // StockModule,         // Controle de estoque
-    // PermissionModule,    // Níveis de acesso
-    // WhatsappModule,      // Integração WhatsApp Business
+    // INSÚMOS
+    SupplierModule,
+    IngredientModule,
   ],
 })
 export class AppModule {}

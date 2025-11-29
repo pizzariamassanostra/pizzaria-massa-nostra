@@ -205,8 +205,6 @@ export class IngredientController {
   // ============================================
   // MOVIMENTAÇÕES
   // ============================================
-
-  // ============================================
   // GET /ingredient/movements
   // Lista todas as movimentações de estoque
   // Query Params (opcionais):
@@ -255,8 +253,6 @@ export class IngredientController {
   // ============================================
   // ALERTAS
   // ============================================
-
-  // ============================================
   // GET /ingredient/alerts
   // Lista todos os alertas ativos
   // (estoque baixo, vencimentos, etc)
@@ -292,8 +288,6 @@ export class IngredientController {
 
   // ============================================
   // ROTAS COM PARÂMETRO :id
-  // ============================================
-
   // ============================================
   // GET /ingredient/:id
   // Busca um ingrediente específico por ID
